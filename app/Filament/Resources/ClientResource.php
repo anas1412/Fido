@@ -17,7 +17,7 @@ class ClientResource extends Resource
 {
     protected static ?string $model = Client::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
     protected static ?string $navigationGroup = "Clients Space";
 
@@ -25,7 +25,15 @@ class ClientResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('address')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('phone')
+                    ->maxLength(15),
+                Forms\Components\TextInput::make('mf')
+                    ->maxLength(255),
             ]);
     }
 
@@ -33,7 +41,13 @@ class ClientResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('address'),
+                Tables\Columns\TextColumn::make('phone'),
+                Tables\Columns\TextColumn::make('mf')
+                    ->searchable(),
             ])
             ->filters([
                 //

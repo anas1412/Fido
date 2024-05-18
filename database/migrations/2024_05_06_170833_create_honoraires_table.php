@@ -13,15 +13,25 @@ return new class extends Migration
     {
         Schema::create('honoraires', function (Blueprint $table) {
             $table->id();
-            $table->integer('note')->nullable();
-            $table->text('object');
-            $table->decimal('montantHT');
-            $table->decimal('montantTTC');
-            $table->decimal('tva');
-            $table->decimal('rs');
-            $table->decimal('tf');
-            $table->decimal('netapayer');
+            $table->integer('note')
+                ->nullable();
+            $table->text('object')
+                ->nullable();
+            $table->decimal('montantHT')
+                ->nullable();
+            $table->decimal('montantTTC')
+                ->nullable();
+            $table->decimal('tva')
+                ->nullable();
+            $table->decimal('rs')
+                ->nullable();
+            $table->decimal('tf')
+                ->nullable();
+            $table->decimal('netapayer')
+                ->nullable();
             $table->foreignId('client_id')
+                ->constrained()
+                ->onDelete('cascade')
                 ->nullable();
             $table->timestamps();
         });
