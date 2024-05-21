@@ -2,17 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\HonoraireResource\Pages;
-use App\Filament\Resources\HonoraireResource\RelationManagers;
-use App\Models\Honoraire;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\Honoraire;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Resource;
 use App\Filament\Resources\taxes;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\HonoraireResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\HonoraireResource\RelationManagers;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 
 class HonoraireResource extends Resource
 {
@@ -21,6 +26,7 @@ class HonoraireResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?string $navigationGroup = "Clients Space";
+
 
     public static function form(Form $form): Form
     {
@@ -31,21 +37,43 @@ class HonoraireResource extends Resource
 
         return $form
             ->schema([
-                /* Forms\Components\Select::make('client_id')
-                    ->label('Client')
-                    ->relationship('client', 'name')
-                    ->searchable()
-                    ->required(), */
-                /*                 Forms\Components\TextInput::make('note')
-                    ->label("Note d'honoraire")
-                    ->default("5")
-                    ->disabled(), */
                 Forms\Components\Select::make('client_id')
                     ->label('Client')
                     ->relationship('client', 'name')
                     ->searchable()
                     ->required()
                     ->reactive()
+                    ->disabledOn('edit')
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->label("Nom de client")
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('address')
+                            ->label("Adresse")
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('phone')
+                            ->label("Numéro de téléphone")
+                            ->maxLength(15),
+                        Forms\Components\TextInput::make('mf')
+                            ->label("Matricule Fiscale")
+                            ->maxLength(255),
+                    ])
+                    ->editOptionForm([
+                        Forms\Components\TextInput::make('name')
+                            ->label("Nom de client")
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('address')
+                            ->label("Adresse")
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('phone')
+                            ->label("Numéro de téléphone")
+                            ->maxLength(15),
+                        Forms\Components\TextInput::make('mf')
+                            ->label("Matricule Fiscale")
+                            ->maxLength(255),
+                    ])
                     ->afterStateUpdated(function ($state, callable $set) {
                         if ($state) {
                             $currentYear = date('Y');
@@ -61,34 +89,36 @@ class HonoraireResource extends Resource
                     ->label("Note d'honoraire")
                     ->disabled(),
                 Forms\Components\TextInput::make('object')
-                    ->label("Objet d'honoraire")
-                    ->disabled(),
+                    ->label("Objet d'honoraire"),
+                /* ->disabled(), */
                 Forms\Components\TextInput::make('montantHT')
                     ->label("Montant H.T")
-                    ->default(12000.00)
-                    ->live(onBlur: true),
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function ($state, callable $set, $get) {
+                        if ($state) {
+                            $newTva = $get('montantHT') * config('taxes.tva');
+                            $newMontantTTC = $get('montantHT') + $newTva;
+                            $newRs = $newMontantTTC * config('taxes.rs');
+                            $newTf = config('taxes.tf');
+                            $newNetapayer = $newMontantTTC - $newRs + $newTf;
+
+                            $set('tva', $newTva);
+                            $set('montantTTC', $newMontantTTC);
+                            $set('rs', $newRs);
+                            $set('tf', $newTf);
+                            $set('netapayer', $newNetapayer);
+                        }
+                    }),
                 Forms\Components\TextInput::make('tva')
-                    ->label("T.V.A")
-                    ->default(config('taxes.tva'))
-                    ->disabled(),
+                    ->label("T.V.A"),
                 Forms\Components\TextInput::make('montantTTC')
-                    ->label("Montant T.T.C")
-                    ->default(1356.000)
-                    ->disabled(),
+                    ->label("Montant T.T.C"),
                 Forms\Components\TextInput::make('rs')
-                    ->label("R/S")
-                    ->default(config('taxes.rs'))
-                    ->disabled(),
+                    ->label("R/S"),
                 Forms\Components\TextInput::make('tf')
-                    ->label("Timbre Fisacle")
-                    ->default(config('taxes.tf'))
-                    ->disabled(),
+                    ->label("Timbre Fisacle"),
                 Forms\Components\TextInput::make('netapayer')
-                    ->label("Net à Payer")
-                    ->default(1288.800)
-                    ->disabled(),
-
-
+                    ->label("Net à Payer"),
             ]);
     }
 
@@ -98,22 +128,34 @@ class HonoraireResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('note')
                     ->sortable()
+                    ->label("Note d'honoraire")
+                    ->getStateUsing(function ($record) {
+                        return str_pad($record->note, 8, '0', STR_PAD_LEFT);
+                    })
                     ->searchable(),
-                Tables\Columns\TextColumn::make('object'),
+                Tables\Columns\TextColumn::make('object')
+                    ->label("Objet d'honoraire"),
                 Tables\Columns\TextColumn::make('client.name')
                     ->label('Nom de client')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('client.mf')
-                    ->label('M.F.')
-                    ->sortable()
+                    ->label('Matricule Fiscale')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Date de création')
+                    ->datetime()
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -122,6 +164,22 @@ class HonoraireResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\TextEntry::make('client.name'),
+                Infolists\Components\TextEntry::make('note'),
+                Infolists\Components\TextEntry::make('montantHT'),
+                Infolists\Components\TextEntry::make('montantTTC'),
+                Infolists\Components\TextEntry::make('tva'),
+                Infolists\Components\TextEntry::make('rs'),
+                Infolists\Components\TextEntry::make('tf'),
+                Infolists\Components\TextEntry::make('netapayer')
+
+                    ->columnSpanFull(),
+            ]);
+    }
     public static function getRelations(): array
     {
         return [
@@ -134,6 +192,7 @@ class HonoraireResource extends Resource
         return [
             'index' => Pages\ListHonoraires::route('/'),
             'create' => Pages\CreateHonoraire::route('/create'),
+            'view' => Pages\ViewHonoraire::route('/{record}'),
             'edit' => Pages\EditHonoraire::route('/{record}/edit'),
         ];
     }

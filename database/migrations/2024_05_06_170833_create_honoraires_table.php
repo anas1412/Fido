@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('note')
                 ->nullable();
+            /* $table->string('note', 8)->nullable(); // Make sure the length is 8 */
             $table->text('object')
                 ->nullable();
             $table->decimal('montantHT')

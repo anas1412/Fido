@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ClientResource extends Resource
 {
@@ -21,18 +22,35 @@ class ClientResource extends Resource
 
     protected static ?string $navigationGroup = "Clients Space";
 
+    protected static ?string $recordTitleAttribute = "name";
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [
+            'name',
+            'mf',
+        ];
+    }
+
+
+
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label("Nom de client")
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
+                    ->label("Adresse")
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
+                    ->label("Numéro de Téléphone")
                     ->maxLength(15),
                 Forms\Components\TextInput::make('mf')
+                    ->label("Matricule Fiscale")
                     ->maxLength(255),
             ]);
     }
@@ -42,18 +60,26 @@ class ClientResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nom')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('address'),
-                Tables\Columns\TextColumn::make('phone'),
+                Tables\Columns\TextColumn::make('address')
+                    ->label('Adresse'),
+                Tables\Columns\TextColumn::make('phone')
+                    ->label('Numéro de téléphone'),
                 Tables\Columns\TextColumn::make('mf')
+                    ->label('Matricule Fiscale')
                     ->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -74,6 +100,7 @@ class ClientResource extends Resource
         return [
             'index' => Pages\ListClients::route('/'),
             'create' => Pages\CreateClient::route('/create'),
+            'view' => Pages\ViewClient::route('/{record}'),
             'edit' => Pages\EditClient::route('/{record}/edit'),
         ];
     }

@@ -17,7 +17,7 @@ class Honoraire extends Model
         'tva',
         'rs',
         'tf',
-        'netapyer',
+        'netapayer',
         'client_id'
     ];
 
@@ -33,7 +33,7 @@ class Honoraire extends Model
             $count = Honoraire::where('client_id', $honoraire->client_id)->count();
             $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . $currentYear;
             $newObject = "Assistance comptable de l'année $currentYear";
-            $honoraire->note = $newNote;
+            $honoraire->note = (string) $newNote;
             $honoraire->object = $newObject;
         });
     }
