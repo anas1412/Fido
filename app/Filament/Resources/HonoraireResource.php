@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\HonoraireResource\RelationManagers;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Blade;
 
 class HonoraireResource extends Resource
 {
@@ -153,6 +155,20 @@ class HonoraireResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
+                    Tables\Actions\Action::make('pdf')
+                        ->label('PDF')
+                        ->color('success')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        /* ->action(function ($record) {
+                            return response()->streamDownload(function () use ($record) {
+                                echo Pdf::loadHtml(
+                                    Blade::render('pdf', ['record' => $record])
+                                )->stream();
+                            }, $record->number . '.pdf');
+                        }), */
+                        ->url(fn (Honoraire $record) => route('pdf', $record))
+                        ->openUrlInNewTab(),
+
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                 ]),

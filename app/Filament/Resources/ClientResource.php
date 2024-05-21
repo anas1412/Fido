@@ -4,15 +4,18 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
+use App\Filament\Resources\ClientResource\RelationManagers\HonorairesRelationManager;
 use App\Models\Client;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
 
 class ClientResource extends Resource
 {
@@ -24,6 +27,13 @@ class ClientResource extends Resource
 
     protected static ?string $recordTitleAttribute = "name";
 
+    protected static int $globalSearchResultsLimit = 20;
+
+    public static function getGlobalSearchResultUrl(Model $record): ?string
+    {
+        return ClientResource::getUrl('view', ['record' => $record]);
+    }
+
     public static function getGloballySearchableAttributes(): array
     {
         return [
@@ -31,7 +41,6 @@ class ClientResource extends Resource
             'mf',
         ];
     }
-
 
 
 
@@ -91,7 +100,7 @@ class ClientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\HonorairesRelationManager::class
         ];
     }
 
