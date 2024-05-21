@@ -95,7 +95,6 @@
             /* Add padding for spacing within the A4 page */
             position: relative;
             /* Ensure the container is positioned relatively */
-
         }
 
         .fixed-table {
@@ -157,11 +156,10 @@
 
 <body>
     <div class="invoice">
-
-        <div class="invoice-container ">
+        <div class="invoice-container">
             <div class="invoice-header">
                 <div>
-                    <table class="fixed-table ">
+                    <table class="fixed-table">
                         <tr>
                             <td>
                                 <div class="table-cell text">
@@ -176,105 +174,90 @@
                             </td>
                             <td>
                                 <div class="table-cell logo">
-                                    {{-- <img src="{{ asset('img/logo.jpg') }}" alt="Logo" class="invoice-logo" width="4cm" height="4cm"> --}}
+                                    {{-- <img src="{{ asset('logo.jpg') }}" alt="Logo" class="invoice-logo"
+                                        width="4cm" height="4cm"> --}}
                                 </div>
                             </td>
                         </tr>
                     </table>
                 </div>
-
                 <div style="text-align: right;">
                     <p style="font-size: 12px; text-decoration: underline; margin-top: 0;">
                         <!-- Adjust margin-top -->
                         M.F.: 729831 E-A-P-000
                     </p>
                 </div>
-
             </div>
         </div>
-
-
         <div class="separator"></div>
-
         <div class="invoice-details">
             <div>
                 <p style="font-size: 17px;">
                     <strong style="text-decoration: underline; font-size: 15px;">Note d'honoraire:</strong>
-                    {{-- Nº{{ honoraire . note }} --}}
+                    Nº{{ $record->note }}
                 </p>
             </div>
             <div style="text-align: right;">
                 <p>
                     <strong>Hammamet le:</strong>
-                    {{-- {{ honoraire.createdAt ? honoraire.createdAt|date('d/m/Y') : '' }} --}}
+                    {{-- {{ $honoraire->createdAt ? $honoraire->createdAt->format('d/m/Y') : '' }} --}}
                 </p>
             </div>
         </div>
-
         <div class="client-info">
             <div class="client-info-box">
                 <p>
-                    {{-- <strong>Client:</strong>
-						{{ honoraire.client.name }}
-					</p>
-					<p>
-						<strong>Adresse:</strong>
-						{{ honoraire.client.adresse }}
-					</p>
-					<p>
-						<strong>M.F:</strong>
-						{{ honoraire.client.mf }} --}}
+                    <strong>Client:</strong>
+                    {{ $record->client->name }}
+                </p>
+                <p>
+                    <strong>Adresse:</strong>
+                    {{ $record->client->address }}
+                </p>
+                <p>
+                    <strong>M.F:</strong>
+                    {{ $record->client->mf }}
                 </p>
             </div>
         </div>
-
         <div class="separator"></div>
-
         <p>
             <strong style="text-decoration: underline;">Objet d'Honoraire:</strong>
-            {{-- {{ honoraire.objet }} --}}
+            {{ $record->object }}
         </p>
-
         <table class="invoice-table">
             <tr>
                 <th>Montant H.T</th>
-                {{-- <td style="text-align: right;">{{ honoraire.montantht|number_format(3, '.', ',') }}</td> --}}
+                <td style="text-align: right;">{{ number_format($record->montantHT, 3, '.', ',') }}</td>
             </tr>
             <tr>
-                <th>T.V.A
-                    {{-- {{ tva }}%</th>
-					<td style="text-align: right;">{{ honoraire.tva|number_format(3, '.', ',') }}</td> --}}
+                <th>T.V.A {{-- {{ $tva }}% --}}</th>
+                <td style="text-align: right;">{{ number_format($record->tva, 3, '.', ',') }}</td>
             </tr>
             <tr>
                 <th>Montant T.T.C</th>
-                {{-- <td style="text-align: right;">{{ honoraire.montantttc|number_format(3, '.', ',') }}</td> --}}
+                <td style="text-align: right;">{{ number_format($record->montantTTC, 3, '.', ',') }}</td>
             </tr>
             <tr>
-                <th>R/S
-                    {{-- {{ rs }}%</th>
-					<td style="text-align: right;">{{ honoraire.rs|number_format(3, '.', ',') }}</td> --}}
+                <th>R/S {{-- {{ $rs }}% --}}</th>
+                <td style="text-align: right;">{{ number_format($record->rs, 3, '.', ',') }}</td>
             </tr>
             <tr>
                 <th>Timbre Fiscal</th>
-                {{-- <td style="text-align: right;">{{ honoraire.timbrefiscal|number_format(3, '.', ',') }}</td> --}}
+                <td style="text-align: right;">{{ number_format($record->tf, 3, '.', ',') }}</td>
             </tr>
             <tr>
                 <th>
                     <strong>Total à payer:</strong>
                 </th>
-                {{-- <td style="text-align: right;">{{ honoraire.netapayer|number_format(3, '.', ',') }}</td> --}}
+                <td style="text-align: right;">{{ number_format($record->netapayer, 3, '.', ',') }}</td>
             </tr>
         </table>
-
-
         <div class="invoice-details">
             <div>
                 <p>
                     <strong>Arrêtée la présente note d'honoraire à la somme de:</strong>
-                    {{-- {{ frenchWords }}
-						dinars et
-						{{ (honoraire.netapayer * 1000)|number_format(0, '.', ',')|slice(-3)|replace({' ': '0'}) }}
-						millimes. --}}
+                    {{--   {{ $frenchWords }} dinars et {{ number_format(($honoraire->netapayer * 1000), 0, '.', ',') | slice(-3) | replace({' ': '0'}) }} millimes. --}}
                 </p>
             </div>
             <div style="text-align: right;">
@@ -288,8 +271,8 @@
             <br>
             <br>
             <div class="separator"></div>
-
-            <div class="invoice-details"><!-- Your existing content goes here -->
+            <div class="invoice-details">
+                <!-- Your existing content goes here -->
             </div>
             <!-- Invisible table placed at the bottom -->
             <table class="footer-table">
@@ -297,17 +280,4 @@
                 <tr>
                     <td>Av. Mohamed Ali Hammi</td>
                     <td>Tél: 72 26 38 83</td>
-                    <td>GSM: 97 43 69 22 / 26 43 69 22</td>
-                </tr>
-                <!-- Second line -->
-                <tr>
-                    <td>8050 Hammamet</td>
-                    <td>Fax: 72 26 38 79</td>
-                    <td>Email: ezzeddine.haouel@yahoo.fr</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</body>
-
-</html>
+                    <td>GSM: 97 43 69 22 / 26
