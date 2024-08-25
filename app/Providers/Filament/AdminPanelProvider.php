@@ -29,6 +29,9 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->registration()
             ->brandName('Fido')
+            ->brandLogo(asset('images/logo.png'))
+            ->brandLogoHeight('3rem')
+            ->favicon(asset('images/logo.png'))
             ->colors([
                 'primary' => Color::Green,
             ])

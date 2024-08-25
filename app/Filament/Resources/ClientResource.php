@@ -29,6 +29,11 @@ class ClientResource extends Resource
 
     protected static int $globalSearchResultsLimit = 20;
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function getGlobalSearchResultUrl(Model $record): ?string
     {
         return ClientResource::getUrl('view', ['record' => $record]);

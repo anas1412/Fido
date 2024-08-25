@@ -21,6 +21,14 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = "Espace Utilisateur";
 
+    protected static ?string $navigationLabel = 'Utilisateurs';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+
     public static function canViewAny(): bool
     {
         return auth()->user()->isAdmin();
