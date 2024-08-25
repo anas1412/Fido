@@ -23,7 +23,7 @@ class ClientResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
-    protected static ?string $navigationGroup = "Clients Space";
+    protected static ?string $navigationGroup = "Espace Client";
 
     protected static ?string $recordTitleAttribute = "name";
 

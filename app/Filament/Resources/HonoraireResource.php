@@ -27,7 +27,7 @@ class HonoraireResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationGroup = "Clients Space";
+    protected static ?string $navigationGroup = "Espace Client";
 
 
 
