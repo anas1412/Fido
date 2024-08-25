@@ -10,6 +10,11 @@ class EditHonoraire extends EditRecord
 {
     protected static string $resource = HonoraireResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function getHeaderActions(): array
     {
         return [

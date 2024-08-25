@@ -1,3 +1,15 @@
+@php
+    use App\Helpers\NumberToWords;
+
+    $netapayer = $record->netapayer;
+    $dinarsInWords = NumberToWords::convertToWords($netapayer);
+    $millimes = number_format($netapayer * 1000, 0, '.', '');
+    $millimes = substr($millimes, -3);
+    if (strlen($millimes) < 3) {
+        $millimes = str_pad($millimes, 3, '0', STR_PAD_LEFT);
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,13 +46,13 @@
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 22px;
             margin: 0 0 5px 0;
         }
 
         .header p {
             margin: 0;
-            font-size: 18px;
+            font-size: 20px;
         }
 
         .logo-container {
@@ -258,8 +270,8 @@
 
     <div class="total-in-words">
         <p>Arrêtée la présente note d'honoraires à la somme de :
-            mille deux cent quatre-vingt-huit dinars et 800 millimes.
-            {{-- {{ $frenchWords }} dinars et {{ number_format(($record->netapayer * 1000), 0, '.', ',') | slice(-3) | replace({' ': '0'}) }} millimes.</p> --}}</p>
+            {{ $dinarsInWords }} dinars et {{ $millimes }} millimes.</p>
+        {{-- {{ $frenchWords }} dinars et {{ number_format(($record->netapayer * 1000), 0, '.', ',') | slice(-3) | replace({' ': '0'}) }} millimes.</p> --}}</p>
         <p class="signature-text"><strong>Cachet et signature</strong></p>
     </div>
 

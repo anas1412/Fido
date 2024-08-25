@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Honoraire;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Helpers\NumberToWords;
 
 
 class PdfController extends Controller
@@ -16,6 +17,7 @@ class PdfController extends Controller
 
         // Format the date
         $formattedDate = $honoraire->created_at->format('d/m/Y');
+        /* $amountInWords = NumberToWords::convertToWords($honoraire->amount); */
 
         return Pdf::loadView('pdf', [
             'record' => $honoraire,
