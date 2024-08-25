@@ -11,7 +11,17 @@ class PdfController extends Controller
 {
     public function __invoke(Honoraire $honoraire)
     {
-        return Pdf::loadView('pdf', ['record' => $honoraire])
+        /* return Pdf::loadView('pdf', ['record' => $honoraire])
+            ->download($honoraire->note . '.pdf'); */
+
+        // Format the date
+        $formattedDate = $honoraire->created_at->format('d/m/Y');
+
+        return Pdf::loadView('pdf', [
+            'record' => $honoraire,
+            'formattedDate' => $formattedDate
+        ])
+            ->setPaper('A4', 'portrait') // Set paper size and orientation
             ->download($honoraire->note . '.pdf');
     }
 }
