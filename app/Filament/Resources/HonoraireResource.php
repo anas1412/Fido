@@ -30,6 +30,7 @@ class HonoraireResource extends Resource
     protected static ?string $navigationGroup = "Clients Space";
 
 
+
     public static function form(Form $form): Form
     {
 
@@ -166,7 +167,7 @@ class HonoraireResource extends Resource
                                 )->stream();
                             }, $record->number . '.pdf');
                         }), */
-                        ->url(fn (Honoraire $record) => route('pdf', $record))
+                        ->url(fn(Honoraire $record) => route('pdf', $record))
                         ->openUrlInNewTab(),
 
                     Tables\Actions\EditAction::make(),

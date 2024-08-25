@@ -21,6 +21,11 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = "Users Management";
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -54,10 +59,9 @@ class UserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-
             ])->recordUrl(
                 #This makes the rows unclickable
-                fn (User $record) => null,
+                fn(User $record) => null,
             );
     }
 
