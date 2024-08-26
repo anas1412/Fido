@@ -22,16 +22,16 @@
             <x-slot name="header">
                 <div class="text-lg font-medium text-gray-900">TF Value</div>
             </x-slot>
-            <div class="text-3xl font-semibold">{{ $tf * 100 }}%</div>
-            <div class="text-gray-600">Pourcentage de Tarif Fiscale</div>
+            <div class="text-3xl font-semibold">{{ $tf * 1000 }} Millimes</div>
+            <div class="text-gray-600">Montant de Tarif Fiscale</div>
         </x-filament::card>
     </div>
 
     <form wire:submit.prevent="submit" class="mt-6">
         {{ $this->form }}
 
-        {{-- <x-filament::button type="submit" color="primary" class="mt-4">
-            Save
-        </x-filament::button> --}}
+        <x-filament::button type="submit" color="primary" class="mt-6">
+            Sauvgarder
+        </x-filament::button>
     </form>
 </x-filament::page>

@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\File;
 class EditTaxes extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-cog';
-    protected static ?string $navigationLabel = 'Modifier les Paramètres';
+    protected static ?string $navigationLabel = 'Modifier les Taxes';
     protected static ?string $slug = 'edit-taxes';
-    protected static ?string $title = 'Modifier les Paramètres Globals';
+    protected static ?string $title = 'Modifier les Paramètres de Taxes';
     protected static string $view = 'filament.pages.edit-taxes';
 
     public $tva;
@@ -43,7 +43,7 @@ class EditTaxes extends Page
                 ->required()
                 ->default($this->rs),
             TextInput::make('tf')
-                ->label('Valeur de tarif fiscale en virgule')
+                ->label('Valeur de tarif fiscale en dinars')
                 ->numeric()
                 ->required()
                 ->default($this->tf),
@@ -74,11 +74,10 @@ class EditTaxes extends Page
     protected function getActions(): array
     {
         return [
-            \Filament\Actions\Action::make('save')
-                ->label('Save')
+            /* \Filament\Actions\Action::make('save')
+                ->label('Sauvgarder')
                 ->action('submit')
-                ->color('primary'),
-        ];
+                ->color('primary'), */];
     }
 
     protected function getViewData(): array

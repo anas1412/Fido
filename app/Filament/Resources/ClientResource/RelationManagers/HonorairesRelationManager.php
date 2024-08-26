@@ -102,13 +102,6 @@ class HonorairesRelationManager extends RelationManager
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
-                        /* ->action(function ($record) {
-                            return response()->streamDownload(function () use ($record) {
-                                echo Pdf::loadHtml(
-                                    Blade::render('pdf', ['record' => $record])
-                                )->stream();
-                            }, $record->number . '.pdf');
-                        }), */
                         ->url(fn(Honoraire $record) => route('pdf', $record))
                         ->openUrlInNewTab(),
                     Tables\Actions\EditAction::make(),
