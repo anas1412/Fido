@@ -246,7 +246,7 @@
                 <td>{{ number_format($record->montantHT, 3, '.', ',') }}</td>
             </tr>
             <tr>
-                <td>T.V.A 19%</td>
+                <td>T.V.A {{ $tva * 100 }}%</td>
                 <td>{{ number_format($record->tva, 3, '.', ',') }}</td>
             </tr>
             <tr>
@@ -254,7 +254,7 @@
                 <td>{{ number_format($record->montantTTC, 3, '.', ',') }}</td>
             </tr>
             <tr>
-                <td>R/S 3%</td>
+                <td>R/S {{ $rs * 100 }}%</td>
                 <td>{{ number_format($record->rs, 3, '.', ',') }}</td>
             </tr>
             <tr>

@@ -21,7 +21,9 @@ class PdfController extends Controller
 
         return Pdf::loadView('pdf', [
             'record' => $honoraire,
-            'formattedDate' => $formattedDate
+            'formattedDate' => $formattedDate,
+            'tva' => config('taxes.tva'),
+            'rs' => config('taxes.rs')
         ])
             ->setPaper('A4', 'portrait') // Set paper size and orientation
             ->download($honoraire->note . '.pdf');
