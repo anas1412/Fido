@@ -7,59 +7,111 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## About Fido
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Fido is a web application for accountants. It's user friendly, intuitive and built with amazing tools such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   [Laravel](https://laravel.com/).
+-   [TailwindCSS](https://tailwindcss.com/).
+-   [FilamentPHP](https://filamentphp.com/).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Prerequisites
 
-## Learning Laravel
+1. **Install WAMP or Alternative:**
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    - Download and install WAMP from [here](https://www.wampserver.com/en/).
+    - Ensure you have installed **VC Redist AIO** before installing WAMP. Download it [here](https://github.com/abbodi1406/vcredist/releases).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. **Install Composer:**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    - Download and install Composer from [here](https://getcomposer.org/download/).
+    - During installation, make sure to:
+        - Select **"Add to PATH"**.
+        - Choose **PHP 8.2** as the PHP version.
 
-## Laravel Sponsors
+3. **Install Git:**
+    - Download and install Git from [here](https://git-scm.com/downloads).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Setting Up the Project
 
-### Premium Partners
+1. **Clone the Repository:**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+    - Open the **WAMP** installation directory, typically located at `C:\wamp64\www\`.
+    - Open a Command Prompt in this directory and run:
+        ```bash
+        git clone https://github.com/anas1412/Fido.git
+        ```
 
-## Contributing
+2. **Set Up Environment Configuration:**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    - Navigate to the `Fido` folder in the **www** directory.
+    - Copy the `.env.example` file and rename it to `.env`.
+    - Make the necessary changes to the `.env` file, such as setting up your database credentials.
 
-## Code of Conduct
+3. **Install Dependencies and Set Up the Database:**
+    - Inside the `Fido` folder, open a Command Prompt and run the following commands:
+        ```bash
+        composer install
+        php artisan migrate
+        php artisan db:seed
+        ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Running the Web App Locally
 
-## Security Vulnerabilities
+There are two ways to run the Fido web app locally:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Development Mode
+
+-   To run the web app in development mode, simply use:
+    ```bash
+    php artisan serve
+    ```
+-   The web application will be running on `localhost:8000` or `127.0.0.1:8000`
+
+### Production Mode
+
+For production, follow these additional steps:
+
+1. **Set Up Apache Virtual Host:**
+
+    - Open the `httpd-vhosts.conf` file located at:
+        ```
+        C:\wamp64\bin\apache\apache2.4.xx\conf\extra\httpd-vhosts.conf
+        ```
+    - Add the following configuration:
+        ```apache
+        <VirtualHost *:80>
+            ServerName fido.local
+            DocumentRoot "C:/wamp64/www/Fido/public"
+            <Directory "C:/wamp64/www/Fido/public">
+                AllowOverride All
+                Require all granted
+            </Directory>
+        </VirtualHost>
+        ```
+
+2. **Update the Hosts File:**
+
+    - Add the following line to your hosts file located at `C:\Windows\System32\drivers\etc\hosts`:
+        ```
+        127.0.0.1 fido.local
+        ```
+
+3. **Auto Start WAMP on Startup:**
+    - Ensure that WAMP is set to auto-start on system startup for smooth operation.
+
+## Default Users
+
+The database seeder will create the following users:
+
+1. **Admin User:**
+
+    - Email: `admin@mail.com`
+    - Password: `admin123`
+
+2. **Normal User:**
+    - Email: `user@mail.com`
+    - Password: `user123`
 
 ## License
 
