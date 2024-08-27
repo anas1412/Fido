@@ -23,10 +23,10 @@ class UserResource extends Resource
 
     protected static ?string $navigationLabel = 'Utilisateurs';
 
-    public static function getNavigationBadge(): ?string
+    /* public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
-    }
+    } */
 
 
     public static function canViewAny(): bool

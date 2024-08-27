@@ -18,6 +18,11 @@ class EditTaxes extends Page
     protected static ?string $title = 'Modifier les Paramètres de Taxes';
     protected static string $view = 'filament.pages.edit-taxes';
 
+    public static function canView(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
     public $tva;
     public $rs;
     public $tf;
