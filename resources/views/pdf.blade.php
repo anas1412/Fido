@@ -270,7 +270,7 @@
 
     <div class="total-in-words">
         <p>Arrêtée la présente note d'honoraires à la somme de :
-            {{ $dinarsInWords }} {{-- dinars et {{ $millimes }} millimes --}}.</p>
+            {{ $dinarsInWords }}{{-- dinars et {{ $millimes }} millimes --}}.</p>
         {{-- {{ $frenchWords }} dinars et {{ number_format(($record->netapayer * 1000), 0, '.', ',') | slice(-3) | replace({' ': '0'}) }} millimes.</p> --}}
         <p class="signature-text"><strong>Cachet et signature</strong></p>
     </div>
