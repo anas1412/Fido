@@ -21,17 +21,20 @@ class StatsOverview extends BaseWidget
     {
         return [
             Stat::make('Nombre des clients enregistrés', Client::count())
-                ->description('')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->color('success'),
-            Stat::make("Nombre d'honoraires traités", Honoraire::count())
-                ->description('')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->color('success'),
-            Stat::make("Nombre d'utilisateurs", User::count())
-                ->description('')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
+                ->description('Nombre de clients enregistrés')
+                ->descriptionColor('success'),
+            Stat::make("Nombre d'honoraires traités", Honoraire::count())
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->color('success')
+                ->description('Nombre d\'honoraires traités')
+                ->descriptionColor('success'),
+            Stat::make("Nombre d'utilisateurs", User::count())
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->color('success')
+                ->description('Nombre d\'utilisateurs enregistrés')
+                ->descriptionColor('success'),
         ];
     }
 }

@@ -48,7 +48,7 @@ class EditTaxes extends Page
                 ->required()
                 ->default($this->rs),
             TextInput::make('tf')
-                ->label('Valeur de tarif fiscale en dinars')
+                ->label('Valeur de Timbre Fiscale en dinars')
                 ->numeric()
                 ->required()
                 ->default($this->tf),

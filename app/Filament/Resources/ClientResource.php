@@ -16,6 +16,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\IconEntry;
+
 
 class ClientResource extends Resource
 {
@@ -102,12 +107,41 @@ class ClientResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('Informations du client')
+                    ->schema([
+                        TextEntry::make('name')
+                            ->label('Nom du client')
+                            ->weight('bold')
+                            ->icon('heroicon-o-user-circle')
+                            ->columnSpan(2),
+                        TextEntry::make('mf')
+                            ->label('Matricule Fiscale')
+                            ->icon('heroicon-o-identification')
+                            ->columnSpan(2),
+                        TextEntry::make('address')
+                            ->label('Adresse')
+                            ->icon('heroicon-o-map-pin')
+                            ->columnSpan(2),
+                        TextEntry::make('phone')
+                            ->label('Numéro de téléphone')
+                            ->icon('heroicon-o-phone')
+                            ->columnSpan(2),
+                    ])
+                    ->columns(4),
+            ]);
+    }
+
     public static function getRelations(): array
     {
         return [
             RelationManagers\HonorairesRelationManager::class
         ];
     }
+
 
     public static function getPages(): array
     {

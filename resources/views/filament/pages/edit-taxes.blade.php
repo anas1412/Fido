@@ -23,7 +23,7 @@
                 <div class="text-lg font-medium text-gray-900">TF Value</div>
             </x-slot>
             <div class="text-3xl font-semibold">{{ $tf * 1000 }} Millimes</div>
-            <div class="text-gray-600">Montant de Tarif Fiscale</div>
+            <div class="text-gray-600">Montant de Timbre Fiscale</div>
         </x-filament::card>
     </div>
 

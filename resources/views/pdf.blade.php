@@ -21,7 +21,7 @@
         @page {
             size: A4;
             /* Set page size */
-            margin-top: 15px;
+            margin-top: 10px;
             /* Set margins to zero */
         }
 
@@ -70,7 +70,7 @@
             text-align: center;
             line-height: 60px;
             font-size: 10px;
-            margin-bottom: 5px;
+            margin-bottom: 0px;
         }
 
         .logo img {
@@ -92,15 +92,15 @@
 
         .header-line {
             border-top: 1px solid #000;
-            margin-top: 10px;
+            margin-top: 22px;
         }
 
         .invoice-details {
-            margin-bottom: 20px;
+            margin-bottom: 00px;
         }
 
         .invoice-details p {
-            font-size: 1.2em;
+            font-size: 1em;
             /* Increases the size of the text */
             margin: 0;
         }
@@ -112,12 +112,12 @@
 
         .client-info {
             text-align: right;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
         .client-box {
             border: 1px solid #000;
-            padding: 10px;
+            padding: 5px;
             display: inline-block;
             margin-left: 50%;
         }
@@ -210,7 +210,7 @@
         </div>
         <div class="logo-container">
             <div class="logo">
-                <img src="https://i.imgur.com/Yg33GrT.jpeg" alt="Logo">
+                <img src="{{ public_path('images/CCT.jpg') }}" alt="Logo">
             </div>
             <br>
             <div class="mf-number">M.F. : 729831 E-A-P- 000</div>

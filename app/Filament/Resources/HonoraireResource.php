@@ -21,6 +21,10 @@ use Filament\Infolists\Infolist;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Blade;
 
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\Grid;
+
 class HonoraireResource extends Resource
 {
     protected static ?string $model = Honoraire::class;
@@ -183,16 +187,61 @@ class HonoraireResource extends Resource
     {
         return $infolist
             ->schema([
-                Infolists\Components\TextEntry::make('client.name'),
-                Infolists\Components\TextEntry::make('note'),
-                Infolists\Components\TextEntry::make('montantHT'),
-                Infolists\Components\TextEntry::make('montantTTC'),
-                Infolists\Components\TextEntry::make('tva'),
-                Infolists\Components\TextEntry::make('rs'),
-                Infolists\Components\TextEntry::make('tf'),
-                Infolists\Components\TextEntry::make('netapayer')
+                Section::make('Informations du client')
+                    ->schema([
+                        TextEntry::make('client.name')
+                            ->label('Nom du client')
+                            ->weight('bold')
+                            ->icon('heroicon-o-user-circle'),
+                        TextEntry::make('client.mf')
+                            ->label('Matricule Fiscale')
+                            ->icon('heroicon-o-identification'),
 
-                    ->columnSpanFull(),
+                    ])
+                    ->columns(2),
+                Section::make('Informations supplémentaires')
+                    ->schema([
+                        TextEntry::make('object')
+                            ->label("Objet d'honoraire"),
+                        TextEntry::make('note')
+                            ->label("Note d'honoraire")
+                            ->formatStateUsing(fn(string $state): string => str_pad($state, 8, '0', STR_PAD_LEFT)),
+                        TextEntry::make('created_at')
+                            ->label('Date de création')
+                            ->dateTime(),
+                    ])
+                    ->columns(3),
+
+                Section::make('Détails financiers')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TextEntry::make('montantHT')
+                                    ->label('Montant H.T')
+                                    ->money('tnd'),
+                                TextEntry::make('tva')
+                                    ->label('T.V.A')
+                                    ->money('tnd'),
+                                TextEntry::make('montantTTC')
+                                    ->label('Montant T.T.C')
+                                    ->money('tnd')
+                                    ->color('success')
+                                    ->weight('bold'),
+                                TextEntry::make('rs')
+                                    ->label('R/S')
+                                    ->money('tnd'),
+                                TextEntry::make('tf')
+                                    ->label('Timbre Fiscal')
+                                    ->money('tnd'),
+                                TextEntry::make('netapayer')
+                                    ->label('Net à Payer')
+                                    ->money('tnd')
+                                    ->color('success')
+                                    ->weight('bold'),
+                            ]),
+                    ]),
+
+
             ]);
     }
     public static function getRelations(): array
