@@ -12,6 +12,10 @@ class ClientsPerMonth extends ChartWidget
 
     protected static ?int $sort = 2;
 
+    protected static ?string $pollingInterval = '15s';
+
+    protected static bool $isLazy = true;
+
     protected function getData(): array
     {
         $currentYear = Carbon::now()->year;
