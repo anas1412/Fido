@@ -85,7 +85,8 @@ class ClientResource extends Resource
                 Tables\Columns\TextColumn::make('address')
                     ->label('Adresse'),
                 Tables\Columns\TextColumn::make('phone')
-                    ->label('Numéro de téléphone'),
+                    ->label('Numéro de téléphone')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('mf')
                     ->label('Matricule Fiscale')
                     ->searchable(),

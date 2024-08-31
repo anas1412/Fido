@@ -34,8 +34,9 @@ class AdminPanelProvider extends PanelProvider
                 'profile' => MenuItem::make()->label('Edit profile'),
                 // ...
             ]) */
-            ->registration()
+            /* ->registration() */
             /* ->passwordReset() */
+            
             ->brandName('Fido')
             ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('3rem')
