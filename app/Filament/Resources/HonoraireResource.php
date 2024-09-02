@@ -42,96 +42,109 @@ class HonoraireResource extends Resource
 
     public static function form(Form $form): Form
     {
-
         $currentYear = date('Y');
         $count = Honoraire::count();
         $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . '/' . $currentYear;
 
         return $form
             ->schema([
-                Forms\Components\Select::make('client_id')
-                    ->label('Client')
-                    ->relationship('client', 'name')
-                    ->searchable()
-                    ->required()
-                    ->reactive()
-                    ->disabledOn('edit')
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('name')
-                            ->label("Nom de client")
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('address')
-                            ->label("Adresse")
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('phone')
-                            ->label("Numéro de téléphone")
-                            ->maxLength(15),
-                        Forms\Components\TextInput::make('mf')
-                            ->label("Matricule Fiscale")
-                            ->maxLength(255),
-                    ])
-                    ->editOptionForm([
-                        Forms\Components\TextInput::make('name')
-                            ->label("Nom de client")
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('address')
-                            ->label("Adresse")
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('phone')
-                            ->label("Numéro de téléphone")
-                            ->maxLength(15),
-                        Forms\Components\TextInput::make('mf')
-                            ->label("Matricule Fiscale")
-                            ->maxLength(255),
-                    ])
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        if ($state) {
-                            $currentYear = date('Y');
-                            $count = Honoraire::where('client_id', $state)->count();
-                            $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . $currentYear;
-                            $newObject = "Assistance comptable de l'année $currentYear";
+                Forms\Components\Wizard::make([
+                    Forms\Components\Wizard\Step::make('Information sur le client')
+                        ->schema([
+                            Forms\Components\Select::make('client_id')
+                                ->label('Client')
+                                ->relationship('client', 'name')
+                                ->searchable()
+                                ->required()
+                                ->reactive()
+                                ->disabledOn('edit')
+                                ->createOptionForm([
+                                    Forms\Components\TextInput::make('name')
+                                        ->label("Nom de client")
+                                        ->required()
+                                        ->maxLength(255),
+                                    Forms\Components\TextInput::make('address')
+                                        ->label("Adresse")
+                                        ->maxLength(255),
+                                    Forms\Components\TextInput::make('phone')
+                                        ->label("Numéro de téléphone")
+                                        ->maxLength(15),
+                                    Forms\Components\TextInput::make('mf')
+                                        ->label("Matricule Fiscale")
+                                        ->maxLength(255),
+                                ])
+                                ->editOptionForm([
+                                    Forms\Components\TextInput::make('name')
+                                        ->label("Nom de client")
+                                        ->required()
+                                        ->maxLength(255),
+                                    Forms\Components\TextInput::make('address')
+                                        ->label("Adresse")
+                                        ->maxLength(255),
+                                    Forms\Components\TextInput::make('phone')
+                                        ->label("Numéro de téléphone")
+                                        ->maxLength(15),
+                                    Forms\Components\TextInput::make('mf')
+                                        ->label("Matricule Fiscale")
+                                        ->maxLength(255),
+                                ])
+                                ->afterStateUpdated(function ($state, callable $set) {
+                                    if ($state) {
+                                        $currentYear = date('Y');
+                                        $count = Honoraire::where('client_id', $state)->count();
+                                        $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . $currentYear;
+                                        $newObject = "Assistance comptable de l'année $currentYear";
 
-                            $set('note', $newNote);
-                            $set('object', $newObject);
-                        }
-                    }),
-                Forms\Components\TextInput::make('note')
-                    ->label("Note d'honoraire")
-                    ->disabled(),
-                Forms\Components\TextInput::make('object')
-                    ->label("Objet d'honoraire"),
-                /* ->disabled(), */
-                Forms\Components\TextInput::make('montantHT')
-                    ->label("Montant H.T")
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function ($state, callable $set, $get) {
-                        if ($state) {
-                            $newTva = $get('montantHT') * config('taxes.tva');
-                            $newMontantTTC = $get('montantHT') + $newTva;
-                            $newRs = $newMontantTTC * config('taxes.rs');
-                            $newTf = config('taxes.tf');
-                            $newNetapayer = $newMontantTTC - $newRs + $newTf;
+                                        $set('note', $newNote);
+                                        $set('object', $newObject);
+                                    }
+                                }),
+                            Forms\Components\TextInput::make('montantHT')
+                                ->label("Montant H.T")
+                                ->live(onBlur: true)
+                                ->required()
+                                ->afterStateUpdated(function ($state, callable $set, $get) {
+                                    if ($state) {
+                                        $newTva = $get('montantHT') * config('taxes.tva');
+                                        $newMontantTTC = $get('montantHT') + $newTva;
+                                        $newRs = $newMontantTTC * config('taxes.rs');
+                                        $newTf = config('taxes.tf');
+                                        $newNetapayer = $newMontantTTC - $newRs + $newTf;
 
-                            $set('tva', $newTva);
-                            $set('montantTTC', $newMontantTTC);
-                            $set('rs', $newRs);
-                            $set('tf', $newTf);
-                            $set('netapayer', $newNetapayer);
-                        }
-                    }),
-                Forms\Components\TextInput::make('tva')
-                    ->label("T.V.A"),
-                Forms\Components\TextInput::make('montantTTC')
-                    ->label("Montant T.T.C"),
-                Forms\Components\TextInput::make('rs')
-                    ->label("R/S"),
-                Forms\Components\TextInput::make('tf')
-                    ->label("Timbre Fisacle"),
-                Forms\Components\TextInput::make('netapayer')
-                    ->label("Net à Payer"),
-            ]);
+                                        $set('tva', $newTva);
+                                        $set('montantTTC', $newMontantTTC);
+                                        $set('rs', $newRs);
+                                        $set('tf', $newTf);
+                                        $set('netapayer', $newNetapayer);
+                                    }
+                                }),
+                        ]),
+                    Forms\Components\Wizard\Step::make("Information de l'honoraire")
+                        ->schema([
+                            Forms\Components\TextInput::make('note')
+                                ->label("Note d'honoraire")
+                                ->disabled(),
+                            Forms\Components\TextInput::make('object')
+                                ->label("Objet d'honoraire"),
+                            Forms\Components\DatePicker::make('date')
+                                ->label("Date d'honoraire")
+                                ->default(now()->toDateString()),
+                        ]),
+                    Forms\Components\Wizard\Step::make('Autre Information')
+                        ->schema([
+                            Forms\Components\TextInput::make('tva')
+                                ->label("T.V.A"),
+                            Forms\Components\TextInput::make('montantTTC')
+                                ->label("Montant T.T.C"),
+                            Forms\Components\TextInput::make('rs')
+                                ->label("R/S"),
+                            Forms\Components\TextInput::make('tf')
+                                ->label("Timbre Fisacle"),
+                            Forms\Components\TextInput::make('netapayer')
+                                ->label("Net à Payer"),
+                        ]),
+                ]),
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table
@@ -154,8 +167,8 @@ class HonoraireResource extends Resource
                 Tables\Columns\TextColumn::make('client.mf')
                     ->label('Matricule Fiscale')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Date de création')
+                Tables\Columns\TextColumn::make('date')
+                    ->label("Date d'honoraire")
                     ->datetime()
                     ->sortable(),
             ])
@@ -206,9 +219,9 @@ class HonoraireResource extends Resource
                         TextEntry::make('note')
                             ->label("Note d'honoraire")
                             ->formatStateUsing(fn(string $state): string => str_pad($state, 8, '0', STR_PAD_LEFT)),
-                        TextEntry::make('created_at')
-                            ->label('Date de création')
-                            ->dateTime(),
+                        TextEntry::make('date')
+                            ->label('Date de honoraire')
+                            ->date(),
                     ])
                     ->columns(3),
 

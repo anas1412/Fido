@@ -36,7 +36,7 @@ class AdminPanelProvider extends PanelProvider
             ]) */
             /* ->registration() */
             /* ->passwordReset() */
-            
+
             ->brandName('Fido')
             ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('3rem')

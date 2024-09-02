@@ -20,6 +20,12 @@ class StatsOverview extends BaseWidget
     protected function getStats(): array
     {
         return [
+            Stat::make("Années de l'exercice", "2024")
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->color('success')
+                ->description('Pour changer l\'année, veuillez cliquer içi')
+                ->descriptionColor('success')
+                ->url('dashboard/edit-taxes'),
             Stat::make('Nombre des clients enregistrés', Client::count())
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')

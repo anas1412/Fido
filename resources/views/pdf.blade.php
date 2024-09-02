@@ -2,12 +2,9 @@
     use App\Helpers\NumberToWords;
 
     $netapayer = $record->netapayer;
-    $dinarsInWords = NumberToWords::convertToWords($netapayer);
-    $millimes = number_format($netapayer * 1000, 0, '.', '');
-    $millimes = substr($millimes, -3);
-    if (strlen($millimes) < 3) {
-        $millimes = str_pad($millimes, 3, '0', STR_PAD_LEFT);
-    }
+    $dinars = floor($netapayer);
+    $millimes = round(($netapayer - $dinars) * 1000);
+    $dinarsInWords = NumberToWords::convertToWords($dinars);
 @endphp
 
 <!DOCTYPE html>
@@ -16,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note d'honoraires</title>
+    <title>Note d'honoraire</title>
     <style>
         @page {
             size: A4;
@@ -42,7 +39,7 @@
 
         .header {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 0px;
         }
 
         .header h1 {
@@ -58,14 +55,15 @@
         .logo-container {
             position: absolute;
             top: 0;
-            right: 0;
+            right: 0px;
+            /* Moved 20px to the right */
             text-align: center;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
-            border: 1px;
+            width: 100px;
+            height: 100px;
+            border: 2px;
             border-radius: 50%;
             text-align: center;
             line-height: 60px;
@@ -74,7 +72,7 @@
         }
 
         .logo img {
-            width: 100px;
+            width: 130px;
             /* Adjust the width as needed */
             height: auto;
             /* Adjust the height automatically to maintain aspect ratio */
@@ -88,38 +86,45 @@
             font-size: 12px;
             text-decoration: underline;
             /* Underline the text */
+            text-align: right;
+            /* Align the text to the right */
         }
 
         .header-line {
             border-top: 1px solid #000;
-            margin-top: 22px;
+            margin-top: 8px;
         }
 
         .invoice-details {
-            margin-bottom: 00px;
-        }
-
-        .invoice-details p {
-            font-size: 1em;
-            /* Increases the size of the text */
             margin: 0;
-        }
-
-        .invoice-details p strong {
-            font-weight: bold;
-            text-decoration: underline;
+            padding-top: 0px;
+            font-size: 1.2em;
         }
 
         .client-info {
             text-align: right;
             margin-bottom: 5px;
+            font-size: 1.2em;
         }
 
         .client-box {
             border: 1px solid #000;
             padding: 5px;
             display: inline-block;
-            margin-left: 50%;
+            margin-left: 30%;
+            text-align: left;
+            line-height: 1.2;
+            /* Reduce line height to bring paragraphs closer */
+        }
+
+        .client-box p {
+            margin: 0 0 5px 0;
+            /* Reduce bottom margin of paragraphs */
+        }
+
+        .client-box p:last-child {
+            margin-bottom: 0;
+            /* Remove bottom margin from last paragraph */
         }
 
         .invoice-purpose {
@@ -150,24 +155,38 @@
             width: 50%;
             border-collapse: collapse;
             margin: auto;
+            margin-bottom: 10px;
             /* Center the table */
         }
 
         .invoice-table th,
         .invoice-table td {
-            border: 1px solid #000;
+            border: none;
             padding: 8px;
-            text-align: right;
         }
 
-        .invoice-table th {
-            background-color: #f2f2f2;
+        .invoice-table th:first-child,
+        .invoice-table td:first-child {
+            text-align: left;
+            width: 40%;
+        }
+
+        .invoice-table th:nth-child(2),
+        .invoice-table td:nth-child(2) {
+            text-align: center;
+            width: 20%;
+        }
+
+        .invoice-table th:last-child,
+        .invoice-table td:last-child {
+            text-align: right;
+            width: 40%;
         }
 
         .total-in-words {
             margin-bottom: 80px;
-            font-style: italic;
             position: relative;
+            font-size: 15px;
             /* This allows positioning of the signature text */
         }
 
@@ -182,11 +201,14 @@
 
         .footer {
             text-align: center;
-            font-size: 10px;
+            font-size: 12px;
             border-top: 1px solid #000;
-            padding-top: 5px;
-            margin-top: auto;
-            /* Pushes footer to the bottom */
+            padding-top: 3px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
         }
 
         .footer-table {
@@ -212,20 +234,22 @@
             <div class="logo">
                 <img src="{{ public_path('images/CCT.jpg') }}" alt="Logo">
             </div>
-            <br>
-            <div class="mf-number">M.F. : 729831 E-A-P- 000</div>
+
         </div>
+        <br>
+        <div class="mf-number">M.F. : 0729831E-A-P-000</div>
         <div class="header-line"></div>
     </div>
 
     <div class="invoice-details">
-        <p><strong>Note d'honoraires :</strong> N°{{ str_pad($record->note, 8, '0', STR_PAD_LEFT) }}</p>
+        <p><u>Note d'honoraires :</u> N°{{ substr_replace(str_pad($record->note, 8, '0', STR_PAD_LEFT), '/', -4, 0) }}
+        </p>
     </div>
 
     <div class="client-info">
         <p>Hammamet le : {{ $formattedDate }}</p>
         <div class="client-box">
-            <p>Client: {{ $record->client->name }}</p>
+            <p>Client: <strong>{{ $record->client->name }}</strong></p>
             <p>Adresse: {{ $record->client->address }}</p>
             <p>M.F.: {{ $record->client->mf }}</p>
         </div>
@@ -238,31 +262,33 @@
     <div class="invoice-table-container">
         <table class="invoice-table">
             <tr>
-                <th>Description</th>
-                <th>Montant</th>
-            </tr>
-            <tr>
                 <td>Montant H.T</td>
+                <td>:</td>
                 <td>{{ number_format($record->montantHT, 3, '.', ',') }}</td>
             </tr>
             <tr>
                 <td>T.V.A {{ $tva * 100 }}%</td>
+                <td>:</td>
                 <td>{{ number_format($record->tva, 3, '.', ',') }}</td>
             </tr>
             <tr>
                 <td>Montant T.T.C</td>
+                <td>:</td>
                 <td>{{ number_format($record->montantTTC, 3, '.', ',') }}</td>
             </tr>
             <tr>
                 <td>R/S {{ $rs * 100 }}%</td>
+                <td>:</td>
                 <td>{{ number_format($record->rs, 3, '.', ',') }}</td>
             </tr>
             <tr>
                 <td>Timbre Fiscal</td>
+                <td>:</td>
                 <td>{{ number_format($record->tf, 3, '.', ',') }}</td>
             </tr>
             <tr>
                 <td><strong>Net à payer</strong></td>
+                <td>:</td>
                 <td><strong>{{ number_format($record->netapayer, 3, '.', ',') }}</strong></td>
             </tr>
         </table>
@@ -270,8 +296,8 @@
 
     <div class="total-in-words">
         <p>Arrêtée la présente note d'honoraires à la somme de :
-            {{ $dinarsInWords }}{{-- dinars et {{ $millimes }} millimes --}}.</p>
-        {{-- {{ $frenchWords }} dinars et {{ number_format(($record->netapayer * 1000), 0, '.', ',') | slice(-3) | replace({' ': '0'}) }} millimes.</p> --}}
+            {{ $dinarsInWords }} dinars et {{ $millimes }} millimes.
+        </p>
         <p class="signature-text"><strong>Cachet et signature</strong></p>
     </div>
 
@@ -280,18 +306,18 @@
             <tr>
                 <td>Av. Mohamed Ali Hammi</td>
                 <td>Tél : 72 26 38 83</td>
-                <td>GSM : 97 43 69 22 / 26 43 69 22</td>
+                <td>GSM : 26 43 69 22 - 27 43 69 22 - 28 43 69 22 </td>
             </tr>
             <tr>
                 <td>8050 Hammamet</td>
                 <td>Fax : 72 26 38 79</td>
                 <td>Email : ezzeddine.haouel@yahoo.fr</td>
             </tr>
-            <tr>
+            {{--             <tr>
                 <td></td>
                 <td></td>
                 <td>Email : ezzeddine.haouel@topnet.tn</td>
-            </tr>
+            </tr> --}}
         </table>
     </div>
 </body>

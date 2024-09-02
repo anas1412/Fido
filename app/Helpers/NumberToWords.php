@@ -8,11 +8,8 @@ class NumberToWords
     {
         $formatter = new \NumberFormatter('fr_FR', \NumberFormatter::SPELLOUT);
         $dinars = intval($number);
-        $millimes = round(($number - $dinars) * 1000);
+        $dinarsText = $formatter->format($dinars);
 
-        $dinarsText = $formatter->format($dinars) . ' dinars';
-        $millimesText = $formatter->format($millimes) . ' millimes';
-
-        return ucfirst($dinarsText) . ' et ' . $millimesText;
+        return ucfirst($dinarsText);
     }
 }

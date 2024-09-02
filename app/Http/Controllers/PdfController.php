@@ -16,7 +16,7 @@ class PdfController extends Controller
             ->download($honoraire->note . '.pdf'); */
 
         // Format the date
-        $formattedDate = $honoraire->created_at->format('d/m/Y');
+        $formattedDate = \Carbon\Carbon::parse($honoraire->date)->format('d/m/Y');
         /* $amountInWords = NumberToWords::convertToWords($honoraire->amount); */
 
         return Pdf::loadView('pdf', [
