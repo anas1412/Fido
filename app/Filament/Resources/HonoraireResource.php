@@ -34,6 +34,13 @@ class HonoraireResource extends Resource
 
     protected static ?string $navigationGroup = "Espace Client";
 
+    public static function getEloquentQuery(): Builder
+    {
+        $fiscalYear = config('fiscal_year.current_year');
+        return parent::getEloquentQuery()->whereYear('date', $fiscalYear);
+    }
+
+
     /* public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();

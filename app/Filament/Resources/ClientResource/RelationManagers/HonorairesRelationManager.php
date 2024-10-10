@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Infolists\Infolist;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Blade;
-
+use Illuminate\Support\Carbon;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Grid;
@@ -26,6 +26,13 @@ class HonorairesRelationManager extends RelationManager
     {
         return false;
     }
+
+/*     public static function getEloquentQuery(): Builder
+    {
+        $fiscalYear = config('fiscal_year.current_year');
+        return parent::getEloquentQuery()->whereYear('date', $fiscalYear);
+    }
+ */
 
 
     public function form(Form $form): Form
@@ -40,6 +47,7 @@ class HonorairesRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('date')
                     ->label("Date d'honoraire")
+                    /* ->default(Carbon::createFromDate(config('fiscal_year.current_year'), 1, 1)) */
                     ->default(now()->toDateString()),
 
                 Forms\Components\TextInput::make('montantHT')
@@ -88,6 +96,7 @@ class HonorairesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereYear('date', config('fiscal_year.current_year')))
             ->recordTitleAttribute('note')
             ->columns([
                 Tables\Columns\TextColumn::make('note')

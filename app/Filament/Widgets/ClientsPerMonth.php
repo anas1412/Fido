@@ -18,34 +18,29 @@ class ClientsPerMonth extends ChartWidget
 
     protected function getData(): array
     {
-        $currentYear = Carbon::now()->year;
+        $currentDate = Carbon::now();
+        $fiscalYearStart = $currentDate->month >= 4
+            ? $currentDate->copy()->startOfYear()->addMonths(3)
+            : $currentDate->copy()->subYear()->startOfYear()->addMonths(3);
+        $fiscalYearEnd = $fiscalYearStart->copy()->addYear()->subDay();
 
         $clients = Client::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-            ->whereYear('created_at', $currentYear)
+            ->whereBetween('created_at', [$fiscalYearStart, $fiscalYearEnd])
             ->groupBy('month')
             ->pluck('count', 'month')
             ->toArray();
 
         $data = [];
-        for ($month = 1; $month <= 12; $month++) {
-            $data[] = $clients[$month] ?? 0;
+        $labels = [];
+        for ($i = 0; $i < 12; $i++) {
+            $currentMonth = $fiscalYearStart->copy()->addMonths($i);
+            $monthKey = $currentMonth->format('n');
+            $data[] = $clients[$monthKey] ?? 0;
+            $labels[] = $currentMonth->translatedFormat('F');
         }
 
         return [
-            'labels' => [
-                'Janvier',
-                'Février',
-                'Mars',
-                'Avril',
-                'Mai',
-                'Juin',
-                'Juillet',
-                'Août',
-                'Septembre',
-                'Octobre',
-                'Novembre',
-                'Décembre',
-            ],
+            'labels' => $labels,
             'datasets' => [
                 [
                     'label' => 'Clients',

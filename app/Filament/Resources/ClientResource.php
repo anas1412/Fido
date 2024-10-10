@@ -44,6 +44,7 @@ class ClientResource extends Resource
         return ClientResource::getUrl('view', ['record' => $record]);
     }
 
+
     public static function getGloballySearchableAttributes(): array
     {
         return [

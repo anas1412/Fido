@@ -19,22 +19,24 @@ class StatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
+        $currentFiscalYear = config('fiscal_year.current_year');
+
         return [
-            Stat::make("Années de l'exercice", "2024")
+            Stat::make("Années de l'exercice", $currentFiscalYear)
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
                 ->description('Pour changer l\'année, veuillez cliquer içi')
                 ->descriptionColor('success')
-                ->url('dashboard/edit-taxes'),
-            Stat::make('Nombre des clients enregistrés', Client::count())
+                ->url('dashboard/modify-fiscal-year'),
+            Stat::make('Nombre des clients enregistrés', Client::whereYear('created_at', $currentFiscalYear)->count())
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
-                ->description('Nombre de clients enregistrés')
+                ->description('Nombre de clients enregistrés cette année fiscale')
                 ->descriptionColor('success'),
-            Stat::make("Nombre d'honoraires traités", Honoraire::count())
+            Stat::make("Nombre d'honoraires traités", Honoraire::whereYear('created_at', $currentFiscalYear)->count())
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
-                ->description('Nombre d\'honoraires traités')
+                ->description('Nombre d\'honoraires traités cette année fiscale')
                 ->descriptionColor('success'),
             Stat::make("Nombre d'utilisateurs", User::count())
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
