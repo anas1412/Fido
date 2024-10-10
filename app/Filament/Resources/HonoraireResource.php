@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Blade;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Grid;
+use Filament\Forms\Components\Toggle;
 
 class HonoraireResource extends Resource
 {
@@ -105,10 +106,10 @@ class HonoraireResource extends Resource
                                 ->required()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                     if ($state) {
-                                        $newTva = $get('montantHT') * config('taxes.tva');
+                                        $newTva = $get('exonere_tva') ? 0 : ($get('montantHT') * config('taxes.tva'));
                                         $newMontantTTC = $get('montantHT') + $newTva;
-                                        $newRs = $newMontantTTC * config('taxes.rs');
-                                        $newTf = config('taxes.tf');
+                                        $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * config('taxes.rs'));
+                                        $newTf = $get('exonere_tf') ? 0 : config('taxes.tf');
                                         $newNetapayer = $newMontantTTC - $newRs + $newTf;
 
                                         $set('tva', $newTva);
@@ -117,6 +118,34 @@ class HonoraireResource extends Resource
                                         $set('tf', $newTf);
                                         $set('netapayer', $newNetapayer);
                                     }
+                                }),
+                            Toggle::make('exonere_tf')
+                                ->label('Exonération TF')
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set, $get) {
+                                    $newTf = $state ? 0 : config('taxes.tf');
+                                    $set('tf', $newTf);
+                                    $set('netapayer', $get('montantTTC') - $get('rs') + $newTf);
+                                }),
+                            Toggle::make('exonere_rs')
+                                ->label('Exonération RS')
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set, $get) {
+                                    $newRs = $state ? 0 : ($get('montantTTC') * config('taxes.rs'));
+                                    $set('rs', $newRs);
+                                    $set('netapayer', $get('montantTTC') - $newRs + $get('tf'));
+                                }),
+                            Toggle::make('exonere_tva')
+                                ->label('Exonération TVA')
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set, $get) {
+                                    $newTva = $state ? 0 : ($get('montantHT') * config('taxes.tva'));
+                                    $newMontantTTC = $get('montantHT') + $newTva;
+                                    $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * config('taxes.rs'));
+                                    $set('tva', $newTva);
+                                    $set('montantTTC', $newMontantTTC);
+                                    $set('rs', $newRs);
+                                    $set('netapayer', $newMontantTTC - $newRs + $get('tf'));
                                 }),
                         ]),
                     Forms\Components\Wizard\Step::make("Information de l'honoraire")
@@ -209,7 +238,6 @@ class HonoraireResource extends Resource
                         TextEntry::make('client.mf')
                             ->label('Matricule Fiscale')
                             ->icon('heroicon-o-identification'),
-
                     ])
                     ->columns(2),
                 Section::make('Informations supplémentaires')
@@ -224,7 +252,22 @@ class HonoraireResource extends Resource
                             ->date(),
                     ])
                     ->columns(3),
-
+                Section::make('Informations sur exonération')
+                    ->schema([
+                        TextEntry::make('exonere_tf')
+                            ->label('Exonération TF')
+                            ->formatStateUsing(fn(bool $state): string => $state ? 'Oui' : 'Non')
+                            ->color(fn(bool $state): string => $state ? 'success' : 'danger'),
+                        TextEntry::make('exonere_rs')
+                            ->label('Exonération RS')
+                            ->formatStateUsing(fn(bool $state): string => $state ? 'Oui' : 'Non')
+                            ->color(fn(bool $state): string => $state ? 'success' : 'danger'),
+                        TextEntry::make('exonere_tva')
+                            ->label('Exonération TVA')
+                            ->formatStateUsing(fn(bool $state): string => $state ? 'Oui' : 'Non')
+                            ->color(fn(bool $state): string => $state ? 'success' : 'danger'),
+                    ])
+                    ->columns(3),
                 Section::make('Détails financiers')
                     ->schema([
                         Grid::make(2)
@@ -253,10 +296,9 @@ class HonoraireResource extends Resource
                                     ->weight('bold'),
                             ]),
                     ]),
-
-
             ]);
     }
+
     public static function getRelations(): array
     {
         return [

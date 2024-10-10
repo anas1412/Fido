@@ -19,7 +19,16 @@ class Honoraire extends Model
         'rs',
         'tf',
         'netapayer',
-        'client_id'
+        'client_id',
+        'exonere_tf',
+        'exonere_rs',
+        'exonere_tva',
+    ];
+
+    protected $casts = [
+        'exonere_tf' => 'boolean',
+        'exonere_rs' => 'boolean',
+        'exonere_tva' => 'boolean',
     ];
 
     public function client()
