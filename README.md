@@ -18,8 +18,8 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
 ## Demo Screenshots
 
 <p align="center">
-  <img src="https://github.com/anas1412/Fido/blob/main/Demo1.png?raw=true" width="45%" alt="Demo Screenshot 1">
-  <img src="https://github.com/anas1412/Fido/blob/main/Demo2.png?raw=true" width="45%" alt="Demo Screenshot 2">
+  <img src="https://raw.githubusercontent.com/anas1412/Fido/f562e70d77884540bc364717be13d56d3b385451/Demo1.png?raw=true" width="45%" alt="Demo Screenshot 1">
+  <img src="https://raw.githubusercontent.com/anas1412/Fido/f562e70d77884540bc364717be13d56d3b385451/Demo2.png?raw=true" width="45%" alt="Demo Screenshot 2">
 </p>
 
 ## Prerequisites
