@@ -15,7 +15,12 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::get('pdf/{honoraire}', PdfController::class)->name('pdf');
+Route::get('pdf/{honoraire}', PdfController::class)->name('pdf')
+    ->middleware(['auth']);;
+
+Route::post('pdf/retenue-source', [PdfController::class, 'generateRetenueSourcReport'])
+    ->name('pdf.retenue-source')
+    ->middleware(['auth']);
 
 
 require __DIR__ . '/auth.php';

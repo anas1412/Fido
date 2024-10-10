@@ -17,6 +17,12 @@ class EditTaxes extends Page
     protected static ?string $slug = 'edit-taxes';
     protected static ?string $title = 'Modifier les Paramètres de Taxes';
     protected static string $view = 'filament.pages.edit-taxes';
+    protected static ?string $navigationGroup = "Parametres";
+    public static function getNavigationSort(): ?int
+    {
+        return 100; // A high number to ensure it appears at the bottom
+    }
+
 
     public static function canView(): bool
     {

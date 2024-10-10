@@ -21,4 +21,9 @@ class Client extends Model
     {
         return $this->hasMany(Honoraire::class);
     }
+
+    public function honorairesWithRS(): HasMany
+    {
+        return $this->hasMany(Honoraire::class)->whereNotNull('rs')->where('rs', '>', 0);
+    }
 }

@@ -22,6 +22,12 @@ class ModifyFiscalYear extends Page implements HasForms
     protected static ?string $slug = 'modify-fiscal-year';
     protected static ?string $title = 'Modifier l\'année de l\'exercice';
 
+    protected static ?string $navigationGroup = "Parametres";
+    public static function getNavigationSort(): ?int
+    {
+        return 99; // A high number to ensure it appears at the bottom
+    }
+
 
     public function mount(): void
     {

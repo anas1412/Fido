@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Honoraire;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helpers\NumberToWords;
+use App\Models\Client;
 
 
 class PdfController extends Controller
@@ -27,5 +28,25 @@ class PdfController extends Controller
         ])
             ->setPaper('A4', 'portrait') // Set paper size and orientation
             ->download($honoraire->note . '.pdf');
+    }
+
+    public function generateRetenueSourcReport(Request $request)
+    {
+        $client = Client::findOrFail($request->client_id);
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        $honoraires = Honoraire::where('client_id', $client->id)
+            ->whereBetween('date', [$startDate, $endDate])
+            ->get();
+
+        return Pdf::loadView('retenue-source', [
+            'client' => $client,
+            'honoraires' => $honoraires,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ])
+            ->setPaper('A4', 'portrait')
+            ->download("rapport_retenue_source_{$client->name}.pdf");
     }
 }
