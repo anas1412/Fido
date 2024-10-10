@@ -15,6 +15,13 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
 -   [TailwindCSS](https://tailwindcss.com/).
 -   [FilamentPHP](https://filamentphp.com/).
 
+## Demo Screenshots
+
+<p align="center">
+  <img src="https://github.com/anas1412/Fido/blob/main/public/images/Demo1.png?raw=true" width="45%" alt="Demo Screenshot 1">
+  <img src="https://github.com/anas1412/Fido/blob/main/public/images/Demo2.png?raw=true" width="45%" alt="Demo Screenshot 2">
+</p>
+
 ## Prerequisites
 
 1. **Install WAMP or Alternative:**
