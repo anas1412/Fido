@@ -1,37 +1,51 @@
 {{-- resources/views/filament/pages/edit-taxes.blade.php --}}
 
 <x-filament::page>
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 mb-8 md:grid-cols-3">
         <x-filament::card>
             <x-slot name="header">
-                <div class="text-lg font-medium text-gray-900">TVA Rate</div>
+                <h2 class="text-lg font-medium text-gray-900">TVA Rate</h2>
             </x-slot>
-            <div class="text-3xl font-semibold">{{ $tva * 100 }}%</div>
-            <div class="text-gray-600">Pourcentage de TVA</div>
+            <div class="flex items-baseline">
+                <span class="text-3xl font-semibold text-primary-600">{{ number_format($tva * 100, 2) }}%</span>
+                <span class="ml-2 text-sm text-gray-600">Pourcentage de TVA</span>
+            </div>
         </x-filament::card>
 
         <x-filament::card>
             <x-slot name="header">
-                <div class="text-lg font-medium text-gray-900">RS Value</div>
+                <h2 class="text-lg font-medium text-gray-900">RS Value</h2>
             </x-slot>
-            <div class="text-3xl font-semibold">{{ $rs * 100 }}%</div>
-            <div class="text-gray-600">Pourcentage de RS</div>
+            <div class="flex items-baseline">
+                <span class="text-3xl font-semibold text-primary-600">{{ number_format($rs * 100, 2) }}%</span>
+                <span class="ml-2 text-sm text-gray-600">Pourcentage de RS</span>
+            </div>
         </x-filament::card>
 
         <x-filament::card>
             <x-slot name="header">
-                <div class="text-lg font-medium text-gray-900">TF Value</div>
+                <h2 class="text-lg font-medium text-gray-900">TF Value</h2>
             </x-slot>
-            <div class="text-3xl font-semibold">{{ $tf * 1000 }} Millimes</div>
-            <div class="text-gray-600">Montant de Timbre Fiscale</div>
+            <div class="flex items-baseline">
+                <span class="text-3xl font-semibold text-primary-600">{{ number_format($tf * 1000, 0) }}</span>
+                <span class="ml-2 text-sm text-gray-600">Millimes (Timbre Fiscale)</span>
+            </div>
         </x-filament::card>
     </div>
 
-    <form wire:submit.prevent="submit" class="mt-6">
-        {{ $this->form }}
+    <x-filament::card>
+        <x-slot name="header">
+            <h2 class="text-lg font-medium text-gray-900">Modifier les taux</h2>
+        </x-slot>
 
-        <x-filament::button type="submit" color="primary" class="mt-6">
-            Sauvgarder
-        </x-filament::button>
-    </form>
+        <form wire:submit.prevent="submit" class="space-y-6">
+            {{ $this->form }}
+
+            <div class="flex justify-end">
+                <x-filament::button type="submit" color="primary">
+                    Sauvegarder
+                </x-filament::button>
+            </div>
+        </form>
+    </x-filament::card>
 </x-filament::page>
