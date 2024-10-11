@@ -16,7 +16,7 @@ class ListRetenueSourc extends ListRecords
 {
     protected static string $resource = RetenueSourcResource::class;
 
-    protected static ?string $title = "Rapport de retenue à la source";
+    protected static ?string $title = "Rapport de retenue à la source par client";
 
 
     protected function getHeaderActions(): array

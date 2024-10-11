@@ -40,11 +40,19 @@ class PdfController extends Controller
             ->whereBetween('date', [$startDate, $endDate])
             ->get();
 
+        // Calculate total amount and total retenue source
+        $totalAmount = $honoraires->sum('amount');
+        $totalRetenueSource = $honoraires->sum(function ($honoraire) {
+            return $honoraire->amount * (config('taxes.rs') / 100);
+        });
+
         return Pdf::loadView('retenue-source', [
             'client' => $client,
             'honoraires' => $honoraires,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'totalAmount' => $totalAmount,
+            'totalRetenueSource' => $totalRetenueSource,
         ])
             ->setPaper('A4', 'portrait')
             ->download("rapport_retenue_source_{$client->name}.pdf");

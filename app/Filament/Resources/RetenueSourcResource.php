@@ -12,6 +12,14 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Grouping\Group;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Support\Enums\MaxWidth;
+use Filament\Tables\Columns\Summarizers\Average;
+use Filament\Tables\Columns\Summarizers\Range;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\Summarizers\Sum;
 
 class RetenueSourcResource extends Resource
 {
@@ -19,37 +27,44 @@ class RetenueSourcResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-
-
     protected static ?string $navigationGroup = "Rapports";
 
-    protected static ?string $navigationLabel = 'Retenue à la source';
+    protected static ?string $navigationLabel = 'Retenue à la source par client';
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('client.name')
+                /* Tables\Columns\TextColumn::make('client.name')
                     ->label('Nom du client')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable(), */
                 Tables\Columns\TextColumn::make('date')
                     ->label("Date d'honoraire")
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('montantTTC')
                     ->label('Montant TTC')
+                    ->summarize(Sum::make()->label('Montant TTC Total')->money('TND'))
                     ->money('tnd')
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('rs')
                     ->label('Retenue à la source')
+                    ->summarize(Sum::make()->label('Retenue à la source Total')->money('TND'))
                     ->money('tnd')
                     ->sortable(),
+
+
             ])
+            ->defaultGroup(
+                Group::make('client.name')
+                    ->collapsible()
+            )
             ->filters([
                 SelectFilter::make('client')
                     ->relationship('client', 'name')
-                    ->label('Client'),
+                    ->label('Nom du client'),
                 Filter::make('date_range')
                     ->form([
                         Forms\Components\DatePicker::make('start_date')
@@ -64,7 +79,13 @@ class RetenueSourcResource extends Resource
                                 fn(Builder $query): Builder => $query->whereBetween('date', [$data['start_date'], $data['end_date']]),
                             );
                     }),
-            ])
+            ], layout: FiltersLayout::AboveContent)
+            ->filtersFormColumns(2)
+            /* ->filtersTriggerAction(
+                fn(Action $action) => $action
+                    ->button()
+                    ->label('Choisir un client et les dates')
+            ) */
             ->actions([
                 /* Tables\Actions\ViewAction::make(), */])
             ->bulkActions([

@@ -8,7 +8,7 @@ use App\Models\Client;
 
 class ClientsPerMonth extends ChartWidget
 {
-    protected static ?string $heading = 'Clients par mois (année en cours)';
+    protected static ?string $heading = 'Clients par mois (année fiscale en cours)';
 
     protected static ?int $sort = 2;
 
