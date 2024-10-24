@@ -5,6 +5,8 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\ChartWidget;
 use Carbon\Carbon;
 use App\Models\Client;
+use Illuminate\Support\Facades\DB;
+
 
 class ClientsPerMonth extends ChartWidget
 {
@@ -24,7 +26,14 @@ class ClientsPerMonth extends ChartWidget
             : $currentDate->copy()->subYear()->startOfYear()->addMonths(3);
         $fiscalYearEnd = $fiscalYearStart->copy()->addYear()->subDay();
 
-        $clients = Client::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+        /* $clients = Client::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->whereBetween('created_at', [$fiscalYearStart, $fiscalYearEnd])
+            ->groupBy('month')
+            ->pluck('count', 'month')
+            ->toArray(); */
+
+        $clients = DB::table('clients')
+            ->selectRaw("strftime('%m', created_at) as month, COUNT(*) as count")
             ->whereBetween('created_at', [$fiscalYearStart, $fiscalYearEnd])
             ->groupBy('month')
             ->pluck('count', 'month')

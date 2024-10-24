@@ -52,6 +52,7 @@ class ListRetenueSourc extends ListRecords
                     Forms\Components\Select::make('client_id')
                         ->label('Client')
                         ->options(Client::pluck('name', 'id'))
+                        ->searchable()
                         ->required(),
                     Forms\Components\DatePicker::make('start_date')
                         ->label('Date de début')

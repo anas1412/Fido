@@ -5,6 +5,8 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\ChartWidget;
 use Carbon\Carbon;
 use App\Models\Honoraire;
+use Illuminate\Support\Facades\DB;
+
 
 class HonorairesPerMonth extends ChartWidget
 {
@@ -24,11 +26,19 @@ class HonorairesPerMonth extends ChartWidget
             : $currentDate->copy()->subYear()->startOfYear()->addMonths(3);
         $fiscalYearEnd = $fiscalYearStart->copy()->addYear()->subDay();
 
-        $honoraires = Honoraire::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+        /* $honoraires = Honoraire::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->whereBetween('created_at', [$fiscalYearStart, $fiscalYearEnd])
+            ->groupBy('month')
+            ->pluck('count', 'month')
+            ->toArray(); */
+
+        $honoraires = DB::table('honoraires')
+            ->selectRaw("strftime('%m', created_at) as month, COUNT(*) as count")
             ->whereBetween('created_at', [$fiscalYearStart, $fiscalYearEnd])
             ->groupBy('month')
             ->pluck('count', 'month')
             ->toArray();
+
 
         $data = [];
         $labels = [];

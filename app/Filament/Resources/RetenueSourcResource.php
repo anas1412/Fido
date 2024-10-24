@@ -59,11 +59,12 @@ class RetenueSourcResource extends Resource
             ])
             ->defaultGroup(
                 Group::make('client.name')
-                    ->collapsible()
+                    ->collapsible(),
             )
             ->filters([
                 SelectFilter::make('client')
                     ->relationship('client', 'name')
+                    ->searchable()
                     ->label('Nom du client'),
                 Filter::make('date_range')
                     ->form([
