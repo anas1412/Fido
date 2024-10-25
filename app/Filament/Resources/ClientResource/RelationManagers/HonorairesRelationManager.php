@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Infolists\Infolist;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Filament\Forms\Components\Toggle;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Carbon;
 use Filament\Infolists\Components\Section;
@@ -27,7 +28,7 @@ class HonorairesRelationManager extends RelationManager
         return false;
     }
 
-/*     public static function getEloquentQuery(): Builder
+    /*     public static function getEloquentQuery(): Builder
     {
         $fiscalYear = config('fiscal_year.current_year');
         return parent::getEloquentQuery()->whereYear('date', $fiscalYear);
@@ -49,17 +50,19 @@ class HonorairesRelationManager extends RelationManager
                     ->label("Date d'honoraire")
                     /* ->default(Carbon::createFromDate(config('fiscal_year.current_year'), 1, 1)) */
                     ->default(now()->toDateString()),
-
+                Forms\Components\TextInput::make('object')
+                    ->label("Objet d'honoraire"),
                 Forms\Components\TextInput::make('montantHT')
                     ->label("Montant H.T")
                     ->live(onBlur: true)
                     ->required()
                     ->afterStateUpdated(function ($state, callable $set, $get) {
                         if ($state) {
-                            $newTva = $get('montantHT') * config('taxes.tva');
+                            $newTva = $get('exonere_tva') ? 0 : ($get('montantHT') * config('taxes.tva'));
+
                             $newMontantTTC = $get('montantHT') + $newTva;
-                            $newRs = $newMontantTTC * config('taxes.rs');
-                            $newTf = config('taxes.tf');
+                            $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * config('taxes.rs'));
+                            $newTf = $get('exonere_tf') ? 0 : config('taxes.tf');
                             $newNetapayer = $newMontantTTC - $newRs + $newTf;
 
                             $currentYear = date('Y');
@@ -76,19 +79,47 @@ class HonorairesRelationManager extends RelationManager
                             $set('object', $newObject);
                         }
                     }),
-                Forms\Components\TextInput::make('object')
-                    ->label("Objet d'honoraire"),
-                Forms\Components\TextInput::make('tva')
-                    ->label("T.V.A"),
+
                 Forms\Components\TextInput::make('montantTTC')
                     ->label("Montant T.T.C"),
+                Forms\Components\TextInput::make('netapayer')
+                    ->label("Net à Payer"),
+                Forms\Components\TextInput::make('tva')
+                    ->label("T.V.A"),
+
                 Forms\Components\TextInput::make('rs')
                     ->label("R/S"),
                 Forms\Components\TextInput::make('tf')
                     ->label("Timbre Fisacle"),
-                Forms\Components\TextInput::make('netapayer')
-                    ->label("Net à Payer"),
-            ]);
+                Toggle::make('exonere_tva')
+                    ->label('Exonération TVA')
+                    ->live()
+                    ->afterStateUpdated(function ($state, callable $set, $get) {
+                        $newTva = $state ? 0 : ($get('montantHT') * config('taxes.tva'));
+                        $newMontantTTC = $get('montantHT') + $newTva;
+                        $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * config('taxes.rs'));
+                        $set('tva', $newTva);
+                        $set('montantTTC', $newMontantTTC);
+                        $set('rs', $newRs);
+                        $set('netapayer', $newMontantTTC - $newRs + $get('tf'));
+                    }),
+                Toggle::make('exonere_rs')
+                    ->label('Exonération RS')
+                    ->live()
+                    ->afterStateUpdated(function ($state, callable $set, $get) {
+                        $newRs = $state ? 0 : ($get('montantTTC') * config('taxes.rs'));
+                        $set('rs', $newRs);
+                        $set('netapayer', $get('montantTTC') - $newRs + $get('tf'));
+                    }),
+                Toggle::make('exonere_tf')
+                    ->label('Exonération TF')
+                    ->live()
+                    ->afterStateUpdated(function ($state, callable $set, $get) {
+                        $newTf = $state ? 0 : config('taxes.tf');
+                        $set('tf', $newTf);
+                        $set('netapayer', $get('montantTTC') - $get('rs') + $newTf);
+                    }),
+            ])->columns(3);
     }
 
 
@@ -108,10 +139,6 @@ class HonorairesRelationManager extends RelationManager
                     ->searchable(),
                 Tables\Columns\TextColumn::make('object')
                     ->label("Objet d'honoraire"),
-                Tables\Columns\TextColumn::make('client.name')
-                    ->label('Nom de client')
-                    ->sortable()
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('client.mf')
                     ->label('Matricule Fiscale')
                     ->searchable(),
