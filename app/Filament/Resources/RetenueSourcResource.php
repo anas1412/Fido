@@ -39,23 +39,20 @@ class RetenueSourcResource extends Resource
                     ->label('Nom du client')
                     ->sortable()
                     ->searchable(), */
+                Tables\Columns\TextColumn::make('note')
+                    ->label('Note')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('date')
                     ->label("Date d'honoraire")
-                    ->date()
-                    ->sortable(),
+                    ->date(),
                 Tables\Columns\TextColumn::make('montantTTC')
                     ->label('Montant TTC')
-                    ->summarize(Sum::make()->label('Montant TTC Total')->money('TND'))
-                    ->money('tnd')
-                    ->sortable(),
-
+                    ->summarize(Sum::make()->label('')->money('TND'))
+                    ->money('tnd'),
                 Tables\Columns\TextColumn::make('rs')
                     ->label('Retenue à la source')
-                    ->summarize(Sum::make()->label('Retenue à la source Total')->money('TND'))
-                    ->money('tnd')
-                    ->sortable(),
-
-
+                    ->summarize(Sum::make()->label('')->money('TND'))
+                    ->money('tnd'),
             ])
             ->defaultGroup(
                 Group::make('client.name')
