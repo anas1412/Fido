@@ -14,6 +14,7 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
 -   [Laravel](https://laravel.com/).
 -   [TailwindCSS](https://tailwindcss.com/).
 -   [FilamentPHP](https://filamentphp.com/).
+-   [SQLite](https://www.sqlite.org/).
 
 ## Demo Screenshots
 
@@ -24,26 +25,20 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
 
 ## Prerequisites
 
-1. **Install WAMP or Alternative:**
-
-    - Download and install WAMP from [here](https://www.wampserver.com/en/).
-    - Ensure you have installed **VC Redist AIO** before installing WAMP. Download it [here](https://github.com/abbodi1406/vcredist/releases).
-
-2. **Install Composer:**
+1. **Install Composer:**
 
     - Download and install Composer from [here](https://getcomposer.org/download/).
     - During installation, make sure to:
         - Select **"Add to PATH"**.
         - Choose **PHP 8.2** as the PHP version.
 
-3. **Install Git:**
+2. **Install Git:**
     - Download and install Git from [here](https://git-scm.com/downloads).
 
 ## Setting Up the Project
 
 1. **Clone the Repository:**
 
-    - Open the **WAMP** installation directory, typically located at `C:\wamp64\www\`.
     - Open a Command Prompt in this directory and run:
         ```bash
         git clone https://github.com/anas1412/Fido.git
@@ -51,7 +46,10 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
 
 2. **Set Up Environment Configuration:**
 
-    - Navigate to the `Fido` folder in the **www** directory.
+    - Navigate to the `Fido` folder
+        ```bash
+        cd Fido
+        ```
     - Copy the `.env.example` file and rename it to `.env`.
     - Make the necessary changes to the `.env` file, such as setting up your database credentials.
 
@@ -73,39 +71,47 @@ There are two ways to run the Fido web app locally:
     ```bash
     php artisan serve
     ```
--   The web application will be running on `localhost:8000` or `127.0.0.1:8000`
+-   The web application will be running on http://localhost:8000 or http://127.0.0.1:8000
 
 ### Production Mode
 
 For production, follow these additional steps:
 
-1. **Set Up Apache Virtual Host:**
+1.  **Set Up Apache Virtual Host:**
 
-    - Open the `httpd-vhosts.conf` file located at:
-        ```
-        C:\wamp64\bin\apache\apache2.4.xx\conf\extra\httpd-vhosts.conf
-        ```
-    - Add the following configuration:
+    -   Add this configuration to your Apache virtual host file, typically located in `/etc/apache2/sites-available`.
+    -   Add the following configuration:
         ```apache
-        <VirtualHost *:80>
+            <VirtualHost *:80>
             ServerName fido.local
-            DocumentRoot "C:/wamp64/www/Fido/public"
-            <Directory "C:/wamp64/www/Fido/public">
-                AllowOverride All
-                Require all granted
-            </Directory>
-        </VirtualHost>
+            DocumentRoot "/home/username/Fido/public"
+            <Directory "/home/username/Fido/public">
+            AllowOverride All
+            Require all granted
+             </Directory>
+            </VirtualHost>
         ```
+    -   Change `username` with your username
 
-2. **Update the Hosts File:**
+2.  **Steps to finalize:**
 
-    - Add the following line to your hosts file located at `C:\Windows\System32\drivers\etc\hosts`:
+    -   Enable the virtual host using:
         ```
-        127.0.0.1 fido.local
+        sudo a2ensite your-site-config.conf
         ```
-
-3. **Auto Start WAMP on Startup:**
-    - Ensure that WAMP is set to auto-start on system startup for smooth operation.
+    -   Update your hosts file to map fido.local to localhost:
+        ```
+        sudo nano /etc/hosts
+        ```
+    -   Add this line:
+        ```
+        127.0.0.1   fido.local
+        ```
+    -   Restart Apache to apply changes:
+        ```
+        sudo systemctl restart apache2
+        ```
+        Now, your project should be accessible at http://fido.local in your Linux environment!
 
 ## Default Users
 
