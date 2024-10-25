@@ -29,7 +29,7 @@ class RetenueSourcResource extends Resource
 
     protected static ?string $navigationGroup = "Rapports";
 
-    protected static ?string $navigationLabel = 'Retenue à la source par client';
+    protected static ?string $navigationLabel = 'Retenue à la source';
 
     public static function table(Table $table): Table
     {
