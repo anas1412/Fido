@@ -171,7 +171,7 @@
             <p>compagnie des comptables de Tunisie</p> --}}
         </div>
         <div class="invoice-purpose">
-            <p><strong>Période:</strong> Du {{ $startDate }} au {{ $endDate }}</p>
+            <p><strong>Période:</strong>{{ $startDate }} à {{ $endDate }}</p>
             <p><strong>Edité le::</strong> {{ $currentDate }}</p>
         </div>
         <div class="logo-container">
