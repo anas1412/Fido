@@ -13,6 +13,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Count;
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -68,8 +71,30 @@ class HonoraireReportResource extends Resource
 
             ])
             ->filters([
-                //
-            ])
+                /* SelectFilter::make('client')
+                    ->relationship('client', 'name')
+                    ->searchable()
+                    ->label('Nom du client'), */
+                Filter::make('date_range')
+                    ->form([
+                        Forms\Components\DatePicker::make('start_date')
+                            ->label('Date de début'),
+                        Forms\Components\DatePicker::make('end_date')
+                            ->label('Date de fin'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['start_date'] && $data['end_date'],
+                                fn(Builder $query): Builder => $query->whereBetween('date', [$data['start_date'], $data['end_date']]),
+                            );
+                    }),
+            ], layout: FiltersLayout::AboveContent)->filtersFormColumns(1)
+            /* ->filtersTriggerAction(
+                fn(Action $action) => $action
+                    ->button()
+                    ->label('Choisir un client et les dates')
+            ) */
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])

@@ -77,8 +77,7 @@ class RetenueSourcResource extends Resource
                                 fn(Builder $query): Builder => $query->whereBetween('date', [$data['start_date'], $data['end_date']]),
                             );
                     }),
-            ], layout: FiltersLayout::AboveContent)
-            ->filtersFormColumns(2)
+            ], layout: FiltersLayout::AboveContent)->filtersFormColumns(2)
             /* ->filtersTriggerAction(
                 fn(Action $action) => $action
                     ->button()
