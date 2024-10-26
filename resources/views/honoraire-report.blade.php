@@ -77,23 +77,66 @@
             margin-top: 8px;
         }
 
-
-
+        /* Updated table styles only */
         .retenue-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            font-size: 11px;
+            /* Reduced font size */
         }
 
         .retenue-table th,
         .retenue-table td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 4px 6px;
+            /* Reduced padding */
             text-align: left;
+            white-space: nowrap;
         }
 
         .retenue-table th {
             background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        /* Set specific column widths */
+        .retenue-table th:nth-child(1),
+        .retenue-table td:nth-child(1) {
+            width: 8%;
+        }
+
+        /* Réf.Honoraire */
+        .retenue-table th:nth-child(2),
+        .retenue-table td:nth-child(2) {
+            width: 7%;
+        }
+
+        /* Date */
+        .retenue-table th:nth-child(3),
+        .retenue-table td:nth-child(3) {
+            width: 15%;
+            white-space: normal;
+            /* Override the nowrap property */
+            word-wrap: break-word;
+        }
+
+        /* Client */
+        .retenue-table th:nth-child(4),
+        .retenue-table td:nth-child(4) {
+            width: 10%;
+        }
+
+        /* M.F */
+
+        /* Right align all amount columns */
+        .retenue-table td:nth-child(5),
+        .retenue-table td:nth-child(6),
+        .retenue-table td:nth-child(7),
+        .retenue-table td:nth-child(8),
+        .retenue-table td:nth-child(9),
+        .retenue-table td:nth-child(10) {
+            text-align: right;
         }
 
         .footer {
@@ -124,8 +167,12 @@
     <div class="header">
         <div>
             <h1>Cabinet Ezzeddine Haouel</h1>
-            <p>Comptable Commissaire aux comptes Membre de la</p>
-            <p>compagnie des comptables de Tunisie</p>
+            {{-- <p>Comptable Commissaire aux comptes Membre de la</p>
+            <p>compagnie des comptables de Tunisie</p> --}}
+        </div>
+        <div class="invoice-purpose">
+            <p><strong>Période:</strong> Du {{ $startDate }} au {{ $endDate }}</p>
+            <p><strong>Edité le::</strong> {{ $currentDate }}</p>
         </div>
         <div class="logo-container">
             <div class="logo">
@@ -133,49 +180,56 @@
             </div>
         </div>
         <br>
-        <div class="mf-number">M.F. : 0729831E-A-P-000</div>
+        {{-- <div class="mf-number">M.F. : 0729831E-A-P-000</div> --}}
+
         <div class="header-line"></div>
     </div>
 
-    <h1>Rapport de Retenue à la Source</h1>
-
-    <div class="client-info">
-        <div class="client-box">
-            <p>Client: <strong>{{ $client->name }}</strong></p>
-            <p>Adresse: {{ $client->address }}</p>
-            <p>M.F.: {{ $client->mf }}</p>
-        </div>
-    </div>
-
-    <div class="invoice-purpose">
-        <p><strong>Période du Rapport:</strong> Du {{ $startDate }} au {{ $endDate }}</p>
-    </div>
-
-    <h2>Détails des Retenues</h2>
+    <h2>RAPPORT DES HONORAIRES</h2>
     <table class="retenue-table">
         <thead>
             <tr>
+                <th>Réf.Honoraire</th>
                 <th>Date</th>
-                <th>Montant TTC</th>
-                <th>Retenue à la Source</th>
+                <th>Client</th>
+                <th>M.F</th>
+                <th>Total H.T</th>
+                <th>T.V.A ({{ $tva }}%)</th>
+                <th>R.S ({{ $rs }}%)</th>
+                <th>Montant T.T.C</th>
+                <th>Timbre</th>
+                <th>Net à payer</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($honoraires as $honoraire)
+            @foreach ($hs as $honoraire)
                 <tr>
-                    <td>{{ $honoraire->date }}</td>
-                    <td>{{ number_format($honoraire->montantTTC, 3, '.', ',') }} TND</td>
-                    <td>{{ number_format($honoraire->rs, 3, '.', ',') }} TND</td>
+                    <td>{{ $honoraire->note }}</td>
+                    <td>{{ date('d/m/Y', strtotime($honoraire->date)) }}</td>
+                    <td>{{ $honoraire->client->name }}</td>
+                    <td>{{ $honoraire->client->mf }}</td>
+                    <td>{{ number_format($honoraire->montantHT, 3, '.', ',') }}</td>
+                    <td>{{ number_format($honoraire->tva, 3, '.', ',') }}</td>
+                    <td>{{ number_format($honoraire->rs, 3, '.', ',') }}</td>
+                    <td>{{ number_format($honoraire->montantTTC, 3, '.', ',') }}</td>
+                    <td>{{ number_format($honoraire->tf, 3, '.', ',') }}</td>
+                    <td>{{ number_format($honoraire->netapayer, 3, '.', ',') }}</td>
                 </tr>
             @endforeach
+            <br><br><br>
+            <tr>
+                <td colspan="4"><strong>TOTAUX:</strong></td>
+                <td><strong>123</strong></td>
+                <td><strong>123</strong></td>
+                <td><strong>123</strong></td>
+                <td><strong>123</strong></td>
+                <td><strong>123</strong></td>
+                <td><strong>123</strong></td>
+            </tr>
         </tbody>
     </table>
 
-    <div class="total-in-words">
-        <p><strong>Total de la Retenue à la Source:</strong> {{ number_format($totalRS, 3, '.', ',') }} TND</p>
-    </div>
-
-    <div class="footer">
+    {{-- <div class="footer">
         <table class="footer-table">
             <tr>
                 <td>Av. Mohamed Ali Hammi</td>
@@ -188,7 +242,7 @@
                 <td>Email : ezzeddine.haouel@yahoo.fr</td>
             </tr>
         </table>
-    </div>
+    </div> --}}
 </body>
 
 </html>

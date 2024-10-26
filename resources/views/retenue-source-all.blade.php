@@ -77,7 +77,7 @@
             margin-top: 8px;
         }
 
-        // ... (keep other styles from pdf.blade.php)
+
 
         .retenue-table {
             width: 100%;

@@ -2,14 +2,15 @@
 
 namespace App\Filament\Resources\HonoraireReportResource\Pages;
 
-use App\Filament\Resources\HonoraireReportResource;
+use Filament\Forms;
+use Filament\Actions;
 use App\Models\Client;
 use App\Models\Honoraire;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Filament\Actions;
 use Filament\Actions\Action;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Forms;
+use App\Filament\Resources\HonoraireReportResource;
 
 class ListHonoraireReport extends ListRecords
 {
@@ -25,30 +26,46 @@ class ListHonoraireReport extends ListRecords
                 ->action(function (array $data) {
                     $startDate = $data['start_date'];
                     $endDate = $data['end_date'];
-
+                    $currentDateFormatted = now()->format('d/m/Y');
                     $clients = Client::all();
                     $allHonoraires = collect();
                     $totalRS = 0;
 
-                    foreach ($clients as $client) {
+                    $hs = Honoraire::whereBetween('date', [$startDate, $endDate])->get();
+                    /* $hs = Honoraire::all(); */
+
+                    /* foreach ($clients as $client) {
                         $honoraires = Honoraire::where('client_id', $client->id)
                             ->whereBetween('date', [$startDate, $endDate])
                             ->get();
 
                         $allHonoraires = $allHonoraires->concat($honoraires);
                         $totalRS += $honoraires->sum('rs');
-                    }
+                    } */
 
-                    $pdf = Pdf::loadView('retenue-source-all', [
+                    $startDateFormatted = date('d/m/Y', strtotime($data['start_date']));
+                    $endDateFormatted = date('d/m/Y', strtotime($data['end_date']));
+
+                    $tva = config('taxes.tva') * 100;
+                    $rs = config('taxes.rs') * 100;
+                    $tf = config('taxes.tf') * 100;
+
+                    $pdf = Pdf::loadView('honoraire-report', [
                         'clients' => $clients,
                         'honoraires' => $allHonoraires,
-                        'startDate' => $startDate,
-                        'endDate' => $endDate,
+                        'hs' => $hs,
+                        'startDate' => $startDateFormatted,
+                        'endDate' => $endDateFormatted,
+                        'currentDate' => $currentDateFormatted,
                         'totalRS' => $totalRS,
+                        'tva' => $tva,
+                        'rs' => $rs,
+                        'tf' => $tf,
                     ]);
 
-                    $currentDate = now()->format('Y-m-d');
+                    $currentDate = now()->format('d-m-Y');
                     return response()->streamDownload(function () use ($pdf) {
+
                         echo $pdf->output();
                     }, "rapport_retenue_source_tous_clients_{$currentDate}.pdf");
                 })
