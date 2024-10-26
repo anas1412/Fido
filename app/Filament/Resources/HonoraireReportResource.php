@@ -95,14 +95,8 @@ class HonoraireReportResource extends Resource
                     ->button()
                     ->label('Choisir un client et les dates')
             ) */
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->actions([])
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
