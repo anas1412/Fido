@@ -40,11 +40,14 @@ class Honoraire extends Model
     {
         static::creating(function ($honoraire) {
             $currentYear = date('Y');
-            /* $count = Honoraire::where('client_id', $honoraire->client_id)->count(); */
-            $count = Honoraire::count();
+            $count = Honoraire::count() + 1; // Start from count + 1 for the new note
 
+            // Generate a new unique note reference
+            do {
+                $newNote = str_pad($count, 4, '0', STR_PAD_LEFT) . $currentYear;
+                $count++; // Increment for the next check if it already exists
+            } while (Honoraire::where('note', $newNote)->exists()); // Check for uniqueness
 
-            $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . $currentYear;
             $newObject = "Assistance comptable de l'année $currentYear";
             $newDate = now()->toDateString();
 

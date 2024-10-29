@@ -66,9 +66,16 @@ class HonorairesRelationManager extends RelationManager
                             $newNetapayer = $newMontantTTC - $newRs + $newTf;
 
                             $currentYear = date('Y');
-                            /* $count = Honoraire::where('client_id', $state)->count(); */
-                            $count = Honoraire::count();
-                            $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . $currentYear;
+                            $count = Honoraire::count() + 1; // Start from count + 1 for the new note
+
+                            // Generate a new unique note reference
+                            do {
+                                $newNote = str_pad($count, 4, '0', STR_PAD_LEFT) . $currentYear;
+                                $count++; // Increment for the next check if it already exists
+                            } while (Honoraire::where('note', $newNote)->exists()); // Check for uniqueness
+
+
+
                             $newObject = "Assistance comptable de l'année $currentYear";
 
                             $set('tva', $newTva);
