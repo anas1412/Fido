@@ -214,7 +214,7 @@ class HonoraireResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date')
                     ->label("Date d'honoraire")
-                    ->datetime()
+                    ->date()
                     ->sortable(),
             ])
             ->filters([
