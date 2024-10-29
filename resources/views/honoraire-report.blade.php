@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rapport de Retenue à la Source</title>
+    <title>Rapport des Honoraires</title>
     <style>
         @page {
             size: A4;
@@ -204,7 +204,7 @@
         <tbody>
             @foreach ($hs as $honoraire)
                 <tr>
-                    <td>{{ $honoraire->note }}</td>
+                    <td>{{ str_pad($honoraire->note, 8, '0', STR_PAD_LEFT) }}</td>
                     <td>{{ date('d/m/Y', strtotime($honoraire->date)) }}</td>
                     <td>{{ $honoraire->client->name }}</td>
                     <td>{{ $honoraire->client->mf }}</td>
@@ -214,6 +214,7 @@
                     <td>{{ number_format($honoraire->montantTTC, 3, '.', ',') }}</td>
                     <td>{{ number_format($honoraire->tf, 3, '.', ',') }}</td>
                     <td>{{ number_format($honoraire->netapayer, 3, '.', ',') }}</td>
+
                 </tr>
             @endforeach
             <br><br><br>

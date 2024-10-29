@@ -68,24 +68,37 @@ class ListRetenueSourc extends ListRecords
                     $startDate = $data['start_date'];
                     $endDate = $data['end_date'];
 
-                    $clients = Client::all();
-                    $allHonoraires = collect();
-                    $totalRS = 0;
+                    $clients = Client::all(); // Fetch all clients
+                    $totalTTC = 0; // Overall total TTC for all clients
+                    $totalRS = 0; // Overall total RS for all clients
 
+                    // Loop through each client and calculate their TTC and RS sums
                     foreach ($clients as $client) {
-                        $honoraires = Honoraire::where('client_id', $client->id)
+                        // Get honoraires for the client within the specified date range
+                        $honoraires = $client->honoraires()
                             ->whereBetween('date', [$startDate, $endDate])
                             ->get();
 
-                        $allHonoraires = $allHonoraires->concat($honoraires);
-                        $totalRS += $honoraires->sum('rs');
+                        // Sum TTC and RS for this client
+                        $client->totalClientTTC = $honoraires->sum('montantTTC');
+                        $client->totalClientRS = $honoraires->sum('rs');
+
+                        // Add client totals to overall totals
+                        $totalTTC += $client->totalClientTTC;
+                        $totalRS += $client->totalClientRS;
                     }
 
+                    $fiscalYear = config('fiscal_year.current_year');
+                    $rs = config('taxes.rs') * 100;
+
+                    // Generate PDF
                     $pdf = Pdf::loadView('retenue-source-all', [
+                        'fiscalYear' => $fiscalYear,
                         'clients' => $clients,
-                        'honoraires' => $allHonoraires,
                         'startDate' => $startDate,
                         'endDate' => $endDate,
+                        'rs' => $rs,
+                        'totalTTC' => $totalTTC,
                         'totalRS' => $totalRS,
                     ]);
 

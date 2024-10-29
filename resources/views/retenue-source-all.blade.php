@@ -77,23 +77,60 @@
             margin-top: 8px;
         }
 
-
-
         .retenue-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            font-size: 11px;
         }
 
         .retenue-table th,
         .retenue-table td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 4px 6px;
             text-align: left;
+            white-space: nowrap;
         }
 
         .retenue-table th {
             background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        /* Set specific column widths */
+        .retenue-table th:nth-child(1),
+        .retenue-table td:nth-child(1) {
+            width: 60%;
+            /* Client - bigger column */
+        }
+
+        .retenue-table th:nth-child(2),
+        .retenue-table td:nth-child(2) {
+            width: 20%;
+            /* M.F */
+            text-align: center;
+            /* Center M.F title and contents */
+        }
+
+        .retenue-table th:nth-child(3) {
+            width: 10%;
+            /* Montant T.T.C */
+            text-align: center;
+            /* Center title only */
+        }
+
+        .retenue-table th:nth-child(4) {
+            width: 10%;
+            /* R.S */
+            text-align: center;
+            /* Center title only */
+        }
+
+        .retenue-table td:nth-child(3),
+        .retenue-table td:nth-child(4) {
+            /* text-align: right; */
+            text-align: center;
+            /* Right align contents of Montant T.T.C and R.S */
         }
 
         .footer {
@@ -127,58 +164,49 @@
             <p>Comptable Commissaire aux comptes Membre de la</p>
             <p>compagnie des comptables de Tunisie</p>
         </div>
+        {{-- <div class="invoice-purpose">
+            <p><strong>Période: </strong>{{ $startDate }} à {{ $endDate }}</p>
+            <p><strong>Edité le: </strong>{{ $currentDate }}</p>
+        </div> --}}
         <div class="logo-container">
             <div class="logo">
                 <img src="{{ public_path('images/CCT.jpg') }}" alt="Logo">
             </div>
         </div>
         <br>
-        <div class="mf-number">M.F. : 0729831E-A-P-000</div>
+        {{-- <div class="mf-number">M.F. : 0729831E-A-P-000</div> --}}
+
         <div class="header-line"></div>
     </div>
 
-    <h1>Rapport de Retenue à la Source</h1>
+    <h2>Etat Retenue à la Source Année {{ $fiscalYear }}</h2>
+    <table class="retenue-table">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>M.F</th>
+                <th>Montant T.T.C</th>
+                <th>R.S ({{ $rs }}%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($clients as $client)
+                <tr>
+                    <td>{{ $client->name }}</td>
+                    <td>{{ $client->mf }}</td>
+                    <td>{{ number_format($client->totalClientTTC, 3, '.', ',') }}</td>
+                    <td>{{ number_format($client->totalClientRS, 3, '.', ',') }}</td>
+                </tr>
+            @endforeach
+            <tr>
+                <td style="text-align: right;" colspan="2"><strong>TOTAUX:</strong></td>
+                <td style="text-align: center;"><strong>{{ number_format($totalTTC, 3, '.', ',') }}</strong></td>
+                <td style="text-align: center;"><strong>{{ number_format($totalRS, 3, '.', ',') }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
 
-    <div class="client-info">
-        @foreach ($clients as $client)
-            <div class="client-box">
-                <p>Client: <strong>{{ $client->name }}</strong></p>
-                <p>Adresse: {{ $client->address }}</p>
-                <p>M.F.: {{ $client->mf }}</p>
-            </div>
-
-            <div class="invoice-purpose">
-                <p><strong>Période du Rapport:</strong> Du {{ $startDate }} au {{ $endDate }}</p>
-            </div>
-
-            <h2>Détails des Retenues</h2>
-            <table class="retenue-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Montant TTC</th>
-                        <th>Retenue à la Source</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($client->honoraires as $honoraire)
-                        <tr>
-                            <td>{{ $honoraire->date }}</td>
-                            <td>{{ number_format($honoraire->montantTTC, 3, '.', ',') }} TND</td>
-                            <td>{{ number_format($honoraire->rs, 3, '.', ',') }} TND</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            <div class="total-in-words">
-                <p><strong>Total de la Retenue à la Source:</strong> {{ number_format($client->totalRS, 3, '.', ',') }}
-                    TND</p>
-            </div>
-        @endforeach
-    </div>
-
-    <div class="footer">
+    {{-- <div class="footer">
         <table class="footer-table">
             <tr>
                 <td>Av. Mohamed Ali Hammi</td>
@@ -191,7 +219,7 @@
                 <td>Email : ezzeddine.haouel@yahoo.fr</td>
             </tr>
         </table>
-    </div>
+    </div> --}}
 </body>
 
 </html>
