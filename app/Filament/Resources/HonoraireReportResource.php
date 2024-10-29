@@ -30,6 +30,12 @@ class HonoraireReportResource extends Resource
 
     protected static ?string $navigationLabel = 'Rapports des honoraires';
 
+    public static function getEloquentQuery(): Builder
+    {
+        $fiscalYear = config('fiscal_year.current_year');
+        return parent::getEloquentQuery()->whereYear('date', $fiscalYear);
+    }
+
 
     public static function table(Table $table): Table
     {

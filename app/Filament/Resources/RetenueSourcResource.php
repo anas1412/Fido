@@ -9,7 +9,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Actions\Action;
@@ -19,6 +18,7 @@ use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Columns\Summarizers\Average;
 use Filament\Tables\Columns\Summarizers\Range;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\Summarizers\Sum;
 
 class RetenueSourcResource extends Resource
@@ -30,6 +30,15 @@ class RetenueSourcResource extends Resource
     protected static ?string $navigationGroup = "Rapports";
 
     protected static ?string $navigationLabel = 'Retenue à la source';
+
+    public static function getEloquentQuery(): Builder
+    {
+        $fiscalYear = config('fiscal_year.current_year');
+        return parent::getEloquentQuery()
+            ->whereYear('date', $fiscalYear)
+            ->whereNotNull('rs')
+            ->where('rs', '>', 0);
+    }
 
     public static function table(Table $table): Table
     {
@@ -102,10 +111,5 @@ class RetenueSourcResource extends Resource
         return [
             'index' => Pages\ListRetenueSourc::route('/'),
         ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->whereNotNull('rs')->where('rs', '>', 0);
     }
 }

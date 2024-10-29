@@ -11,12 +11,14 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\HonoraireReportResource;
+use Filament\Forms\Components\Builder;
 
 class ListHonoraireReport extends ListRecords
 {
     protected static string $resource = HonoraireReportResource::class;
 
     protected static ?string $title = "Rapport des honoraires";
+
 
     protected function getHeaderActions(): array
     {
