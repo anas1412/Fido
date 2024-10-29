@@ -66,7 +66,8 @@ class HonorairesRelationManager extends RelationManager
                             $newNetapayer = $newMontantTTC - $newRs + $newTf;
 
                             $currentYear = date('Y');
-                            $count = Honoraire::where('client_id', $state)->count();
+                            /* $count = Honoraire::where('client_id', $state)->count(); */
+                            $count = Honoraire::count();
                             $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . $currentYear;
                             $newObject = "Assistance comptable de l'année $currentYear";
 

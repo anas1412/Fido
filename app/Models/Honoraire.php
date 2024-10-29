@@ -40,7 +40,9 @@ class Honoraire extends Model
     {
         static::creating(function ($honoraire) {
             $currentYear = date('Y');
-            $count = Honoraire::where('client_id', $honoraire->client_id)->count();
+            /* $count = Honoraire::where('client_id', $honoraire->client_id)->count(); */
+            $count = Honoraire::count();
+
 
             $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . $currentYear;
             $newObject = "Assistance comptable de l'année $currentYear";
