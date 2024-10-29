@@ -171,8 +171,8 @@
             <p>compagnie des comptables de Tunisie</p> --}}
         </div>
         <div class="invoice-purpose">
-            <p><strong>Période:</strong>{{ $startDate }} à {{ $endDate }}</p>
-            <p><strong>Edité le::</strong> {{ $currentDate }}</p>
+            <p><strong>Période: </strong>{{ $startDate }} à {{ $endDate }}</p>
+            <p><strong>Edité le: </strong>{{ $currentDate }}</p>
         </div>
         <div class="logo-container">
             <div class="logo">
@@ -218,13 +218,13 @@
             @endforeach
             <br><br><br>
             <tr>
-                <td colspan="4"><strong>TOTAUX:</strong></td>
-                <td><strong>123</strong></td>
-                <td><strong>123</strong></td>
-                <td><strong>123</strong></td>
-                <td><strong>123</strong></td>
-                <td><strong>123</strong></td>
-                <td><strong>123</strong></td>
+                <td style="text-align: right;" colspan="4"><strong>TOTAUX:</strong></td>
+                <td style="text-align: right;"><strong>{{ number_format($totalHT, 3, '.', ',') }}</strong></td>
+                <td style="text-align: right;"><strong>{{ number_format($totalTVA, 3, '.', ',') }}</strong></td>
+                <td style="text-align: right;"><strong>{{ number_format($totalRS, 3, '.', ',') }}</strong></td>
+                <td style="text-align: right;"><strong>{{ number_format($totalTTC, 3, '.', ',') }}</strong></td>
+                <td style="text-align: right;"><strong>{{ number_format($totalTF, 3, '.', ',') }}</strong></td>
+                <td style="text-align: right;"><strong>{{ number_format($totalNetapayer, 3, '.', ',') }}</strong></td>
             </tr>
         </tbody>
     </table>
