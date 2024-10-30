@@ -25,15 +25,39 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
 
 ## Prerequisites
 
-1. **Install Composer:**
+1. **PHP 8.2 or higher**
+
+    - Download PHP 8.2 from [here](https://windows.php.net/downloads/releases/php-8.3.13-nts-Win32-vs16-x64.zip).
+    - Extract the downloaded file to a directory of your choice.
+
+    **N.B. If you are using XAMPP or WAMP, you can skip the above step.**
+
+2. **Install Composer:**
 
     - Download and install Composer from [here](https://getcomposer.org/download/).
     - During installation, make sure to:
+        - Select **PHP 8.2** as the PHP version.
         - Select **"Add to PATH"**.
-        - Choose **PHP 8.2** as the PHP version.
 
-2. **Install Git:**
+3. **Install Git:**
+
     - Download and install Git from [here](https://git-scm.com/downloads).
+
+4. **Edit the `php.ini` File inside your PHP installation directory:**
+
+    - Open the `php.ini` file located in your PHP installation directory you chose (e.g., `C:\xampp\php\php.ini`).
+    - Uncomment the following lines by removing the semicolon (;) at the beginning:
+        ```bash
+        extension=pdo_sqlite
+        extension=json
+        extension=ctype
+        extension=tokenizer
+        extension=fileinfo
+        extension=mbstring
+        extension=openssl
+        extension=bcmath
+        extension=intl
+        ```
 
 ## Setting Up the Project
 
@@ -51,7 +75,7 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
         cd Fido
         ```
     - Copy the `.env.example` file and rename it to `.env`.
-    - Make the necessary changes to the `.env` file, such as setting up your database credentials.
+        <!-- - Make the necessary changes to the `.env` file, such as setting up your database credentials. -->
 
 3. **Install Dependencies and Set Up the Database:**
     - Inside the `Fido` folder, open a Command Prompt and run the following commands:
