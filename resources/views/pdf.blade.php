@@ -313,11 +313,6 @@
                 <td>Fax : 72 26 38 79</td>
                 <td>Email : ezzeddine.haouel@yahoo.fr</td>
             </tr>
-            {{--             <tr>
-                <td></td>
-                <td></td>
-                <td>Email : ezzeddine.haouel@topnet.tn</td>
-            </tr> --}}
         </table>
     </div>
 </body>

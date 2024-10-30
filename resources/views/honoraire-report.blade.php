@@ -180,7 +180,7 @@
             </div>
         </div>
         <br>
-        {{-- <div class="mf-number">M.F. : 0729831E-A-P-000</div> --}}
+        <div class="mf-number">M.F. : 0729831E-A-P-000</div>
 
         <div class="header-line"></div>
     </div>
@@ -217,7 +217,7 @@
 
                 </tr>
             @endforeach
-            <br><br><br>
+            <br><br>
             <tr>
                 <td style="text-align: right;" colspan="4"><strong>TOTAUX:</strong></td>
                 <td style="text-align: right;"><strong>{{ number_format($totalHT, 3, '.', ',') }}</strong></td>
@@ -230,7 +230,7 @@
         </tbody>
     </table>
 
-    {{-- <div class="footer">
+    <div class="footer">
         <table class="footer-table">
             <tr>
                 <td>Av. Mohamed Ali Hammi</td>
@@ -243,7 +243,7 @@
                 <td>Email : ezzeddine.haouel@yahoo.fr</td>
             </tr>
         </table>
-    </div> --}}
+    </div>
 </body>
 
 </html>

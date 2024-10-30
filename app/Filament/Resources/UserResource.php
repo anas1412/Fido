@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
@@ -53,6 +57,7 @@ class UserResource extends Resource
                     ->email()
                     ->maxLength(50),
                 Forms\Components\Toggle::make('is_admin')
+                    ->label('Role Admin')
                     ->required(),
             ]);
     }
@@ -69,15 +74,19 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\ToggleColumn::make('is_admin')
                     ->toggleable()
+                    ->sortable()
                     ->label('admin'),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->sortable()
                     ->datetime(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                /* Tables\Actions\EditAction::make(), */])
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

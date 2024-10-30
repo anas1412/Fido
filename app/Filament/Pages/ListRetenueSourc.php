@@ -28,19 +28,26 @@ class ListRetenueSourc extends ListRecords
                     $client = Client::findOrFail($data['client_id']);
                     $startDate = $data['start_date'];
                     $endDate = $data['end_date'];
+                    $startDateFormatted = date('d/m/Y', strtotime($data['start_date']));
+                    $endDateFormatted = date('d/m/Y', strtotime($data['end_date']));
+                    $currentDateFormatted = now()->format('d/m/Y');
 
                     $honoraires = Honoraire::where('client_id', $client->id)
                         ->whereBetween('date', [$startDate, $endDate])
                         ->get();
 
                     $totalRS = $honoraires->sum('rs');
+                    $totalTTC = $honoraires->sum('montantTTC');
 
                     $pdf = Pdf::loadView('retenue-source', [
                         'client' => $client,
                         'honoraires' => $honoraires,
-                        'startDate' => $startDate,
-                        'endDate' => $endDate,
+                        'startDate' => $startDateFormatted,
+                        'endDate' => $endDateFormatted,
+                        'currentDate' => $currentDateFormatted,
                         'totalRS' => $totalRS,
+                        'totalTTC' => $totalTTC,
+                        'rs' => config('taxes.rs') * 100,
                     ]);
 
                     $currentDate = now()->format('Y-m-d');
@@ -67,6 +74,9 @@ class ListRetenueSourc extends ListRecords
                 ->action(function (array $data) {
                     $startDate = $data['start_date'];
                     $endDate = $data['end_date'];
+                    $startDateFormatted = date('d/m/Y', strtotime($data['start_date']));
+                    $endDateFormatted = date('d/m/Y', strtotime($data['end_date']));
+                    $currentDateFormatted = now()->format('d/m/Y');
 
                     $clients = Client::all(); // Fetch all clients
                     $totalTTC = 0; // Overall total TTC for all clients
@@ -95,8 +105,9 @@ class ListRetenueSourc extends ListRecords
                     $pdf = Pdf::loadView('retenue-source-all', [
                         'fiscalYear' => $fiscalYear,
                         'clients' => $clients,
-                        'startDate' => $startDate,
-                        'endDate' => $endDate,
+                        'startDate' => $startDateFormatted,
+                        'endDate' => $endDateFormatted,
+                        'currentDate' => $currentDateFormatted,
                         'rs' => $rs,
                         'totalTTC' => $totalTTC,
                         'totalRS' => $totalRS,

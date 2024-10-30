@@ -77,7 +77,31 @@
             margin-top: 8px;
         }
 
+        .client-info {
+            text-align: right;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
 
+        .client-box {
+            border: 1px solid #000;
+            padding: 5px;
+            display: inline-block;
+            margin-left: 30%;
+            text-align: left;
+            line-height: 1.2;
+            /* Reduce line height to bring paragraphs closer */
+        }
+
+        .client-box p {
+            margin: 0 0 5px 0;
+            /* Reduce bottom margin of paragraphs */
+        }
+
+        .client-box p:last-child {
+            margin-bottom: 0;
+            /* Remove bottom margin from last paragraph */
+        }
 
         .retenue-table {
             width: 100%;
@@ -94,6 +118,13 @@
 
         .retenue-table th {
             background-color: #f2f2f2;
+        }
+
+        .retenue-table th:nth-child(2),
+        .retenue-table th:nth-child(3),
+        .retenue-table td:nth-child(2),
+        .retenue-table td:nth-child(3) {
+            text-align: center;
         }
 
         .footer {
@@ -127,6 +158,10 @@
             <p>Comptable Commissaire aux comptes Membre de la</p>
             <p>compagnie des comptables de Tunisie</p>
         </div>
+        {{-- <div class="invoice-purpose">
+            <p><strong>Période: </strong>{{ $startDate }} à {{ $endDate }}</p>
+            <p><strong>Edité le: </strong>{{ $currentDate }}</p>
+        </div> --}}
         <div class="logo-container">
             <div class="logo">
                 <img src="{{ public_path('images/CCT.jpg') }}" alt="Logo">
@@ -137,7 +172,7 @@
         <div class="header-line"></div>
     </div>
 
-    <h1>Rapport de Retenue à la Source</h1>
+    <h2>Rapport de Retenue à la Source</h2>
 
     <div class="client-info">
         <div class="client-box">
@@ -148,32 +183,33 @@
     </div>
 
     <div class="invoice-purpose">
-        <p><strong>Période du Rapport:</strong> Du {{ $startDate }} au {{ $endDate }}</p>
+        <p><strong>Période: </strong>{{ $startDate }} à {{ $endDate }}</p>
     </div>
 
-    <h2>Détails des Retenues</h2>
     <table class="retenue-table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Montant TTC</th>
-                <th>Retenue à la Source</th>
+                <th>Objet</th>
+                <th>Montant T.T.C</th>
+                <th>R.S({{ $rs }}%)</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($honoraires as $honoraire)
                 <tr>
-                    <td>{{ $honoraire->date }}</td>
-                    <td>{{ number_format($honoraire->montantTTC, 3, '.', ',') }} TND</td>
-                    <td>{{ number_format($honoraire->rs, 3, '.', ',') }} TND</td>
+                    <td>{{ $honoraire->object }}</td>
+                    <td>{{ number_format($honoraire->montantTTC, 3, '.', ',') }}</td>
+                    <td>{{ number_format($honoraire->rs, 3, '.', ',') }}</td>
                 </tr>
             @endforeach
+            <br><br> <!-- Add a line break -->
+            <tr>
+                <td style="text-align: right;"><strong>TOTAUX:</strong></td>
+                <td style="text-align: center;"><strong>{{ number_format($totalTTC, 3, '.', ',') }}</strong></td>
+                <td style="text-align: center;"><strong>{{ number_format($totalRS, 3, '.', ',') }}</strong></td>
+            </tr>
         </tbody>
     </table>
-
-    <div class="total-in-words">
-        <p><strong>Total de la Retenue à la Source:</strong> {{ number_format($totalRS, 3, '.', ',') }} TND</p>
-    </div>
 
     <div class="footer">
         <table class="footer-table">
