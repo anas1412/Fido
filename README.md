@@ -92,6 +92,8 @@ Configure Apache for production:
 
 1.  **Virtual Host Configuration:**
 
+    Typically located in `/etc/apache2/sites-available` or `/etc/nginx/sites-available`. Create a new file named `fido.conf` and add the following content:
+
     ```apache
         <VirtualHost *:80>
             ServerName fido.local
@@ -108,7 +110,7 @@ Replace `username` with your actual username.
 2.  **Finalize Setup**
 
     ```
-    sudo a2ensite your-site-config.conf
+    sudo a2ensite fido.conf
     sudo nano /etc/hosts
     ```
 
