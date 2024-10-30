@@ -23,6 +23,9 @@ Fido is a cutting-edge SaaS application designed specifically for accountants. I
 -   **[TailwindCSS](https://tailwindcss.com/):** A utility-first CSS framework for rapid UI development.
 -   **[FilamentPHP](https://filamentphp.com/):** A toolkit for building beautiful admin panels.
 -   **[SQLite](https://www.sqlite.org/):** A lightweight, serverless database engine.
+-   **[Docker](https://www.docker.com/):** A platform for developing, shipping, and running applications in containers.
+-   **[Kubernetes](https://kubernetes.io/):** An open-source system for automating the deployment, scaling, and management of containerized applications.
+-   **[AWS](https://aws.amazon.com/):** A comprehensive cloud computing platform offering a wide range of services.
 
 ## Visual Insights
 
@@ -135,6 +138,25 @@ The database seeder will create the following users:
 -   **Normal User:**
     -   Email: `user@mail.com`
     -   Password: `user123`
+
+## Todo
+
+### Fremium Features
+
+-   Debit Note Statement
+-   More Ancounting Features
+
+### Premium Features
+
+-   Custom Reports
+-   Advanced Analytics
+-   Customization Options
+-   Kanban Integration
+-   Calendar Integration
+-   Session Booking
+-   Mailing System
+-   Mobile Push Notifications
+-   Secure Payement Method System
 
 ## License
 
