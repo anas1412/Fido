@@ -146,7 +146,7 @@ The database seeder will create the following users:
 ### Fremium Features
 
 -   Debit Note Statement
--   More Ancounting Features
+-   More Accounting Features
 
 ### Premium Features
 
