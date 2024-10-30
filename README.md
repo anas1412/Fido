@@ -19,8 +19,8 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
 ## Demo Screenshots
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/anas1412/Fido/f562e70d77884540bc364717be13d56d3b385451/Demo1.png?raw=true" width="45%" alt="Demo Screenshot 1">
-  <img src="https://raw.githubusercontent.com/anas1412/Fido/f562e70d77884540bc364717be13d56d3b385451/Demo2.png?raw=true" width="45%" alt="Demo Screenshot 2">
+  <img src="Demo1.png?raw=true" width="45%" alt="Demo Screenshot 1">
+  <img src="Demo2.png?raw=true" width="45%" alt="Demo Screenshot 2">
 </p>
 
 ## Prerequisites
@@ -75,7 +75,7 @@ Fido is a web application for accountants. It's user friendly, intuitive and bui
         cd Fido
         ```
     - Copy the `.env.example` file and rename it to `.env`.
-        <!-- - Make the necessary changes to the `.env` file, such as setting up your database credentials. -->
+          <!-- - Make the necessary changes to the `.env` file, such as setting up your database credentials. -->
 
 3. **Install Dependencies and Set Up the Database:**
     - Inside the `Fido` folder, open a Command Prompt and run the following commands:
