@@ -25,7 +25,8 @@ Fido is a cutting-edge SaaS application designed specifically for accountants. I
 -   **[SQLite](https://www.sqlite.org/):** A lightweight, serverless database engine.
 -   **[Docker](https://www.docker.com/):** A platform for developing, shipping, and running applications in containers.
 -   **[Kubernetes](https://kubernetes.io/):** An open-source system for automating the deployment, scaling, and management of containerized applications.
--   **[AWS](https://aws.amazon.com/):** A comprehensive cloud computing platform offering a wide range of services.
+-   **[ArgoCD](https://argoproj.github.io/argo-cd/):** A declarative, GitOps continuous delivery tool for Kubernetes.
+-   **[Amazon AWS](https://aws.amazon.com/):** A comprehensive cloud computing platform offering a wide range of services.
 
 ## Visual Insights
 
@@ -155,7 +156,7 @@ The database seeder will create the following users:
 -   Customization Options
 -   Kanban Integration
 -   Calendar Integration
--   Session Booking
+-   Clients Session Booking
 -   Mailing System
 -   Mobile Push Notifications
 -   Secure Payement Method System
