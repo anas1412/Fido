@@ -48,7 +48,7 @@ Fido is a SaaS platform tailored to meet the unique needs of Tunisian accountant
 -   **Calendar and Push Notifications:** Stay on top of deadlines and important events.
 -   **Payment Solutions:** Secure client invoicing and payment processing options.
 
-## Visual Insights
+## Visual Insights (Freemium Version)
 
 <p align="center">
   <img src="Demo1.png?raw=true" width="45%" alt="Demo Screenshot 1">
