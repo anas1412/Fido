@@ -161,6 +161,7 @@ The database seeder will create the following users:
 -   ERP Integration
 -   Automated Database Backup and Restore
 -   Kanban for Workflow Management
+-   Video Conference Meeting Tool
 -   Calendar Integration
 -   Clients Session Booking
 -   Comprehensive Mailing System
