@@ -157,6 +157,8 @@ The database seeder will create the following users:
 -   Custom Reports
 -   Advanced Analytics
 -   Customization Options
+-   CRM Integration
+-   ERP Integration
 -   Automated Database Backup and Restore
 -   Kanban for Workflow Management
 -   Calendar Integration
