@@ -15,18 +15,38 @@
 
 # Fido: Revolutionizing Accounting for Professionals
 
-Fido is a cutting-edge SaaS application designed specifically for accountants. It offers a user-friendly and intuitive interface, leveraging state-of-the-art technologies to streamline accounting processes.
+Fido is a SaaS platform tailored to meet the unique needs of Tunisian accountants. Designed with simplicity, compliance, and efficiency in mind, Fido uses the latest technologies to enhance accounting workflows, automate essential tasks, and provide professionals with tools to manage reports, invoices, client interactions, and tax obligations.
 
 ## Key Technologies
 
--   **[Laravel](https://laravel.com/):** A robust PHP framework for building scalable applications.
--   **[TailwindCSS](https://tailwindcss.com/):** A utility-first CSS framework for rapid UI development.
--   **[FilamentPHP](https://filamentphp.com/):** A toolkit for building beautiful admin panels.
--   **[SQLite](https://www.sqlite.org/):** A lightweight, serverless database engine.
--   **[Docker](https://www.docker.com/):** A platform for developing, shipping, and running applications in containers.
--   **[Kubernetes](https://kubernetes.io/):** An open-source system for automating the deployment, scaling, and management of containerized applications.
--   **[ArgoCD](https://argoproj.github.io/argo-cd/):** A declarative, GitOps continuous delivery tool for Kubernetes.
--   **[Amazon AWS](https://aws.amazon.com/):** A comprehensive cloud computing platform offering a wide range of services.
+-   **[Laravel](https://laravel.com/):** Scalable PHP framework.
+-   **[TailwindCSS](https://tailwindcss.com/):** Utility-first CSS for rapid design.
+-   **[FilamentPHP](https://filamentphp.com/):** Elegant admin panel.
+-   **[SQLite](https://www.sqlite.org/):** Lightweight, serverless database.
+-   **[Docker](https://www.docker.com/):** Containerized app deployment.
+-   **[Kubernetes](https://kubernetes.io/):** Container orchestration.
+-   **[ArgoCD](https://argoproj.github.io/argo-cd/):** GitOps continuous delivery for Kubernetes.
+-   **[Amazon AWS](https://aws.amazon.com/):** Cloud infrastructure.
+
+## Fido’s Key Features
+
+### Fremium Features
+
+-   **Client and Project Management:** Easily track clients and engagements.
+-   **Professional Fees Report:** Generate and export detailed professional fees reports.
+-   **Withholding Tax Statement:** Simplifies management of withholding tax obligations.
+-   **Debit Note Statement:** Manage and record debit transactions efficiently.
+-   **Basic Invoicing and Reports:** Generate and export essential accounting reports and invoices.
+
+### Premium Features
+
+-   **Custom Reports and Advanced Analytics:** Enhanced data insights for better decision-making.
+-   **ERP and CRM Integrations:** Connect with ERP systems for seamless data sharing.
+-   **Automated Backups:** Regular data backup and restore.
+-   **Kanban Workflow:** Visual task and project management.
+-   **Video Conferencing and Meeting Scheduling:** Tools to manage client meetings in-app.
+-   **Calendar and Push Notifications:** Stay on top of deadlines and important events.
+-   **Payment Solutions:** Secure client invoicing and payment processing options.
 
 ## Visual Insights
 
@@ -34,37 +54,6 @@ Fido is a cutting-edge SaaS application designed specifically for accountants. I
   <img src="Demo1.png?raw=true" width="45%" alt="Demo Screenshot 1">
   <img src="Demo2.png?raw=true" width="45%" alt="Demo Screenshot 2">
 </p>
-
-## Fido Features
-
-### Fremium Features
-
--   Basic Client Management
--   Standard Accounting Features
--   Professional Fees Report
--   Withholding Tax Statement
--   Debit Note Statement
--   Basic Report Generation and Invoicing Template
--   More Accounting Features
-
-### Premium Features
-
--   Custom Reports
--   Advanced Analytics
--   Customization Options
--   CRM Integration
--   ERP Integration
--   Automated Database Backup and Restore
--   Kanban for Workflow Management
--   Video Conference Meeting Tool
--   Calendar Integration
--   Clients Session Booking
--   Comprehensive Mailing System
--   Mobile Push Notifications
--   In-App Meeting Tool
--   Quarterly/Yearly Subscription Payments
--   Payment System for Accountants
--   Advanced Client Invoicing
 
 ## System Requirements
 
