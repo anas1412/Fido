@@ -35,6 +35,37 @@ Fido is a cutting-edge SaaS application designed specifically for accountants. I
   <img src="Demo2.png?raw=true" width="45%" alt="Demo Screenshot 2">
 </p>
 
+## Fido Features
+
+### Fremium Features
+
+-   Basic Client Management
+-   Standard Accounting Features
+-   Professional Fees Report
+-   Withholding Tax Statement
+-   Debit Note Statement
+-   Basic Report Generation and Invoicing Template
+-   More Accounting Features
+
+### Premium Features
+
+-   Custom Reports
+-   Advanced Analytics
+-   Customization Options
+-   CRM Integration
+-   ERP Integration
+-   Automated Database Backup and Restore
+-   Kanban for Workflow Management
+-   Video Conference Meeting Tool
+-   Calendar Integration
+-   Clients Session Booking
+-   Comprehensive Mailing System
+-   Mobile Push Notifications
+-   In-App Meeting Tool
+-   Quarterly/Yearly Subscription Payments
+-   Payment System for Accountants
+-   Advanced Client Invoicing
+
 ## System Requirements
 
 -   **PHP 8.2 or higher:** [Download PHP](https://windows.php.net/downloads/releases/php-8.3.13-nts-Win32-vs16-x64.zip)
@@ -141,35 +172,6 @@ The database seeder will create the following users:
 -   **Normal User:**
     -   Email: `user@mail.com`
     -   Password: `user123`
-
-## Todo
-
-### Fremium Features
-
--   Basic Client Management
--   Standard Accounting Features
--   Basic Report Generation and Invoicing Template
--   Debit Note Statement
--   More Accounting Features
-
-### Premium Features
-
--   Custom Reports
--   Advanced Analytics
--   Customization Options
--   CRM Integration
--   ERP Integration
--   Automated Database Backup and Restore
--   Kanban for Workflow Management
--   Video Conference Meeting Tool
--   Calendar Integration
--   Clients Session Booking
--   Comprehensive Mailing System
--   Mobile Push Notifications
--   In-App Meeting Tool
--   Quarterly/Yearly Subscription Payments
--   Payment System for Accountants
--   Advanced Client Invoicing
 
 ## License
 
