@@ -146,6 +146,9 @@ The database seeder will create the following users:
 
 ### Fremium Features
 
+-   Basic Client Management
+-   Standard Accounting Features
+-   Basic Report Generation and Invoicing Template
 -   Debit Note Statement
 -   More Accounting Features
 
@@ -154,12 +157,16 @@ The database seeder will create the following users:
 -   Custom Reports
 -   Advanced Analytics
 -   Customization Options
--   Kanban Integration
+-   Automated Database Backup and Restore
+-   Kanban for Workflow Management
 -   Calendar Integration
 -   Clients Session Booking
--   Mailing System
+-   Comprehensive Mailing System
 -   Mobile Push Notifications
--   Secure Payement Method System
+-   In-App Meeting Tool
+-   Quarterly/Yearly Subscription Payments
+-   Payment System for Accountants
+-   Advanced Client Invoicing
 
 ## License
 
