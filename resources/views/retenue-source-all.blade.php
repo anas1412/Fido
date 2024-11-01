@@ -123,14 +123,14 @@
         .retenue-table th:nth-child(4) {
             width: 10%;
             /* R.S */
-            text-align: center;
+            text-align: right;
             /* Center title only */
         }
 
         .retenue-table td:nth-child(3),
         .retenue-table td:nth-child(4) {
             /* text-align: right; */
-            text-align: center;
+            text-align: right;
             /* Right align contents of Montant T.T.C and R.S */
         }
 
@@ -202,8 +202,8 @@
             <br><br>
             <tr>
                 <td style="text-align: right;" colspan="2"><strong>TOTAUX:</strong></td>
-                <td style="text-align: center;"><strong>{{ number_format($totalTTC, 3, '.', ',') }}</strong></td>
-                <td style="text-align: center;"><strong>{{ number_format($totalRS, 3, '.', ',') }}</strong></td>
+                <td style="text-align: right;"><strong>{{ number_format($totalTTC, 3, '.', ',') }}</strong></td>
+                <td style="text-align: right;"><strong>{{ number_format($totalRS, 3, '.', ',') }}</strong></td>
             </tr>
         </tbody>
     </table>

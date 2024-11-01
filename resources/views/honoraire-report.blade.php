@@ -83,7 +83,7 @@
             border-collapse: collapse;
             margin-bottom: 20px;
             font-size: 11px;
-            /* Reduced font size */
+
         }
 
         .retenue-table th,
@@ -100,43 +100,79 @@
             font-weight: bold;
         }
 
-        /* Set specific column widths */
         .retenue-table th:nth-child(1),
         .retenue-table td:nth-child(1) {
-            width: 8%;
+            width: 10%;
+            text-align: right;
+            /* Réf.Honoraire */
         }
 
-        /* Réf.Honoraire */
+
         .retenue-table th:nth-child(2),
         .retenue-table td:nth-child(2) {
-            width: 7%;
+            width: 10%;
+            text-align: center;
+            /* Date */
         }
 
-        /* Date */
+
         .retenue-table th:nth-child(3),
         .retenue-table td:nth-child(3) {
-            width: 15%;
+            width: 10%;
             white-space: normal;
             /* Override the nowrap property */
             word-wrap: break-word;
+            text-align: left;
+            /* Client */
         }
 
-        /* Client */
         .retenue-table th:nth-child(4),
         .retenue-table td:nth-child(4) {
-            width: 10%;
+            width: 13%;
+            text-align: center;
+            /* M.F */
         }
 
-        /* M.F */
-
-        /* Right align all amount columns */
-        .retenue-table td:nth-child(5),
-        .retenue-table td:nth-child(6),
-        .retenue-table td:nth-child(7),
-        .retenue-table td:nth-child(8),
-        .retenue-table td:nth-child(9),
-        .retenue-table td:nth-child(10) {
+        .retenue-table th:nth-child(5),
+        .retenue-table td:nth-child(5) {
+            width: 10%;
             text-align: right;
+            /* Total H.T */
+        }
+
+        .retenue-table th:nth-child(6),
+        .retenue-table td:nth-child(6) {
+            width: 10%;
+            text-align: right;
+            /* T.V.A */
+        }
+
+        .retenue-table th:nth-child(7),
+        .retenue-table td:nth-child(7) {
+            width: 10%;
+            text-align: right;
+            /* R.S */
+        }
+
+        .retenue-table th:nth-child(8),
+        .retenue-table td:nth-child(8) {
+            width: 10%;
+            text-align: right;
+            /* Montant T.T.C */
+        }
+
+        .retenue-table th:nth-child(9),
+        .retenue-table td:nth-child(9) {
+            width: 7%;
+            text-align: right;
+            /* Timbre */
+        }
+
+        .retenue-table th:nth-child(10),
+        .retenue-table td:nth-child(10) {
+            width: 10%;
+            text-align: right;
+            /* Net à payer */
         }
 
         .footer {
@@ -189,7 +225,7 @@
     <table class="retenue-table">
         <thead>
             <tr>
-                <th>Réf.Honoraire</th>
+                <th>Réf.</th>
                 <th>Date</th>
                 <th>Client</th>
                 <th>M.F</th>
