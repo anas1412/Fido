@@ -136,11 +136,6 @@
             /* Increases the size of the text */
         }
 
-        .invoice-purpose p strong {
-            font-weight: bold;
-            text-decoration: underline;
-        }
-
         .invoice-table-container {
             display: flex;
             justify-content: center;
@@ -243,7 +238,8 @@
     </div>
 
     <div class="invoice-details">
-        <p><u>Note d'honoraires :</u> N°{{ substr_replace(str_pad($record->note, 8, '0', STR_PAD_LEFT), '/', -4, 0) }}
+        <p><strong><u>Note d'honoraires</u> :</strong>
+            N°{{ substr_replace(str_pad($record->note, 8, '0', STR_PAD_LEFT), '/', -4, 0) }}
         </p>
     </div>
 
@@ -257,7 +253,7 @@
     </div>
 
     <div class="invoice-purpose">
-        <p><strong>Objet d'honoraire :</strong> {{ $record->object }}.</p>
+        <p><strong><u>Objet d'honoraire</u> :</strong> {{ $record->object }}.</p>
     </div>
 
     <div class="invoice-table-container">
