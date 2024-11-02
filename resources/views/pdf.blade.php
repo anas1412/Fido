@@ -156,6 +156,7 @@
             border-collapse: collapse;
             margin: auto;
             margin-bottom: 10px;
+            font-size: 18px;
             /* Center the table */
         }
 
@@ -293,7 +294,7 @@
             </tr>
         </table>
     </div>
-
+    <br>
     <div class="total-in-words">
         <p>Arrêtée la présente note d'honoraires à la somme de :
             {{ $dinarsInWords }} dinars et {{ $millimes }} millimes.

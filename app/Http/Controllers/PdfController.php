@@ -7,18 +7,19 @@ use App\Models\Honoraire;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helpers\NumberToWords;
 use App\Models\Client;
-
+use Carbon\Carbon;
 
 class PdfController extends Controller
 {
     public function __invoke(Honoraire $honoraire)
     {
-        /* return Pdf::loadView('pdf', ['record' => $honoraire])
-            ->download($honoraire->note . '.pdf'); */
+        $formattedDate = Carbon::parse($honoraire->date)->format('d/m/Y');
+        $currentDate = Carbon::now()->format('d-m-Y');
 
-        // Format the date
-        $formattedDate = \Carbon\Carbon::parse($honoraire->date)->format('d/m/Y');
-        /* $amountInWords = NumberToWords::convertToWords($honoraire->amount); */
+        $paddedNote = str_pad($honoraire->note, 6, '0', STR_PAD_LEFT);
+
+        $fileName = "Honoraire_{$paddedNote}_{$currentDate}.pdf";
+
 
         return Pdf::loadView('pdf', [
             'record' => $honoraire,
@@ -26,7 +27,7 @@ class PdfController extends Controller
             'tva' => config('taxes.tva'),
             'rs' => config('taxes.rs')
         ])
-            ->setPaper('A4', 'portrait') // Set paper size and orientation
-            ->download($honoraire->note . '.pdf');
+            ->setPaper('A4', 'portrait')
+            ->download($fileName);
     }
 }
