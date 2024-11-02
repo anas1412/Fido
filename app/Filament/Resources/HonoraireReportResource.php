@@ -44,7 +44,9 @@ class HonoraireReportResource extends Resource
                 Tables\Columns\TextColumn::make('note')
                     ->label('Réf')
                     ->sortable()
-                    ->searchable(),
+                    ->getStateUsing(function ($record) {
+                        return str_pad($record->note, 8, '0', STR_PAD_LEFT);
+                    }),
                 Tables\Columns\TextColumn::make('date')
                     ->label("Date")
                     ->date(),

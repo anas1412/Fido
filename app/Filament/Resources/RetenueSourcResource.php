@@ -50,7 +50,9 @@ class RetenueSourcResource extends Resource
                     ->searchable(), */
                 Tables\Columns\TextColumn::make('note')
                     ->label('Note')
-                    ->searchable(),
+                    ->getStateUsing(function ($record) {
+                        return str_pad($record->note, 8, '0', STR_PAD_LEFT);
+                    }),
                 Tables\Columns\TextColumn::make('date')
                     ->label("Date d'honoraire")
                     ->date(),

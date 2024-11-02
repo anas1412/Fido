@@ -202,7 +202,11 @@ class HonoraireResource extends Resource
                     ->getStateUsing(function ($record) {
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     })
-                    ->searchable(),
+                    ->searchable(query: function (Builder $query, string $search) {
+                        // Pad the search input with zeros
+                        $paddedSearch = str_pad($search, 8, '0', STR_PAD_LEFT);
+                        $query->where('note', 'like', "%{$paddedSearch}%");
+                    }),
                 Tables\Columns\TextColumn::make('object')
                     ->label("Objet d'honoraire"),
                 Tables\Columns\TextColumn::make('client.name')
