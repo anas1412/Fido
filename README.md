@@ -54,7 +54,7 @@ Fido is a SaaS platform tailored to meet the unique needs of Tunisian accountant
 <p align="center">
   <img src="Demo1.png?raw=true" width="80%" alt="Demo Screenshot 1">
   <img src="Demo2.png?raw=true" width="80%" alt="Demo Screenshot 2">
-  <img src="DB_schema.png?raw=true" width="80%" alt="SQLite_DB_schema">
+  <!-- <img src="DB_schema.png?raw=true" width="80%" alt="SQLite_DB_schema"> -->
 </p>
 
 ## System Requirements
