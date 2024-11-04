@@ -20,6 +20,7 @@ Fido is a SaaS platform tailored to meet the unique needs of Tunisian accountant
 ## Key Technologies
 
 -   **[Laravel](https://laravel.com/):** Scalable PHP framework.
+-   **[Livewire](https://livewire.com/):** Real-time web development.
 -   **[TailwindCSS](https://tailwindcss.com/):** Utility-first CSS for rapid design.
 -   **[FilamentPHP](https://filamentphp.com/):** Elegant admin panel.
 -   **[SQLite](https://www.sqlite.org/):** Lightweight, serverless database.
