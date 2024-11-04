@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Filament\Resources\RetenueSourcResource\Pages;
+namespace App\Filament\Resources\ListNoteDeDebitReportResource\Pages;
 
-use App\Filament\Resources\RetenueSourcResource;
+use App\Filament\Resources\NoteDeDebitResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Actions\Action;
 use App\Models\Client;
 use App\Models\Honoraire;
+use App\Models\NoteDeDebit;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class ListRetenueSourc extends ListRecords
+class ListNoteDeDebitReport extends ListRecords
 {
-    protected static string $resource = RetenueSourcResource::class;
+    protected static string $resource = NoteDeDebitResource::class;
 
-    protected static ?string $title = "Rapport des retenues à la source";
+    protected static ?string $title = "Rapport des note des debits";
 
 
     protected function getHeaderActions(): array
@@ -32,28 +33,25 @@ class ListRetenueSourc extends ListRecords
                     $endDateFormatted = date('d/m/Y', strtotime($data['end_date']));
                     $currentDateFormatted = now()->format('d/m/Y');
 
-                    $honoraires = Honoraire::where('client_id', $client->id)
+                    $noteDeDebits = NoteDeDebit::where('client_id', $client->id)
                         ->whereBetween('date', [$startDate, $endDate])
                         ->get();
 
-                    $totalRS = $honoraires->sum('rs');
-                    $totalTTC = $honoraires->sum('montantTTC');
+                    $total = $noteDeDebits->sum('amount');
 
-                    $pdf = Pdf::loadView('retenue-source', [
+                    $pdf = Pdf::loadView('note-de-debit', [
                         'client' => $client,
-                        'honoraires' => $honoraires,
+                        'noteDesSebits' => $noteDeDebits,
                         'startDate' => $startDateFormatted,
                         'endDate' => $endDateFormatted,
                         'currentDate' => $currentDateFormatted,
-                        'totalRS' => $totalRS,
-                        'totalTTC' => $totalTTC,
-                        'rs' => config('taxes.rs') * 100,
+                        'total' => $total,
                     ]);
 
                     $currentDate = now()->format('d-m-Y');
                     return response()->streamDownload(function () use ($pdf) {
                         echo $pdf->output();
-                    }, "rapport_retenue_source_{$client->name}_{$currentDate}.pdf");
+                    }, "rapport_note_de_debit_{$client->name}_{$currentDate}.pdf");
                 })
 
                 ->form([
@@ -79,44 +77,38 @@ class ListRetenueSourc extends ListRecords
                     $currentDateFormatted = now()->format('d/m/Y');
 
                     $clients = Client::all(); // Fetch all clients
-                    $totalTTC = 0; // Overall total TTC for all clients
-                    $totalRS = 0; // Overall total RS for all clients
+                    $total = 0; // Overall total for all clients
 
-                    // Loop through each client and calculate their TTC and RS sums
+                    // Loop through each client and calculate their Total sums
                     foreach ($clients as $client) {
                         // Get honoraires for the client within the specified date range
-                        $honoraires = $client->honoraires()
+                        $noteDeDebits = $client->honoraires()
                             ->whereBetween('date', [$startDate, $endDate])
                             ->get();
 
                         // Sum TTC and RS for this client
-                        $client->totalClientTTC = $honoraires->sum('montantTTC');
-                        $client->totalClientRS = $honoraires->sum('rs');
+                        $client->totalClient = $noteDeDebits->sum('amount');
 
                         // Add client totals to overall totals
-                        $totalTTC += $client->totalClientTTC;
-                        $totalRS += $client->totalClientRS;
+                        $total += $client->totalClient;
                     }
 
                     $fiscalYear = config('fiscal_year.current_year');
-                    $rs = config('taxes.rs') * 100;
 
                     // Generate PDF
-                    $pdf = Pdf::loadView('retenue-source-all', [
+                    $pdf = Pdf::loadView('note-de-debit-all', [
                         'fiscalYear' => $fiscalYear,
                         'clients' => $clients,
                         'startDate' => $startDateFormatted,
                         'endDate' => $endDateFormatted,
                         'currentDate' => $currentDateFormatted,
-                        'rs' => $rs,
-                        'totalTTC' => $totalTTC,
-                        'totalRS' => $totalRS,
+                        'total' => $total,
                     ]);
 
                     $currentDate = now()->format('d-m-Y');
                     return response()->streamDownload(function () use ($pdf) {
                         echo $pdf->output();
-                    }, "rapport_retenue_source_tous_clients_{$currentDate}.pdf");
+                    }, "rapport_note_debit_tous_clients_{$currentDate}.pdf");
                 })
 
                 ->form([

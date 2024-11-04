@@ -2,66 +2,55 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\RetenueSourcResource\Pages;
-use App\Models\Honoraire;
+use App\Filament\Resources\NoteDeDebitReportResource\Pages;
+use App\Filament\Resources\NoteDeDebitReportResource\RelationManagers;
+use App\Models\NoteDeDebit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
-use Filament\Tables\Enums\FiltersLayout;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables\Columns\Summarizers\Average;
-use Filament\Tables\Columns\Summarizers\Range;
-use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Columns\Summarizers\Sum;
 
-class RetenueSourcResource extends Resource
+class NoteDeDebitReportResource extends Resource
 {
-    protected static ?string $model = Honoraire::class;
+    protected static ?string $model = NoteDeDebit::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
 
     protected static ?string $navigationGroup = "Rapports";
 
-    protected static ?string $navigationLabel = 'Rappports des retenues à la source';
+    protected static ?string $navigationLabel = 'Rappports des notes de débit';
+
+    protected static ?int $navigationSort = 3;
 
     public static function getEloquentQuery(): Builder
     {
         $fiscalYear = config('fiscal_year.current_year');
-        return parent::getEloquentQuery()
-            ->whereYear('date', $fiscalYear)
-            ->whereNotNull('rs')
-            ->where('rs', '>', 0);
+        return parent::getEloquentQuery()->whereYear('date', $fiscalYear);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                /* Tables\Columns\TextColumn::make('client.name')
-                    ->label('Nom du client')
-                    ->sortable()
-                    ->searchable(), */
                 Tables\Columns\TextColumn::make('note')
-                    ->label('Note')
+                    ->label('Référence')
                     ->getStateUsing(function ($record) {
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     }),
                 Tables\Columns\TextColumn::make('date')
-                    ->label("Date d'honoraire")
+                    ->label("Date de debit")
                     ->date(),
-                Tables\Columns\TextColumn::make('montantTTC')
-                    ->label('Montant TTC')
-                    ->summarize(Sum::make()->label('')->money('TND'))
-                    ->money('tnd'),
-                Tables\Columns\TextColumn::make('rs')
-                    ->label('Retenue à la source')
+                Tables\Columns\TextColumn::make('amount')
+                    ->label('Montant de debit')
                     ->summarize(Sum::make()->label('')->money('TND'))
                     ->money('tnd'),
             ])
@@ -89,15 +78,13 @@ class RetenueSourcResource extends Resource
                             );
                     }),
             ], layout: FiltersLayout::AboveContent)->filtersFormColumns(2)
-            /* ->filtersTriggerAction(
-                fn(Action $action) => $action
-                    ->button()
-                    ->label('Choisir un client et les dates')
-            ) */
             ->actions([
-                /* Tables\Actions\ViewAction::make(), */])
+                Tables\Actions\EditAction::make(),
+            ])
             ->bulkActions([
-                // You can add bulk actions if needed
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
@@ -111,7 +98,7 @@ class RetenueSourcResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRetenueSourc::route('/'),
+            'index' => Pages\ListNoteDeDebitReports::route('/'),
         ];
     }
 }

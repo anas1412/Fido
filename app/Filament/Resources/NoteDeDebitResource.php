@@ -86,8 +86,6 @@ class NoteDeDebitResource extends Resource
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->label('Description')->columnSpanFull(),
-
-
             ]);
     }
 
