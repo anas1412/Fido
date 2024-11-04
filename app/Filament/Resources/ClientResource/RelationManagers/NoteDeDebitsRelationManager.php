@@ -30,13 +30,11 @@ class NoteDeDebitsRelationManager extends RelationManager
                     ->disabled(),
                 Forms\Components\DatePicker::make('date') // Add date picker
                     ->label('Date d\'émission'),
-                Forms\Components\Select::make('client_id')
-                    ->label('Client')
-                    ->relationship('client', 'name')
-                    ->searchable()
-                    ->disabledOn('edit')
-                    ->required()
+                Forms\Components\TextInput::make('amount')
+                    ->label('Montant')
+                    ->numeric()
                     ->reactive()
+                    ->required()
                     ->afterStateUpdated(function ($state, callable $set) {
                         if ($state) {
                             $currentYear = date('Y');
@@ -51,13 +49,9 @@ class NoteDeDebitsRelationManager extends RelationManager
                             $set('note', $newNote);
                         }
                     }),
-                Forms\Components\TextInput::make('amount')
-                    ->label('Montant')
-                    ->numeric()
-                    ->required(),
                 Forms\Components\TextInput::make('description')
                     ->required()
-                    ->label('Description')->columnSpanFull(),
+                    ->label('Description'),
             ]);
     }
 
