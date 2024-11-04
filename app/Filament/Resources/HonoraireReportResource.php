@@ -117,8 +117,7 @@ class HonoraireReportResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListHonoraireReport::route('/'),
-            /* 'index' => Pages\ListHonoraireReports::route('/'), */
+            'index' => Pages\ListHonoraireReports::route('/'),
             /* 'create' => Pages\CreateHonoraireReport::route('/create'),
             'edit' => Pages\EditHonoraireReport::route('/{record}/edit'), */
         ];

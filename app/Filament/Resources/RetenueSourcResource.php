@@ -111,7 +111,7 @@ class RetenueSourcResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRetenueSourc::route('/'),
+            'index' => Pages\ListRetenueSourcs::route('/'),
         ];
     }
 }
