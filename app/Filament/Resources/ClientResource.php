@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
 use App\Filament\Resources\ClientResource\RelationManagers\HonorairesRelationManager;
+use App\Filament\Resources\ClientResource\RelationManagers\NoteDeDebitsRelationManager;
 use App\Models\Client;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -140,7 +141,7 @@ class ClientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\HonorairesRelationManager::class
+            RelationManagers\HonorairesRelationManager::class,
         ];
     }
 
