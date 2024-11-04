@@ -48,12 +48,12 @@ class Honoraire extends Model
                 $count++; // Increment for the next check if it already exists
             } while (Honoraire::where('note', $newNote)->exists()); // Check for uniqueness
 
-            $newObject = "Assistance comptable de l'année $currentYear";
-            $newDate = now()->toDateString();
+            /* $newObject = "Assistance comptable de l'année $currentYear";
+            $newDate = now()->toDateString(); */
 
-            $honoraire->date = $newDate;
+            /* $honoraire->date = $newDate; */
             $honoraire->note = (string) $newNote;
-            $honoraire->object = $newObject;
+            /* $honoraire->object = $newObject; */
         });
     }
 }

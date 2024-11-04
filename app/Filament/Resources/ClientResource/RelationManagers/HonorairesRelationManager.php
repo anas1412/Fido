@@ -147,9 +147,6 @@ class HonorairesRelationManager extends RelationManager
                     ->searchable(),
                 Tables\Columns\TextColumn::make('object')
                     ->label("Objet d'honoraire"),
-                Tables\Columns\TextColumn::make('client.mf')
-                    ->label('Matricule Fiscale')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('date')
                     ->label("Date d'honoraire")
                     ->date()

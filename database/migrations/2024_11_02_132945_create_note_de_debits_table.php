@@ -10,6 +10,8 @@ return new class extends Migration
     {
         Schema::create('note_de_debits', function (Blueprint $table) {
             $table->id();
+            $table->integer('note')
+                ->nullable();
             $table->foreignId('client_id')->constrained()->onDelete('cascade')->nullable();
             $table->decimal('amount')->nullable();
             $table->string('description')->nullable();

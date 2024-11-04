@@ -142,6 +142,7 @@ class ClientResource extends Resource
     {
         return [
             RelationManagers\HonorairesRelationManager::class,
+            RelationManagers\NoteDeDebitsRelationManager::class,
         ];
     }
 
