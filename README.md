@@ -51,8 +51,8 @@ Fido is a SaaS platform tailored to meet the unique needs of Tunisian accountant
 ## Visual Insights (Freemium Version)
 
 <p align="center">
-  <img src="Demo1.png?raw=true" width="45%" alt="Demo Screenshot 1">
-  <img src="Demo2.png?raw=true" width="45%" alt="Demo Screenshot 2">
+  <img src="Demo1.png?raw=true" width="50%" alt="Demo Screenshot 1">
+  <img src="Demo2.png?raw=true" width="50%" alt="Demo Screenshot 2">
 </p>
 <p align="center">
   <img src="DB_schema.png?raw=true" width="80%" alt="SQLite_DB_schema">
