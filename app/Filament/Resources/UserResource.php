@@ -23,9 +23,11 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = "Espace Utilisateur";
+    protected static ?string $navigationGroup = "Espace Administrateur"; // Updated to French
 
-    protected static ?string $navigationLabel = 'Utilisateurs';
+    protected static ?string $navigationLabel = 'Gestion des utilisateurs';
+
+
 
     /* public static function getNavigationBadge(): ?string
     {
