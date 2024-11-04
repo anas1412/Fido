@@ -27,9 +27,9 @@ class RetenueSourcResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = "Rapports";
+    protected static ?string $navigationGroup = "Génération des Rapports";
 
-    protected static ?string $navigationLabel = 'Rappports des retenues à la source';
+    protected static ?string $navigationLabel = 'List des Retenues à la Source';
 
     public static function getEloquentQuery(): Builder
     {

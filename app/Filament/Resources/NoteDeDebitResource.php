@@ -26,6 +26,8 @@ class NoteDeDebitResource extends Resource
 
     protected static ?string $navigationGroup = "Espace Client";
 
+    protected static ?string $navigationLabel = 'Notes de Débit';
+
     public static function getEloquentQuery(): Builder
     {
         $fiscalYear = config('fiscal_year.current_year');
