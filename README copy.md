@@ -15,7 +15,7 @@
 
 # Fido: Revolutionizing Accounting for Professionals
 
-Fido is a freelancing project dashboard platform tailored to meet the unique needs of a Tunisian accountant. Designed with simplicity, compliance, and efficiency in mind, Fido uses the latest technologies to enhance accounting workflows, automate essential tasks, and provide professionals with tools to manage reports and tax obligations.
+Fido is a SaaS platform tailored to meet the unique needs of Tunisian accountants. Designed with simplicity, compliance, and efficiency in mind, Fido uses the latest technologies to enhance accounting workflows, automate essential tasks, and provide professionals with tools to manage reports, invoices, client interactions, and tax obligations.
 
 ## Key Technologies
 
@@ -24,23 +24,25 @@ Fido is a freelancing project dashboard platform tailored to meet the unique nee
 -   **[TailwindCSS](https://tailwindcss.com/):** Utility-first CSS for rapid design.
 -   **[FilamentPHP](https://filamentphp.com/):** Elegant admin panel.
 -   **[SQLite](https://www.sqlite.org/):** Lightweight, serverless database.
+-   **[Docker](https://www.docker.com/):** Containerized app deployment.
+-   **[Kubernetes](https://kubernetes.io/):** Container orchestration.
+-   **[ArgoCD](https://argoproj.github.io/argo-cd/):** GitOps continuous delivery for Kubernetes.
+-   **[Amazon AWS](https://aws.amazon.com/):** Cloud infrastructure.
 
 ## Fido’s Key Features
 
-### Current Features
+### Fremium Features
 
--   **Employees Accounts Management:** Easily manage employees access on the dashboard.
+-   **Client and Project Management:** Easily track clients and engagements.
 -   **Professional Fees Report:** Generate and export detailed professional fees reports.
 -   **Withholding Tax Statement:** Simplifies management of withholding tax obligations.
 -   **Debit Note Statement:** Manage and record debit transactions efficiently.
--   **Basic Reports:** Generate and export essential accounting reports.
+-   **Basic Invoicing and Reports:** Generate and export essential accounting reports and invoices.
 
-### Todo Features
+### Premium Features
 
--   **Advanced Invoicing and Reports:** Generate and export customized accounting reports and invoices.
--   **Clients and Projects Management:** Easily track clients and engagements.
 -   **Custom Reports and Advanced Analytics:** Enhanced data insights for better decision-making.
--   **ERP and CRM Integrations:** Connect with ERP & CRM systems for seamless data sharing and 24/7 support.
+-   **ERP and CRM Integrations:** Connect with ERP systems for seamless data sharing.
 -   **Automated Backups:** Regular data backup and restore.
 -   **Kanban Workflow:** Visual task and project management.
 -   **Video Conferencing and Meeting Scheduling:** Tools to manage client meetings in-app.
