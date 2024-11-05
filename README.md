@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://laravel.com" target="_blank">
-    <img src="https://github.com/anas1412/Fido/blob/main/public/images/logo.png?raw=true" width="100" alt="Fido Logo">
+    <img src="/public/images/DL_logo.png?raw=true" width="100" alt="Fido Logo">
   </a>
 </p>
 
