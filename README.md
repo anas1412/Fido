@@ -13,7 +13,7 @@
   </a>
 </p>
 
-# Fido: Revolutionizing Accounting for Professionals
+# Fido: Automating Accounting with Ease
 
 Fido is a freelancing project dashboard platform tailored to meet the unique needs of a Tunisian accountant. Designed with simplicity, compliance, and efficiency in mind, Fido uses the latest technologies to enhance accounting workflows, automate essential tasks, and provide professionals with tools to manage reports and tax obligations.
 
