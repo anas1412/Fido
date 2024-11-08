@@ -81,7 +81,7 @@ class ListHonoraireReports extends ListRecords
                     return response()->streamDownload(function () use ($pdf) {
 
                         echo $pdf->output();
-                    }, "rapport_retenue_source_tous_clients_{$currentDate}.pdf");
+                    }, "rapport_des_honoraires_{$currentDate}.pdf");
                 })
 
                 ->form([
@@ -92,6 +92,7 @@ class ListHonoraireReports extends ListRecords
                         ->label('Date de fin')
                         ->required(),
                 ]),
+
         ];
     }
 }
