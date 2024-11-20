@@ -1,4 +1,3 @@
-{{-- resources/views/certificates/tax-withholding.blade.php --}}
 <!DOCTYPE html>
 <html>
 
@@ -24,7 +23,8 @@
             top: 20px;
             left: 20px;
             font-weight: bold;
-            line-height: 1.5;
+            line-height: 1.2; /* Adjusted line-height to reduce vertical space */
+            font-size: 14px;
         }
 
         .header-right {
@@ -33,30 +33,35 @@
             right: 20px;
             text-align: right;
             font-weight: bold;
-            line-height: 1.5;
+            line-height: 1.2; /* Adjusted line-height to reduce vertical space */
+            font-size: 14px;
         }
 
         .date-section {
             position: absolute;
-            top: 100px;
+            top: 110px;
             left: 50%;
             transform: translateX(-50%);
+            font-size: 14px;
         }
 
         .section-a {
             position: absolute;
-            top: 130px;
+            top: 150px;
             left: 20px;
             font-weight: bold;
             text-decoration: underline;
+            font-size: 15px;
         }
 
         .id-grid-a {
             position: absolute;
-            top: 150px;
+            top: 160px;
             right: 20px;
             width: 50%;
             border-collapse: collapse;
+            border: solid black;
+            font-size: 15px;
         }
 
         .id-grid-a td {
@@ -68,36 +73,46 @@
 
         .info-box-a {
             position: absolute;
-            top: 220px;
+            top: 260px;
             left: 20px;
             width: 90%;
             line-height: 1.5;
-        }
-
-        .section-b {
-            position: absolute;
-            top: 260px;
-            left: 20px;
-            font-weight: bold;
-            text-decoration: underline;
+            font-size: 14px;
         }
 
         .grid-table {
             position: absolute;
-            top: 280px;
-            left: 20px;
-            width: 60%;
-            margin-left: 20%;
+            top: 325px;
+            left: 8px;
+            right: 8px;
+            width: 95%;
             border-collapse: collapse;
+            border: solid black;
+            margin-left: 10px;
+            margin-right: 10px;
+            font-size: 15px;
         }
+
+        .grid-table th:first-child,
+        .grid-table td:first-child {
+            text-align: left;
+             /* Aligns only the first table header to the left */
+        }
+
+
+        .grid-table tr:nth-child(2) td:nth-child(2) {
+            height: 120px;
+        }
+
 
         .grid-table td,
         .grid-table th {
             border: 1px solid black;
             padding: 5px;
             text-align: center;
-            height: 30px;
         }
+
+
 
         .amount-cell {
             text-align: right;
@@ -106,18 +121,31 @@
 
         .section-c {
             position: absolute;
-            top: 420px;
+            top: 550px;
             left: 20px;
             font-weight: bold;
             text-decoration: underline;
+            font-size: 15px;
+            
+        }
+
+        .id-c {
+            position: absolute;
+            top: 560px;
+            right: 20px;
+            font-size: 13px;
+            
         }
 
         .id-grid-c {
             position: absolute;
-            top: 440px;
+            top: 580px;
             right: 20px;
             width: 50%;
             border-collapse: collapse;
+            font-size: 15px;
+            font-weight: bold;
+            border: solid black;
         }
 
         .id-grid-c td {
@@ -129,40 +157,39 @@
 
         .info-box-c {
             position: absolute;
-            top: 500px;
+            top: 690px;
             left: 20px;
             width: 90%;
             line-height: 1.5;
+            font-size: 14px;
         }
 
         .signature-box {
             position: absolute;
-            top: 580px;
-            left: 20px;
-            width: 90%;
+            top: 750px;
+            left: 0px;
+            right: 1px;
+            width: 100%;
             text-align: center;
-            line-height: 1.5;
+            line-height: 0.8;
+            border: 1px solid black;
+            height: 220px;
+            font-size: 14px;
+            padding-top: 10px;
         }
 
         .signature-box p {
-            margin: 8px 0;
+            margin: 12px 0;
         }
 
-        .line-break {
-            border-top: 1px solid black;
-            margin: 8px 0;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-        }
 
         .footer {
             position: absolute;
-            bottom: 20px;
+            bottom: 80px;
             left: 20px;
             width: calc(100% - 40px);
             font-size: 10px;
-            text-align: center;
+            text-align: left;
         }
     </style>
 </head>
@@ -197,29 +224,27 @@
             <td width="25%"><strong>N° Et.<br>Secondaire</strong></td>
         </tr>
         <tr>
-            <td>{{ $matricule_fiscal_payeur ?? '1199245Y' }}</td>
-            <td>{{ $code_tva_payeur ?? 'A' }}</td>
-            <td>{{ $code_categorie_payeur ?? 'M' }}</td>
-            <td>{{ $no_et_secondaire_payeur ?? '000' }}</td>
+            <td><strong>{{ $matricule_fiscal_payeur ?? '1199245Y' }}</strong></td>
+            <td><strong>{{ $code_tva_payeur ?? 'A' }}</strong></td>
+            <td><strong>{{ $code_categorie_payeur ?? 'M' }}</strong></td>
+            <td><strong>{{ $no_et_secondaire_payeur ?? '000' }}</strong></td>
         </tr>
     </table>
 
-    <div class="info-box-a">
-        <strong>Dénomination de la personne ou de l'organisme payeur:</strong>
-        {{ $denomination_payeur ?? 'STE DISTRIPETS SARL' }}<br>
-        <strong>Adresse:</strong> {{ $adresse_payeur ?? 'RUE SAAD IBN ABI WAKKAS MORNAG' }}
-    </div>
+    <br><br>
 
-    <div class="section-b">
-        B-RETENUES EFFECTUEES SUR:
+    <div class="info-box-a">
+        <strong>Dénomination de la personne ou de l'organisme payeur:
+        {{ $denomination_payeur ?? 'STE DISTRIPETS SARL' }}</strong><br>
+        <strong>Adresse:</strong> {{ $adresse_payeur ?? 'RUE SAAD IBN ABI WAKKAS MORNAG' }}
     </div>
 
     <table class="grid-table">
         <tr>
-            <th width="60%">Description</th>
-            <th width="15%">MONTANT BRUT</th>
-            <th width="10%">RETENUE</th>
-            <th width="15%">MONTANT NET</th>
+            <th width="50%">B-RETENUES EFFECTUEES SUR: </th>
+            <th width="21%">MONTANT BRUT</th>
+            <th width="14%">RETENUE</th>
+            <th width="21%">MONTANT NET</th>
         </tr>
         <tr>
             <td>{{ $description ?? '- Assistance Comptable de l\'année 2023.' }}</td>
@@ -239,6 +264,10 @@
         C-BENEFICIAIRE:
     </div>
 
+    <div class="id-c">
+        IDENTIFIANT
+    </div>
+
     <table class="id-grid-c">
         <tr>
             <td width="25%"><strong>Matricule<br>Fiscal</strong></td>
@@ -255,26 +284,29 @@
     </table>
 
     <div class="info-box-c">
-        <strong>Nom, Prénom, ou raison social:</strong> {{ $nom_beneficiaire ?? 'Cabinet Ezzeddine Haouel' }}<br>
-        <strong>Adresse Professionnelle:</strong> {{ $adresse_beneficiaire ?? 'Av. Mohamed Ali Hammi 8050 Hammamet' }}
+        <strong>Nom, Prénom, ou raison social: {{ $nom_beneficiaire ?? 'Cabinet Ezzeddine Haouel' }}<br></strong>
+        <strong>Adresse Professionnelle:{{ $adresse_beneficiaire ?? 'Av. Mohamed Ali Hammi 8050 Hammamet' }}</strong> 
     </div>
+
 
     <div class="signature-box">
         <p>Je soussigné, certifie exacts les renseignements figurant sur le présent certificat</p>
         <p>et m'expose aux sanctions prévenues par la loi pour toute inexactitude</p>
 
-        <div class="line-break"></div>
+        <br>
 
         <p>HAMMAMET, le {{ $date_signature ?? '31/08/2024' }}</p>
 
-        <div class="line-break"></div>
 
-        <p>Cachet et signature du payeur</p>
+        <p><strong>Cachet et signature du payeur</strong></p>
     </div>
 
+
     <div class="footer">
-        Certificat de retenue d'impôt sur le revenu ou d'impôt sur les sociétés - Document à conserver pour la
-        déclaration fiscale.
+        1/ le certificat, est délivé à l'occasion de chaque paiement toutesfois pour les opération répétitives le certificat peut être délivré trimestriellement.
+        <br>
+        2/ code catégorie: M.personnes physique- industrie et commerce- P. Professions librérales - N. employeurs non soumis à l'impôt ou sur les sociétés (administrations et
+        établissement publies). -E. établissement secondaires.
     </div>
 </body>
 

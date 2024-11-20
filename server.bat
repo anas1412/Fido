@@ -25,9 +25,6 @@ if %ERRORLEVEL% NEQ 0 (
 echo Pulling the latest changes from the main branch...
 git pull origin main || (echo ERROR: Git pull failed. Exiting... & exit /b 1)
 
-
-
-
 :: Output information about the environment
 echo Laravel project found! Preparing to start the server...
 
