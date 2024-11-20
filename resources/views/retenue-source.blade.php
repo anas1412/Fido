@@ -236,7 +236,7 @@
     <div class="info-box-a">
         <strong>Dénomination de la personne ou de l'organisme payeur:
         {{ $denomination_payeur ?? 'STE DISTRIPETS SARL' }}</strong><br>
-        <strong>Adresse:</strong> {{ $adresse_payeur ?? 'RUE SAAD IBN ABI WAKKAS MORNAG' }}
+        <strong>Adresse :</strong> {{ $adresse_payeur ?? 'RUE SAAD IBN ABI WAKKAS MORNAG' }}
     </div>
 
     <table class="grid-table">
@@ -285,7 +285,7 @@
 
     <div class="info-box-c">
         <strong>Nom, Prénom, ou raison social: {{ $nom_beneficiaire ?? 'Cabinet Ezzeddine Haouel' }}<br></strong>
-        <strong>Adresse Professionnelle:{{ $adresse_beneficiaire ?? 'Av. Mohamed Ali Hammi 8050 Hammamet' }}</strong> 
+        <strong>Adresse Professionnelle : {{ $adresse_beneficiaire ?? 'Av. Mohamed Ali Hammi 8050 Hammamet' }}</strong> 
     </div>
 
 
