@@ -209,7 +209,7 @@
     </div>
 
     <div class="date-section">
-        Retenu effectuée le : {{ $date_retenue ?? '01/07/2024' }}
+        Retenu effectuée le : {{ $currentDate ?? 'NaN' }}
     </div>
 
     <div class="section-a">
@@ -224,10 +224,10 @@
             <td width="25%"><strong>N° Et.<br>Secondaire</strong></td>
         </tr>
         <tr>
-            <td><strong>{{ $matricule_fiscal_payeur ?? '1199245Y' }}</strong></td>
-            <td><strong>{{ $code_tva_payeur ?? 'A' }}</strong></td>
-            <td><strong>{{ $code_categorie_payeur ?? 'M' }}</strong></td>
-            <td><strong>{{ $no_et_secondaire_payeur ?? '000' }}</strong></td>
+            <td><strong>{{ substr($client->mf ?? '1199245Y', 0, 8) }}</strong></td>
+            <td><strong>{{ substr($client->mf ?? 'A', 8, 1) }}</strong></td>
+            <td><strong>{{ substr($client->mf ?? 'A', 9, 1) }}</strong></td>
+            <td><strong>{{ substr($client->mf ?? 'A', 10, 3) }}</strong></td>
         </tr>
     </table>
 
@@ -235,8 +235,8 @@
 
     <div class="info-box-a">
         <strong>Dénomination de la personne ou de l'organisme payeur:
-        {{ $denomination_payeur ?? 'STE DISTRIPETS SARL' }}</strong><br>
-        <strong>Adresse :</strong> {{ $adresse_payeur ?? 'RUE SAAD IBN ABI WAKKAS MORNAG' }}
+        {{ $client->name ?? 'STE DISTRIPETS SARL' }}</strong><br>
+        <strong>Adresse :</strong> {{ $client->address ?? 'RUE SAAD IBN ABI WAKKAS MORNAG' }}
     </div>
 
     <table class="grid-table">
@@ -247,16 +247,32 @@
             <th width="21%">MONTANT NET</th>
         </tr>
         <tr>
-            <td>{{ $description ?? '- Assistance Comptable de l\'année 2023.' }}</td>
-            <td class="amount-cell">{{ number_format($montant_brut ?? 3571.0, 3) }}</td>
-            <td class="amount-cell">{{ number_format($retenue ?? 107.1, 3) }}</td>
-            <td class="amount-cell">{{ number_format($montant_net ?? 3463.9, 3) }}</td>
-        </tr>
+    <td>
+        @foreach($honoraires as $honoraire)
+            {{ $honoraire->object ?? '- Assistance Comptable de l\'année NaN.' }}<br>
+        @endforeach
+    </td>
+    <td class="amount-cell">
+        @foreach($honoraires as $honoraire)
+            {{ number_format($honoraire->montantHT ?? 00) }}<br>
+        @endforeach
+    </td>
+    <td class="amount-cell">
+        @foreach($honoraires as $honoraire)
+            {{ number_format($honoraire->rs ?? 00) }}<br>
+        @endforeach
+    </td>
+    <td class="amount-cell">
+        @foreach($honoraires as $honoraire)
+            {{ number_format($honoraire->netapayer ?? 00) }}<br>
+        @endforeach
+    </td>
+</tr>
         <tr>
             <td><strong>Total Général</strong></td>
-            <td class="amount-cell"><strong>{{ number_format($montant_brut ?? 3571.0, 3) }}</strong></td>
-            <td class="amount-cell"><strong>{{ number_format($retenue ?? 107.1, 3) }}</strong></td>
-            <td class="amount-cell"><strong>{{ number_format($montant_net ?? 3463.9, 3) }}</strong></td>
+            <td class="amount-cell"><strong>{{ number_format($totalTTC ?? 00) }}</strong></td>
+            <td class="amount-cell"><strong>{{ number_format($TotalRS ?? 00) }}</strong></td>
+            <td class="amount-cell"><strong>{{ number_format($totalNET ?? 00) }}</strong></td>
         </tr>
     </table>
 
@@ -295,7 +311,7 @@
 
         <br>
 
-        <p>HAMMAMET, le {{ $date_signature ?? '31/08/2024' }}</p>
+        <p>HAMMAMET, le {{ $currentDate ?? '31/08/2024' }}</p>
 
 
         <p><strong>Cachet et signature du payeur</strong></p>

@@ -37,6 +37,7 @@ class ListRetenueSourcs extends ListRecords
 
                     $totalRS = $honoraires->sum('rs');
                     $totalTTC = $honoraires->sum('montantTTC');
+                    $totalNET = $honoraires->sum('netapayer');
 
                     $pdf = Pdf::loadView('retenue-source', [
                         'client' => $client,
@@ -46,6 +47,7 @@ class ListRetenueSourcs extends ListRecords
                         'currentDate' => $currentDateFormatted,
                         'totalRS' => $totalRS,
                         'totalTTC' => $totalTTC,
+                        'totalNET' => $totalNET,
                         'rs' => config('taxes.rs') * 100,
                     ]);
 
