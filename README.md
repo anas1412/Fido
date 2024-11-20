@@ -57,27 +57,8 @@ Fido is a freelancing project dashboard platform tailored to meet the unique nee
 
 ## System Requirements
 
--   **PHP 8.2 or higher:** [Download PHP](https://windows.php.net/downloads/releases/php-8.3.13-nts-Win32-vs16-x64.zip)
--   **Composer:** [Install Composer](https://getcomposer.org/download/)
 -   **Git:** [Install Git](https://git-scm.com/downloads)
-
-### PHP Configuration
-
-**Edit the `php.ini` File inside your PHP installation directory:**
-
--   Open the `php.ini` file located in your PHP installation directory you chose (e.g., `C:\xampp\php\php.ini`).
--   Uncomment the following lines by removing the semicolon (;) at the beginning:
-    ```ini
-    extension=pdo_sqlite
-    extension=json
-    extension=ctype
-    extension=tokenizer
-    extension=fileinfo
-    extension=mbstring
-    extension=openssl
-    extension=bcmath
-    extension=intl
-    ```
+-   **Composer:** [Install Composer](https://getcomposer.org/download/) (choose the php.exe inside PHP8.2 folder inside the project folder)
 
 ## Quick Start Guide
 
@@ -105,6 +86,7 @@ Fido is a freelancing project dashboard platform tailored to meet the unique nee
 
     php artisan serve
 
+Or double click on `server.bat` in the project directory.
 Access the application at http://localhost:8000.
 
 ### Production Mode
