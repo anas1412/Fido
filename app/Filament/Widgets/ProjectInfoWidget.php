@@ -15,4 +15,10 @@ class ProjectInfoWidget extends Widget
     {
         return true; // Set any visibility restrictions if needed
     }
+        public function getViewData(): array
+    {
+        return [
+            'version' => config('app.version'), // Pass version from config
+        ];
+    }
 }

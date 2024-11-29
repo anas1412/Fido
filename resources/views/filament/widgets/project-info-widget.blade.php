@@ -4,7 +4,7 @@
             <!-- Project Title and Version on the Left -->
             <div>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Fido Project</h1>
-                <p class="text-sm text-gray-500">v0.1.15</p>
+                <p class="text-sm text-gray-500">{{ $version }}</p>
             </div>
 
             <!-- Documentation and GitHub Buttons on the Right -->
