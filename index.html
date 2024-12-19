@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FIDO - Smart Accounting Software</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: "#6FBF44",
+                        },
+                    },
+                },
+            };
+        </script>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+            body {
+                font-family: "Inter", sans-serif;
+            }
+            .gradient-bg {
+                background: linear-gradient(135deg, #6fbf44 0%, #5da939 100%);
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50">
+        <!-- Navigation -->
+        <nav class="fixed z-50 w-full bg-white shadow">
+            <div
+                class="flex items-center justify-between max-w-5xl px-4 py-4 mx-auto"
+            >
+                <div
+                    class="flex items-center space-x-2 text-2xl font-bold text-primary"
+                >
+                    <svg
+                        class="w-8 h-8"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <path
+                            d="M10 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"
+                        />
+                    </svg>
+                    <span>FIDO</span>
+                </div>
+                <div class="items-center hidden gap-6 md:flex">
+                    <a
+                        href="#features"
+                        class="text-gray-600 transition hover:text-primary"
+                        >Features</a
+                    >
+                    <a
+                        href="#pricing"
+                        class="text-gray-600 transition hover:text-primary"
+                        >Pricing</a
+                    >
+                    <a
+                        href="#contact"
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5da939] transition"
+                        >Get Started</a
+                    >
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="pt-20 bg-white">
+            <div class="max-w-5xl px-4 py-20 mx-auto">
+                <div class="text-center">
+                    <img
+                        src="https://github.com/anas1412/Fido/raw/main/public/images/logo.png?raw=true"
+                        alt="FIDO Logo"
+                        class="mx-auto mb-6"
+                    />
+
+                    <h1
+                        class="mb-6 text-4xl font-bold text-gray-900 md:text-5xl"
+                    >
+                        Accounting Software Made Simple
+                    </h1>
+                    <p class="max-w-2xl mx-auto mb-8 text-xl text-gray-600">
+                        Designed specifically for Tunisian accountants to
+                        automate tasks and manage clients easily
+                    </p>
+                    <div class="flex justify-center gap-4 mb-12">
+                        <a
+                            href="https://cyberia.tn"
+                            target="_blank"
+                            class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-[#5da939] transition shadow-lg"
+                        >
+                            Get Started Now
+                        </a>
+                        <button
+                            onclick="openModal()"
+                            class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50"
+                        >
+                            Watch Demo
+                        </button>
+
+                        <div
+                            id="myModal"
+                            class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50"
+                        >
+                            <div
+                                class="relative p-8 bg-white rounded-lg shadow-lg w-96"
+                            >
+                                <button
+                                    onclick="closeModal()"
+                                    class="absolute p-2 bg-gray-200 rounded-full top-4 right-4 hover:bg-gray-300"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-6 h-6 text-gray-600"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        />
+                                    </svg>
+                                </button>
+                                <h2 class="mb-4 text-xl font-bold">
+                                    To view a demo or order
+                                </h2>
+                                <p class="mb-6">
+                                    You can either visit our website for more
+                                    information or contact us directly.
+                                </p>
+                                <div class="flex justify-center space-x-4">
+                                    <a
+                                        href="https://cyberia.tn"
+                                        target="_blank"
+                                        class="bg-primary text-white px-6 py-2 rounded-md hover:bg-[#5da939]"
+                                        >Visit Website</a
+                                    >
+                                    <a
+                                        href="mailto:hello@cyberia.tn"
+                                        class="bg-primary text-white px-6 py-2 rounded-md hover:bg-[#5da939]"
+                                        >Email Us</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            function openModal() {
+                                document
+                                    .getElementById("myModal")
+                                    .classList.remove("hidden");
+                            }
+
+                            function closeModal() {
+                                document
+                                    .getElementById("myModal")
+                                    .classList.add("hidden");
+                            }
+                        </script>
+                    </div>
+                    <div class="flex justify-center gap-4">
+                        <div class="max-w-2xl cursor-pointer">
+                            <img
+                                src="https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true"
+                                alt="FIDO Dashboard 1"
+                                class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"
+                            />
+                        </div>
+                        <div class="max-w-2xl cursor-pointer">
+                            <img
+                                src="https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true"
+                                alt="FIDO Dashboard 2"
+                                class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Features Section -->
+        <div id="features" class="max-w-6xl px-4 py-20 mx-auto">
+            <h2 class="mb-4 text-3xl font-bold text-center">
+                Everything You Need
+            </h2>
+            <p class="max-w-2xl mx-auto mb-12 text-center text-gray-600">
+                Comprehensive tools designed specifically for Tunisian
+                accountants to streamline their workflow
+            </p>
+
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Professional Fees -->
+                <div
+                    class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl"
+                >
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
+                            <svg
+                                class="w-6 h-6 text-[#6FBF44]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-bold">
+                            Professional Fees Report
+                        </h3>
+                    </div>
+                    <p class="text-gray-600">
+                        Generate and export detailed professional fees reports
+                        with automatic calculations and custom formatting
+                        options.
+                    </p>
+                </div>
+
+                <!-- Tax Management -->
+                <div
+                    class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl"
+                >
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
+                            <svg
+                                class="w-6 h-6 text-[#6FBF44]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-bold">Withholding Tax</h3>
+                    </div>
+                    <p class="text-gray-600">
+                        Simplify management of withholding tax obligations with
+                        automated calculations and reporting.
+                    </p>
+                </div>
+
+                <!-- Debit Notes -->
+                <div
+                    class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl"
+                >
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
+                            <svg
+                                class="w-6 h-6 text-[#6FBF44]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                                ></path>
+                            </svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-bold">
+                            Debit Note Statement
+                        </h3>
+                    </div>
+                    <p class="text-gray-600">
+                        Efficiently manage and record debit transactions with
+                        automated statement generation.
+                    </p>
+                </div>
+
+                <!-- Employee Management -->
+                <div
+                    class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl"
+                >
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
+                            <svg
+                                class="w-6 h-6 text-[#6FBF44]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-bold">
+                            Employee Accounts
+                        </h3>
+                    </div>
+                    <p class="text-gray-600">
+                        Manage employee access and permissions with role-based
+                        dashboard controls.
+                    </p>
+                </div>
+
+                <!-- Client Management -->
+                <div
+                    class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl"
+                >
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
+                            <svg
+                                class="w-6 h-6 text-[#6FBF44]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-bold">Client Portal</h3>
+                    </div>
+                    <p class="text-gray-600">
+                        Track clients and projects with an intuitive portal
+                        designed for better collaboration.
+                    </p>
+                </div>
+
+                <!-- Advanced Analytics -->
+                <div
+                    class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl"
+                >
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
+                            <svg
+                                class="w-6 h-6 text-[#6FBF44]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <h3 class="ml-4 text-xl font-bold">
+                            Advanced Analytics
+                        </h3>
+                    </div>
+                    <p class="text-gray-600">
+                        Gain insights with custom reports and advanced analytics
+                        for better decision-making.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Updated Pricing Section -->
+        <div id="pricing" class="py-16 bg-white">
+            <div class="max-w-5xl px-4 mx-auto">
+                <h2 class="mb-12 text-3xl font-bold text-center">
+                    One-Time Payment, Lifetime Access
+                </h2>
+
+                <div
+                    class="max-w-md p-8 mx-auto border border-green-100 shadow-lg bg-gradient-to-br from-green-50 to-white rounded-xl"
+                >
+                    <h3 class="mb-4 text-2xl font-bold text-center">
+                        Lifetime License
+                    </h3>
+                    <p class="mb-2 text-4xl font-bold text-center">1500 TND</p>
+                    <p class="mb-6 text-center text-gray-600">
+                        One-time payment
+                    </p>
+                    <ul class="mb-8 space-y-4">
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-primary"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            All Features Included
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-primary"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            Lifetime Updates
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-primary"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            Email Support
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="w-5 h-5 mr-2 text-primary"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            Unlimited Clients
+                        </li>
+                    </ul>
+                    <div class="text-center">
+                        <a
+                            href="https://cyberia.tn"
+                            target="_blank"
+                            class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md"
+                        >
+                            Get Started Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="py-12 text-white bg-gray-800">
+            <div class="max-w-5xl px-4 mx-auto">
+                <div class="grid gap-8 mb-8 md:grid-cols-3">
+                    <div>
+                        <h3 class="mb-4 font-bold">FIDO</h3>
+                        <p class="text-sm text-gray-400">
+                            Smart accounting software for Tunisian
+                            professionals.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="mb-4 font-bold">Features</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li>
+                                <a class="transition hover:text-white"
+                                    >Reports</a
+                                >
+                            </li>
+                            <li>
+                                <a class="transition hover:text-white"
+                                    >Tax Management</a
+                                >
+                            </li>
+                            <li>
+                                <a class="transition hover:text-white"
+                                    >Client Portal</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-4 font-bold">Support</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li>
+                                <a
+                                    href="https://cyberia.tn/"
+                                    target="_blank"
+                                    class="transition hover:text-white"
+                                    >Help Center</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://cyberia.tn/#contact"
+                                    target="_blank"
+                                    class="transition hover:text-white"
+                                    >Contact</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div
+                    class="pt-8 text-sm text-center text-gray-400 border-t border-gray-700"
+                >
+                    <p>© 2024 Cyberia Digital Studio. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
