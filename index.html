@@ -1,128 +1,167 @@
 <!DOCTYPE html>
-<html lang="en" style="scroll-behavior: smooth">
+<!-- No more x-data on the html tag. The store is global. -->
+<html lang="fr" style="scroll-behavior: smooth">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>FIDO - Smart Accounting Software</title>
+        <!-- The title will now access the global store -->
+        <title x-data x-text="$store.i18n.t('pageTitle')"></title>
         <script src="https://cdn.tailwindcss.com"></script>
-        <!-- Alpine Core -->
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-        ></script>
-        <!-- Alpine Anchor Plugin for smooth scrolling -->
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js"
-        ></script>
+        
+        <!-- Load Alpine Core & Plugins -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js"></script>
+        
+        <!-- FINAL, WORKING SCRIPT -->
+        <script>
+            document.addEventListener('alpine:init', () => {
+                // This is the "best practice" Alpine Global Store.
+                Alpine.store('i18n', {
+                    // 1. STATE
+                    lang: 'fr',
+                    translations: {
+                        // General
+                        pageTitle: { en: 'FIDO - Smart Accounting Software', fr: 'FIDO - Logiciel de Comptabilité Intelligent' },
+                        // Navigation
+                        navFeatures: { en: 'Features', fr: 'Fonctionnalités' },
+                        navPricing: { en: 'Pricing', fr: 'Tarifs' },
+                        navContact: { en: 'Contact', fr: 'Contact' },
+                        navGetStarted: { en: 'Get Started', fr: 'Commencer' },
+                        // Hero Section
+                        heroTitle: { en: 'Accounting Software Made Simple', fr: 'Le Logiciel de Comptabilité Simplifié' },
+                        heroSubtitle: { en: 'Designed specifically for Tunisian accountants to automate tasks and manage clients easily', fr: 'Conçu spécifiquement pour les comptables tunisiens pour automatiser les tâches et gérer les clients facilement' },
+                        heroBtnStart: { en: 'Get Started Now', fr: 'Commencez Maintenant' },
+                        heroBtnContact: { en: 'Contact Us', fr: 'Nous Contacter' },
+                        // Features Section
+                        featuresTitle: { en: 'Everything You Need', fr: 'Tout Ce Dont Vous Avez Besoin' },
+                        featuresSubtitle: { en: 'Comprehensive tools designed specifically for Tunisian accountants to streamline their workflow', fr: 'Des outils complets conçus pour les comptables tunisiens afin de rationaliser leur flux de travail' },
+                        feature1Title: { en: 'Professional Fees Report', fr: 'Rapport d\'Honoraires' },
+                        feature1Desc: { en: 'Generate and export detailed professional fees reports with automatic calculations and custom formatting options.', fr: 'Générez et exportez des rapports d\'honoraires détaillés avec des calculs automatiques et des options de formatage personnalisées.' },
+                        feature2Title: { en: 'Withholding Tax', fr: 'Retenue à la Source' },
+                        feature2Desc: { en: 'Simplify management of withholding tax obligations with automated calculations and reporting.', fr: 'Simplifiez la gestion des obligations de retenue à la source avec des calculs et des rapports automatisés.' },
+                        feature3Title: { en: 'Debit Note Statement', fr: 'Relevé de Note de Débit' },
+                        feature3Desc: { en: 'Efficiently manage and record debit transactions with automated statement generation.', fr: 'Gérez et enregistrez efficacement les transactions de débit avec la génération de relevés automatisée.' },
+                        feature4Title: { en: 'Employee Accounts', fr: 'Comptes Employés' },
+                        feature4Desc: { en: 'Manage employee access and permissions with role-based dashboard controls.', fr: 'Gérez l\'accès et les autorisations des employés avec des contrôles de tableau de bord basés sur les rôles.' },
+                        feature5Title: { en: 'Client Portal', fr: 'Portail Client' },
+                        feature5Desc: { en: 'Track clients and projects with an intuitive portal designed for better collaboration.', fr: 'Suivez les clients et les projets avec un portail intuitif conçu pour une meilleure collaboration.' },
+                        feature6Title: { en: 'Advanced Analytics', fr: 'Analyses Avancées' },
+                        feature6Desc: { en: 'Gain insights with custom reports and advanced analytics for better decision-making.', fr: 'Obtenez des informations avec des rapports personnalisés et des analyses avancées pour une meilleure prise de décision.' },
+                        // Pricing Section
+                        pricingTitle: { en: 'Flexible Plans to Fit Your Needs', fr: 'Des Formules Flexibles Selon Vos Besoins' },
+                        plan1Title: { en: 'Self-Hosted (Open Source)', fr: 'Auto-Hébergé (Open Source)' },
+                        plan1Price: { en: 'Free', fr: 'Gratuit' },
+                        plan1Subtitle: { en: 'Take full control and host it yourself', fr: 'Prenez le contrôle total et hébergez-le vous-même' },
+                        plan1Feature1: { en: 'Full Source Code Access', fr: 'Accès Complet au Code Source' },
+                        plan1Feature2: { en: 'Unlimited Customization', fr: 'Personnalisation Illimitée' },
+                        plan1Feature3: { en: 'Community Support', fr: 'Support Communautaire' },
+                        plan1Feature4: { en: 'Ideal for Developers & Tech-Savvy Users', fr: 'Idéal pour les Développeurs et Utilisateurs Expérimentés' },
+                        plan1Button: { en: 'View on GitHub', fr: 'Voir sur GitHub' },
+                        plan2Title: { en: 'Managed Service', fr: 'Service Géré' },
+                        plan2PriceUnit: { en: '/month', fr: '/mois' },
+                        plan2Subtitle: { en: 'Hassle-free hosting, security, and support', fr: 'Hébergement, sécurité et support sans tracas' },
+                        plan2Feature1: { en: 'Fully Hosted Solution', fr: 'Solution Entièrement Hébergée' },
+                        plan2Feature2: { en: 'Automatic Updates & Backups', fr: 'Mises à Jour et Sauvegardes Automatiques' },
+                        plan2Feature3: { en: 'Dedicated Technical Support', fr: 'Support Technique Dédié' },
+                        plan2Feature4: { en: 'Enhanced Security & Performance', fr: 'Sécurité et Performances Améliorées' },
+                        // Contact Section
+                        contactTitle: { en: 'Get in Touch', fr: 'Contactez-Nous' },
+                        contactSubtitle: { en: 'Have questions or need assistance? Reach out to us!', fr: 'Vous avez des questions ou besoin d\'aide ? Contactez-nous !' },
+                        // Footer
+                        footerSlogan: { en: 'Smart accounting software for Tunisian professionals.', fr: 'Logiciel de comptabilité intelligent pour les professionnels tunisiens.' },
+                        footerLinksTitle: { en: 'Quick Links', fr: 'Liens Rapides' },
+                        footerSupportTitle: { en: 'Support', fr: 'Support' },
+                        footerRepoLink: { en: 'GitHub Repository', fr: 'Dépôt GitHub' },
+                        footerCopyright: { en: '© 2024 Fido. All rights reserved.', fr: '© 2024 Fido. Tous droits réservés.' },
+                    },
+
+                    // 2. HELPER FUNCTION (GETTER)
+                    t(key) {
+                        return this.translations[key]?.[this.lang] || this.translations[key]?.['en'] || key;
+                    },
+
+                    // 3. ACTIONS
+                    setLang(newLang) {
+                        this.lang = newLang;
+                        document.documentElement.lang = newLang; // Also update the main document language
+                    }
+                });
+            });
+        </script>
+        
         <script>
             tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            primary: "#6FBF44",
-                        },
-                    },
-                },
+                theme: { extend: { colors: { primary: "#6FBF44" } } },
             };
         </script>
         <style>
             @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-            body {
-                font-family: "Inter", sans-serif;
-            }
-            .gradient-bg {
-                background: linear-gradient(135deg, #6fbf44 0%, #5da939 100%);
-            }
-            /* Target for offsetting scroll due to fixed nav */
-            [id] {
-                scroll-margin-top: 80px; 
-            }
+            body { font-family: "Inter", sans-serif; }
+            [id] { scroll-margin-top: 80px; }
+            .lang-active { font-weight: 700; color: #6FBF44; text-decoration: underline; text-underline-offset: 4px; }
         </style>
     </head>
-    <body
-        class="bg-gray-50"
-        x-data="{ isMenuOpen: false, lightboxOpen: false, lightboxImage: '' }"
-        @keydown.escape.window="isMenuOpen = false; lightboxOpen = false"
-    >
+    
+    <body x-data="{ isMenuOpen: false, lightboxOpen: false, lightboxImage: '' }" @keydown.escape.window="isMenuOpen = false; lightboxOpen = false" class="bg-gray-50">
         <!-- Navigation -->
         <nav class="fixed z-40 w-full bg-white shadow-md">
-            <div
-                class="flex items-center justify-between max-w-6xl px-4 py-4 mx-auto"
-            >
+            <div class="flex items-center justify-between max-w-6xl px-4 py-4 mx-auto">
                 <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-primary">
-                    <svg
-                        class="w-8 h-8"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                    >
-                        <path
-                            d="M10 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"
-                        />
-                    </svg>
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" /></svg>
                     <span>FIDO</span>
                 </a>
                 
                 <div class="items-center hidden gap-8 md:flex">
-                    <a href="#features" class="text-gray-600 transition hover:text-primary">Features</a>
-                    <a href="#pricing" class="text-gray-600 transition hover:text-primary">Pricing</a>
-                    <a href="#contact" class="text-gray-600 transition hover:text-primary">Contact</a>
-                    <a href="#pricing" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5da939] transition">Get Started</a>
+                    <a href="#features" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
+                    <a href="#pricing" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
+                    <a href="#contact" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
+                    <!-- Language Switcher -->
+                    <div class="flex items-center gap-3 text-sm font-medium">
+                        <button @click="$store.i18n.setLang('en')" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="transition hover:text-primary">EN</button>
+                        <span class="text-gray-300">|</span>
+                        <button @click="$store.i18n.setLang('fr')" :class="{ 'lang-active': $store.i18n.lang === 'fr' }" class="transition hover:text-primary">FR</button>
+                    </div>
+                    <a href="#pricing" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5da939] transition" x-text="$store.i18n.t('navGetStarted')"></a>
                 </div>
 
                 <div class="md:hidden">
                     <button @click="isMenuOpen = !isMenuOpen" aria-label="Open Menu" :aria-expanded="isMenuOpen" aria-controls="mobile-menu">
-                        <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path x-show="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            <path x-show="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+                        <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path x-show="!isMenuOpen" d="M4 6h16M4 12h16M4 18h16"></path><path x-show="isMenuOpen" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
             </div>
             
-            <div 
-                id="mobile-menu"
-                x-show="isMenuOpen"
-                x-transition
-                class="absolute w-full bg-white shadow-lg md:hidden"
-                @click.away="isMenuOpen = false"
-            >
+            <div id="mobile-menu" x-show="isMenuOpen" x-transition class="absolute w-full bg-white shadow-lg md:hidden" @click.away="isMenuOpen = false">
                 <div class="flex flex-col px-4 pt-2 pb-4 space-y-4">
-                    <a href="#features" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary">Features</a>
-                    <a href="#pricing" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary">Pricing</a>
-                    <a href="#contact" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary">Contact</a>
-                    <a href="#pricing" @click="isMenuOpen = false" class="block w-full text-center bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5da939] transition">Get Started</a>
+                    <a href="#features" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
+                    <a href="#pricing" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
+                    <a href="#contact" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
+                    <a href="#pricing" @click="isMenuOpen = false" class="block w-full text-center bg-primary text-white px-4 py-2 mt-2 rounded-lg hover:bg-[#5da939] transition" x-text="$store.i18n.t('navGetStarted')"></a>
+                    <div class="flex items-center justify-center gap-4 pt-4 mt-4 border-t border-gray-100">
+                        <button @click="$store.i18n.setLang('en'); isMenuOpen = false" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="text-lg transition hover:text-primary">EN</button>
+                        <span class="text-gray-300">|</span>
+                        <button @click="$store.i18n.setLang('fr'); isMenuOpen = false" :class="{ 'lang-active': $store.i18n.lang === 'fr' }" class="text-lg transition hover:text-primary">FR</button>
+                    </div>
                 </div>
             </div>
         </nav>
 
+        <!-- The rest of the body content uses the new $store syntax -->
+        
         <!-- Hero Section -->
         <div class="pt-24 bg-white">
             <div class="max-w-5xl px-4 py-20 mx-auto">
                 <div class="text-center">
                     <img src="https://github.com/anas1412/Fido/raw/main/public/images/logo.png?raw=true" alt="FIDO Logo" class="w-32 mx-auto mb-6"/>
-                    <h1 class="mb-6 text-4xl font-bold text-gray-900 md:text-5xl">Accounting Software Made Simple</h1>
-                    <p class="max-w-2xl mx-auto mb-8 text-xl text-gray-600">Designed specifically for Tunisian accountants to automate tasks and manage clients easily</p>
+                    <h1 class="mb-6 text-4xl font-bold text-gray-900 md:text-5xl" x-text="$store.i18n.t('heroTitle')"></h1>
+                    <p class="max-w-2xl mx-auto mb-8 text-xl text-gray-600" x-text="$store.i18n.t('heroSubtitle')"></p>
                     <div class="flex flex-col justify-center gap-4 sm:flex-row mb-12">
-                        <a href="#pricing" class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-[#5da939] transition shadow-lg">Get Started Now</a>
-                        <a href="#contact" class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50">Contact Us</a>
+                        <a href="#pricing" class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-[#5da939] transition shadow-lg" x-text="$store.i18n.t('heroBtnStart')"></a>
+                        <a href="#contact" class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50" x-text="$store.i18n.t('heroBtnContact')"></a>
                     </div>
-                    
                     <div class="flex flex-col md:flex-row justify-center gap-8">
-                        <a 
-                            href="#" 
-                            @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true'; lightboxOpen = true" 
-                            class="max-w-2xl cursor-pointer"
-                        >
-                            <img src="https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true" alt="FIDO Dashboard 1" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/>
-                        </a>
-                        <a 
-                            href="#" 
-                            @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true'; lightboxOpen = true" 
-                            class="max-w-2xl cursor-pointer"
-                        >
-                            <img src="https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true" alt="FIDO Dashboard 2" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/>
-                        </a>
+                        <a href="#" @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true'; lightboxOpen = true" class="max-w-2xl cursor-pointer"><img src="https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true" alt="FIDO Dashboard 1" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/></a>
+                        <a href="#" @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true'; lightboxOpen = true" class="max-w-2xl cursor-pointer"><img src="https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true" alt="FIDO Dashboard 2" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/></a>
                     </div>
                 </div>
             </div>
@@ -130,62 +169,26 @@
 
         <!-- Enhanced Features Section -->
         <div id="features" class="max-w-6xl px-4 py-20 mx-auto">
-            <h2 class="mb-4 text-3xl font-bold text-center">Everything You Need</h2>
-            <p class="max-w-2xl mx-auto mb-12 text-center text-gray-600">Comprehensive tools designed specifically for Tunisian accountants to streamline their workflow</p>
+            <h2 class="mb-4 text-3xl font-bold text-center" x-text="$store.i18n.t('featuresTitle')"></h2>
+            <p class="max-w-2xl mx-auto mb-12 text-center text-gray-600" x-text="$store.i18n.t('featuresSubtitle')"></p>
             <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                 <div class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
-                            <svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <h3 class="ml-4 text-xl font-bold">Professional Fees Report</h3>
-                    </div>
-                    <p class="text-gray-600">Generate and export detailed professional fees reports with automatic calculations and custom formatting options.</p>
+                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature1Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature1Desc')"></p>
                 </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
-                            <svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path></svg>
-                        </div>
-                        <h3 class="ml-4 text-xl font-bold">Withholding Tax</h3>
-                    </div>
-                    <p class="text-gray-600">Simplify management of withholding tax obligations with automated calculations and reporting.</p>
+                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature2Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature2Desc')"></p>
                 </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
-                            <svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        </div>
-                        <h3 class="ml-4 text-xl font-bold">Debit Note Statement</h3>
-                    </div>
-                    <p class="text-gray-600">Efficiently manage and record debit transactions with automated statement generation.</p>
+                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature3Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature3Desc')"></p>
                 </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
-                            <svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                        <h3 class="ml-4 text-xl font-bold">Employee Accounts</h3>
-                    </div>
-                    <p class="text-gray-600">Manage employee access and permissions with role-based dashboard controls.</p>
+                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature4Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature4Desc')"></p>
                 </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
-                            <svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        </div>
-                        <h3 class="ml-4 text-xl font-bold">Client Portal</h3>
-                    </div>
-                    <p class="text-gray-600">Track clients and projects with an intuitive portal designed for better collaboration.</p>
+                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature5Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature5Desc')"></p>
                 </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm feature-card rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4">
-                        <div class="p-3 bg-green-100 rounded-lg feature-icon">
-                            <svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                        </div>
-                        <h3 class="ml-4 text-xl font-bold">Advanced Analytics</h3>
-                    </div>
-                    <p class="text-gray-600">Gain insights with custom reports and advanced analytics for better decision-making.</p>
+                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature6Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature6Desc')"></p>
                 </div>
             </div>
         </div>
@@ -193,35 +196,31 @@
         <!-- Pricing Section -->
         <div id="pricing" class="py-16 bg-white">
             <div class="max-w-5xl px-4 mx-auto">
-                <h2 class="mb-12 text-3xl font-bold text-center">Flexible Plans to Fit Your Needs</h2>
+                <h2 class="mb-12 text-3xl font-bold text-center" x-text="$store.i18n.t('pricingTitle')"></h2>
                 <div class="grid gap-8 md:grid-cols-2">
                     <div class="p-8 border border-gray-100 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-xl">
-                        <h3 class="mb-4 text-2xl font-bold text-center">Self-Hosted (Open Source)</h3>
-                        <p class="mb-2 text-4xl font-bold text-center">Free</p>
-                        <p class="mb-6 text-center text-gray-600">Take full control and host it yourself</p>
+                        <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan1Title')"></h3>
+                        <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan1Price')"></p>
+                        <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan1Subtitle')"></p>
                         <ul class="mb-8 space-y-4">
-                             <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Full Source Code Access</li>
-                             <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Unlimited Customization</li>
-                             <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Community Support</li>
-                             <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ideal for Developers & Tech-Savvy Users</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan1Feature1')"></span></li>
+                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan1Feature2')"></span></li>
+                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan1Feature3')"></span></li>
+                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan1Feature4')"></span></li>
                         </ul>
-                        <div class="text-center">
-                            <a href="https://github.com/anas1412/Fido" target="_blank" class="bg-gray-800 text-white px-8 py-3 rounded-lg inline-block hover:bg-gray-700 transition shadow-md">View on GitHub</a>
-                        </div>
+                        <div class="text-center"><a href="https://github.com/anas1412/Fido" target="_blank" class="bg-gray-800 text-white px-8 py-3 rounded-lg inline-block hover:bg-gray-700 transition shadow-md" x-text="$store.i18n.t('plan1Button')"></a></div>
                     </div>
                     <div class="p-8 border border-green-100 shadow-lg bg-gradient-to-br from-green-50 to-white rounded-xl">
-                        <h3 class="mb-4 text-2xl font-bold text-center">Managed Service</h3>
-                        <p class="mb-2 text-4xl font-bold text-center">100 TND<span class="text-xl text-gray-600">/month</span></p>
-                        <p class="mb-6 text-center text-gray-600">Hassle-free hosting, security, and support</p>
+                        <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan2Title')"></h3>
+                        <p class="mb-2 text-4xl font-bold text-center">100 TND<span class="text-xl text-gray-600" x-text="$store.i18n.t('plan2PriceUnit')"></span></p>
+                        <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan2Subtitle')"></p>
                         <ul class="mb-8 space-y-4">
-                             <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Fully Hosted Solution</li>
-                             <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Automatic Updates & Backups</li>
-                             <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Dedicated Technical Support</li>
-                             <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Enhanced Security & Performance</li>
+                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan2Feature1')"></span></li>
+                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan2Feature2')"></span></li>
+                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan2Feature3')"></span></li>
+                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan2Feature4')"></span></li>
                         </ul>
-                        <div class="text-center">
-                            <a href="#contact" class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md">Get Started Now</a>
-                        </div>
+                        <div class="text-center"><a href="#contact" class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md" x-text="$store.i18n.t('heroBtnStart')"></a></div>
                     </div>
                 </div>
             </div>
@@ -230,17 +229,12 @@
         <!-- Contact Section -->
         <div id="contact" class="py-16 bg-gray-50">
             <div class="max-w-5xl px-4 mx-auto text-center">
-                <h2 class="mb-4 text-3xl font-bold">Get in Touch</h2>
-                <p class="max-w-2xl mx-auto mb-8 text-gray-600">Have questions or need assistance? Reach out to us!</p>
-                <div class="flex flex-col items-center justify-center space-y-4 md:flex-row md:space-y-0 md:space-x-8">
-                    <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        <a href="mailto:contact@fido.tn" class="text-lg text-gray-700 hover:underline">contact@fido.tn</a>
-                    </div>
-                    <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                        <a href="tel:+21620123456" class="text-lg text-gray-700 hover:underline">+216 20 123 456</a>
-                    </div>
+                <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('contactTitle')"></h2>
+                <p class="max-w-2xl mx-auto mb-8 text-gray-600" x-text="$store.i18n.t('contactSubtitle')"></p>
+                <div class="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-8 lg:gap-12">
+                    <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><a href="mailto:anas.bassoumi@gmail.com" class="text-lg text-gray-700 hover:underline">anas.bassoumi@gmail.com</a></div>
+                    <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg><a href="tel:+21650377851" class="text-lg text-gray-700 hover:underline">+216 50 377 851</a></div>
+                    <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.447-4.433-9.886-9.888-9.886-5.448 0-9.886 4.434-9.889 9.885-.001 2.225.651 4.316 1.906 6.03l-.534 1.956 1.984-.52z"/></svg><a href="https://wa.me/21650377851" target="_blank" class="text-lg text-gray-700 hover:underline">+216 50 377 851</a></div>
                 </div>
             </div>
         </div>
@@ -249,54 +243,19 @@
         <footer class="py-12 text-white bg-gray-800">
             <div class="max-w-6xl px-4 mx-auto">
                 <div class="grid gap-8 mb-8 md:grid-cols-3">
-                    <div>
-                        <h3 class="mb-4 text-lg font-bold">FIDO</h3>
-                        <p class="text-sm text-gray-400">Smart accounting software for Tunisian professionals.</p>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 font-bold">Quick Links</h4>
-                        <ul class="space-y-2 text-sm text-gray-400">
-                            <li><a href="#features" class="transition hover:text-white">Features</a></li>
-                            <li><a href="#pricing" class="transition hover:text-white">Pricing</a></li>
-                            <li><a href="#contact" class="transition hover:text-white">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 font-bold">Support</h4>
-                        <ul class="space-y-2 text-sm text-gray-400">
-                            <li><a href="#contact" class="transition hover:text-white">Contact Us</a></li>
-                            <li><a href="https://github.com/anas1412/Fido" target="_blank" class="transition hover:text-white">GitHub Repository</a></li>
-                        </ul>
-                    </div>
+                    <div><h3 class="mb-4 text-lg font-bold">FIDO</h3><p class="text-sm text-gray-400" x-text="$store.i18n.t('footerSlogan')"></p></div>
+                    <div><h4 class="mb-4 font-bold" x-text="$store.i18n.t('footerLinksTitle')"></h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#features" class="transition hover:text-white" x-text="$store.i18n.t('navFeatures')"></a></li><li><a href="#pricing" class="transition hover:text-white" x-text="$store.i18n.t('navPricing')"></a></li><li><a href="#contact" class="transition hover:text-white" x-text="$store.i18n.t('navContact')"></a></li></ul></div>
+                    <div><h4 class="mb-4 font-bold" x-text="$store.i18n.t('footerSupportTitle')"></h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#contact" class="transition hover:text-white" x-text="$store.i18n.t('heroBtnContact')"></a></li><li><a href="https://github.com/anas1412/Fido" target="_blank" class="transition hover:text-white" x-text="$store.i18n.t('footerRepoLink')"></a></li></ul></div>
                 </div>
-                <div class="pt-8 text-sm text-center text-gray-400 border-t border-gray-700">
-                    <p>© 2024 Fido. All rights reserved.</p>
-                </div>
+                <div class="pt-8 text-sm text-center text-gray-400 border-t border-gray-700"><p x-text="$store.i18n.t('footerCopyright')"></p></div>
             </div>
         </footer>
 
         <!-- Lightbox Modal -->
-        <div
-            x-show="lightboxOpen"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-            @click="lightboxOpen = false"
-            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80"
-            style="display: none;"
-        >
+        <div x-show="lightboxOpen" x-transition @click="lightboxOpen = false" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80" style="display: none;">
             <div @click.stop class="relative">
-                <button @click="lightboxOpen = false" class="absolute -top-2 -right-2 md:-top-4 md:-right-4 text-white bg-primary rounded-full p-2 leading-none hover:bg-[#5da939] focus:outline-none z-10">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-                <img 
-                    :src="lightboxImage" 
-                    alt="Enlarged screenshot" 
-                    class="object-contain w-auto rounded-lg shadow-lg max-h-[90vh]"
-                >
+                <button @click="lightboxOpen = false" class="absolute -top-2 -right-2 md:-top-4 md:-right-4 text-white bg-primary rounded-full p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                <img :src="lightboxImage" alt="Enlarged screenshot" class="object-contain w-auto rounded-lg shadow-lg max-h-[90vh]">
             </div>
         </div>
 
