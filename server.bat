@@ -1,43 +1,109 @@
 @echo off
-:: Set the path to your Laravel project directory
+setlocal enabledelayedexpansion
+
+:: === CONFIG ===
 set PROJECT_DIR=D:\Devs\Fido
+set VALID_PHP_VERSION1=8.2
+set VALID_PHP_VERSION2=8.3
 
-:: Change directory to the Laravel project
+:: === Go to project directory ===
 echo Changing directory to the Laravel project...
-cd /d "%PROJECT_DIR%" || (echo ERROR: Failed to change directory. Exiting... & exit /b 1)
-
-:: Check if Git is installed
-echo Checking if Git is installed...
-git --version >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo ERROR: Git is not installed.
-    set /p INSTALL_GIT="Do you want to install Git? (Yes/No): "
-    if /i "%INSTALL_GIT%"=="Yes" (
-        echo Opening Git download page...
-        start https://git-scm.com/download/win
-    ) else (
-        echo Please install Git manually and run the script again.
-        exit /b 1
-    )
+cd /d "%PROJECT_DIR%" || (
+    echo ❌ ERROR: Failed to change directory to %PROJECT_DIR%
+    goto end
 )
 
-:: Pull the latest changes from the main branch
-echo Pulling the latest changes from the main branch...
-git pull origin main || (echo ERROR: Git pull failed. Exiting... & exit /b 1)
+:: === Check PHP version ===
+echo Checking PHP version...
+for /f "delims=" %%i in ('php -r "echo PHP_VERSION;" 2^>nul') do set PHP_VERSION=%%i
 
-:: Output information about the environment
-echo Laravel project found! Preparing to start the server...
+if not defined PHP_VERSION (
+    echo ❌ ERROR: PHP is not installed or not in PATH.
+    goto end
+)
 
-:: Run php artisan serve in the background
-echo Starting "php artisan serve" in the background...
-start /B php artisan serve --verbose || (echo ERROR: Failed to start Laravel server. Exiting... & exit /b 1)
+set PHP_MAJOR_MINOR=!PHP_VERSION:~0,3!
 
-:: Optional: Success message
-echo Laravel server is now running in the background! Access it at http://127.0.0.1:8000
+if /i not "!PHP_MAJOR_MINOR!"=="%VALID_PHP_VERSION1%" if /i not "!PHP_MAJOR_MINOR!"=="%VALID_PHP_VERSION2%" (
+    echo ❌ ERROR: Invalid PHP version detected: !PHP_VERSION!
+    echo ➤ Required: PHP 8.2 or 8.3
+    goto end
+)
 
-:: Open the browser to the Laravel app
-echo Opening the Laravel app in the default browser...
-start "" "http://127.0.0.1:8000" || (echo ERROR: Failed to open browser. Exiting... & exit /b 1)
+echo ✅ PHP version OK: !PHP_VERSION!
 
-:: Keep the terminal window open
-pause
+:: === Check Git ===
+echo Checking if Git is installed...
+git --version >nul 2>nul
+if errorlevel 1 (
+    echo ❌ ERROR: Git is not installed.
+    start https://git-scm.com/download/win
+    goto end
+)
+
+:: === Pull latest changes ===
+echo Pulling latest changes from main branch...
+git pull origin main || (
+    echo ❌ ERROR: Git pull failed.
+    goto end
+)
+
+:: === Check vendor folder ===
+if not exist "vendor" (
+    echo "vendor" folder not found. Running composer install...
+    composer install || (
+        echo ❌ ERROR: Composer install failed.
+        goto end
+    )
+) else (
+    echo ✅ "vendor" folder exists. Skipping composer install.
+)
+
+:: === Check for database.sqlite ===
+if not exist "database\database.sqlite" (
+    echo ❌ database.sqlite not found. Running migrations with seed...
+    php artisan migrate --seed || (
+        echo ❌ ERROR: Migrate --seed failed.
+        goto end
+    )
+) else (
+    echo ✅ database.sqlite found. Skipping migration.
+)
+
+:: === Start Laravel server ===
+echo Starting Laravel server...
+start /B php artisan serve || (
+    echo ❌ ERROR: Failed to start Laravel server.
+    goto end
+)
+
+:: === Open Browser ===
+echo Opening browser at http://127.0.0.1:8000 ...
+start "" "http://127.0.0.1:8000"
+
+:: === Done ===
+echo ------------------------------------------
+echo ✅ Laravel server should now be running!
+echo ➤ Visit: http://127.0.0.1:8000
+
+:: === Display Admin Credentials ===
+echo.
+echo --- Admin Credentials ---
+for /f "tokens=1,2 delims==" %%a in ('findstr "ADMIN_EMAIL" .env') do (
+    if "%%a"=="ADMIN_EMAIL" (
+        echo   Email: %%b
+    )
+)
+for /f "tokens=1,2 delims==" %%a in ('findstr "ADMIN_PASSWORD" .env') do (
+    if "%%a"=="ADMIN_PASSWORD" (
+        echo   Password: %%b
+    )
+)
+echo   Dashboard: http://127.0.0.1:8000/admin
+echo ------------------------------------------
+
+:end
+echo.
+echo Press any key to exit...
+pause >nul
+exit /b

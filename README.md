@@ -58,7 +58,7 @@ Fido is a freelancing project dashboard platform tailored to meet the unique nee
 ## System Requirements
 
 -   **Git:** [Install Git](https://git-scm.com/downloads)
--   **Composer:** [Install Composer](https://getcomposer.org/download/) (choose the php.exe inside PHP8.2 folder inside the project folder)
+-   **Composer:** [Install Composer](https://getcomposer.org/download/) (choose the php.exe inside PHP8.2 (8.3) folder inside the project folder)
 
 ## Quick Start Guide
 
