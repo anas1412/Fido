@@ -15,16 +15,12 @@ class HonorairesPerMonth extends ChartWidget
 
     protected function getData(): array
     {
-        $currentDate = Carbon::now();
-        $fiscalYearStart = $currentDate->month >= 4
-            ? $currentDate->copy()->startOfYear()->addMonths(3)
-            : $currentDate->copy()->subYear()->startOfYear()->addMonths(3);
-        $fiscalYearEnd = $fiscalYearStart->copy()->addYear()->subDay();
+        $currentFiscalYear = config('fiscal_year.current_year');
 
         // Fetch data grouped by month, handling cases where the query might return no results
         $honoraires = DB::table('honoraires')
             ->selectRaw("strftime('%m', created_at) as month, COUNT(*) as count")
-            ->whereBetween('created_at', [$fiscalYearStart, $fiscalYearEnd])
+            ->whereYear('created_at', $currentFiscalYear)
             ->groupBy('month')
             ->pluck('count', 'month')
             ->toArray();
@@ -32,11 +28,10 @@ class HonorairesPerMonth extends ChartWidget
         // Initialize data and labels arrays
         $data = [];
         $labels = [];
-        for ($i = 0; $i < 12; $i++) {
-            $currentMonth = $fiscalYearStart->copy()->addMonths($i);
-            $monthKey = $currentMonth->format('n'); // 'n' for numeric month without leading zero
+        for ($i = 1; $i <= 12; $i++) {
+            $monthKey = str_pad($i, 2, '0', STR_PAD_LEFT); // Format month as 01, 02, etc.
             $data[] = $honoraires[$monthKey] ?? 0; // Default to 0 if no data for the month
-            $labels[] = $currentMonth->format('F'); // Full month name
+            $labels[] = Carbon::create()->month($i)->format('F'); // Full month name
         }
 
         // Ensure a valid response structure, even when there is no data

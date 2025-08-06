@@ -31,7 +31,7 @@ class ModifyFiscalYear extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->fiscalYear = config('fiscal_year.current_year');
+        $this->fiscalYear = config('fiscal_year.current_year', date('Y'));
     }
 
     public function form(Form $form): Form
@@ -57,7 +57,7 @@ class ModifyFiscalYear extends Page implements HasForms
         file_put_contents($path, $content);
 
         // Clear the config cache
-        /* \Artisan::call('config:clear'); */
+        \Artisan::call('config:clear');
 
         Notification::make()
             ->title("L'année de l'exercice a été mise à jour")
