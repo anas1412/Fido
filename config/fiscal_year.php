@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'current_year' => env('FISCAL_YEAR', date('Y')),
+    'current_year' => '2025',
 ];

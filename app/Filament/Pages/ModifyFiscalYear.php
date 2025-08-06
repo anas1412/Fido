@@ -42,29 +42,46 @@ class ModifyFiscalYear extends Page implements HasForms
                     ->label("Année de l'exercice")
                     ->required()
                     ->numeric()
-                    ->minValue(2000)
-                    ->maxValue(2100),
+                    ->minValue(1900) // Allow historical data if needed
+                    ->maxValue(2100) // Future-proof for a while
+                    ->rules(['digits:4', 'integer']),
             ]);
     }
 
     public function submit(): void
     {
         $data = $this->form->getState();
+        $newFiscalYear = $data['fiscalYear'];
 
-        // Update the config file
-        $path = config_path('fiscal_year.php');
-        $content = "<?php\n\nreturn [\n    'current_year' => '{$data['fiscalYear']}',\n];";
-        file_put_contents($path, $content);
+        try {
+            // Construct the content for the config file
+            $content = "<?php\n\nreturn [\n    'current_year' => '{$newFiscalYear}',\n];";
 
-        // Clear the config cache
-        \Artisan::call('config:clear');
+            // Get the path to the config file
+            $path = config_path('fiscal_year.php');
 
-        Notification::make()
-            ->title("L'année de l'exercice a été mise à jour")
-            ->success()
-            ->send();
+            // Attempt to write to the file
+            if (file_put_contents($path, $content) === false) {
+                throw new \Exception('Failed to write to fiscal_year.php. Check file permissions.');
+            }
 
-        // Redirect to the dashboard home page
-        $this->redirect(filament()->getHomeUrl());
+            // Clear the config cache
+            \Artisan::call('config:clear');
+
+            Notification::make()
+                ->title("L'année de l'exercice a été mise à jour avec succès.")
+                ->success()
+                ->send();
+
+            // Redirect to the dashboard home page
+            $this->redirect(filament()->getHomeUrl());
+
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title("Erreur lors de la mise à jour de l'année de l'exercice.")
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 }
