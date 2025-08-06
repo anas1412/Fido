@@ -1,13 +1,31 @@
-<x-filament-panels::page>
-    <x-filament::card>
-        <form wire:submit.prevent="submit" class="space-y-6">
-            <div class="space-y-4">
-                {{ $this->form }}
-            </div>
+{{-- resources/views/filament/pages/modify-fiscal-year.blade.php --}}
 
-            <x-filament::button type="submit" class="w-full mt-4 md:w-auto">
-                {{ __('Mettre à jour l\'année de l\'exercice') }}
-            </x-filament::button>
+<x-filament::page>
+    <div class="grid grid-cols-1 gap-6 mb-8">
+        <x-filament::card>
+            <x-slot name="header">
+                <h2 class="text-lg font-medium text-gray-900">Année Fiscale Actuelle</h2>
+            </x-slot>
+            <div class="flex items-baseline">
+                <span class="text-3xl font-semibold text-primary-600">{{ $this->year }}</span>
+                <span class="ml-2 text-sm text-gray-600">Année Fiscale</span>
+            </div>
+        </x-filament::card>
+    </div>
+
+    <x-filament::card>
+        <x-slot name="header">
+            <h2 class="text-lg font-medium text-gray-900">Modifier l'Année Fiscale</h2>
+        </x-slot>
+
+        <form wire:submit.prevent="save" class="space-y-6">
+            {{ $this->form }}
+
+            <div class="flex justify-end">
+                <x-filament::button type="submit" color="primary">
+                    Sauvegarder
+                </x-filament::button>
+            </div>
         </form>
     </x-filament::card>
-</x-filament-panels::page>
+</x-filament::page>
