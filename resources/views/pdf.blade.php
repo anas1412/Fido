@@ -52,6 +52,10 @@
             font-size: 20px;
         }
 
+        .header > div:first-child {
+            margin-right: 150px; /* Adjust this value as needed to prevent overlap */
+        }
+
         .logo-container {
             position: absolute;
             top: 0;
