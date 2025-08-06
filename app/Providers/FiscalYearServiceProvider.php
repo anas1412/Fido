@@ -26,7 +26,10 @@ class FiscalYearServiceProvider extends ServiceProvider
         }
 
         try {
-            $fiscalYearSetting = FiscalYearSetting::firstOrCreate([]);
+            $fiscalYearSetting = FiscalYearSetting::firstOrCreate(
+                [],
+                ['year' => date('Y')]
+            );
             config(['fiscal_year.current_year' => $fiscalYearSetting->year ?? date('Y')]);
         } catch (\Exception $e) {
             // Log the error, but don't prevent the application from booting

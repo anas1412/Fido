@@ -37,9 +37,10 @@ class ModifyFiscalYear extends Page implements HasForms
 
     public function mount(): void
     {
-        $fiscalYearSetting = FiscalYearSetting::firstOrCreate([
-            'year' => date('Y') // Provide a default year
-        ]);
+        $fiscalYearSetting = FiscalYearSetting::firstOrCreate(
+            [],
+            ['year' => date('Y')]
+        );
         $this->form->fill($fiscalYearSetting->attributesToArray());
         $this->year = $this->data['year'] ?? 0;
     }
@@ -71,7 +72,9 @@ class ModifyFiscalYear extends Page implements HasForms
     {
         try {
             $data = $this->form->getState();
-            FiscalYearSetting::firstOrCreate([])->update($data);
+            $fiscalYearSetting = FiscalYearSetting::firstOrNew([]);
+            $fiscalYearSetting->fill($data);
+            $fiscalYearSetting->save();
             $this->year = $data['year'] ?? 0;
         } catch (\Exception $e) {
             Notification::make()
