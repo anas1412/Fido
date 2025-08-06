@@ -12,7 +12,7 @@ Fido is a freelancing project dashboard platform tailored to meet the unique nee
 
 -   **[Laravel](https://laravel.com/):** Scalable PHP framework.
 -   **[Livewire](https://livewire.com/):** Real-time web development.
--   **[TailwindCSS](https://tailwindcss.com/):** Utility-first CSS for rapid design.
+-   **[TailwindCSS](https://tailwindcss.com/)::** Utility-first CSS for rapid design.
 -   **[FilamentPHP](https://filamentphp.com/):** Elegant admin panel.
 -   **[SQLite](https://www.sqlite.org/):** Lightweight, serverless database.
 
@@ -36,7 +36,7 @@ That's it! The script will automatically handle everything for you:
 -   It will download and configure Composer (the PHP package manager).
 -   It will install all necessary dependencies.
 -   It will create and set up the database.
--   It will start the application server and open it in your web browser.
+-   It will start the application server using Laravel's built-in development server and open it in your web browser.
 
 ## Default Admin Account
 

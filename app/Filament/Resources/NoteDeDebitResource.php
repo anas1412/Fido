@@ -31,7 +31,7 @@ class NoteDeDebitResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $fiscalYear = config('fiscal_year.current_year');
-        return parent::getEloquentQuery()->whereYear('date', $fiscalYear);
+        return parent::getEloquentQuery()->with('client')->whereYear('date', $fiscalYear);
     }
 
     public static function form(Form $form): Form

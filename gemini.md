@@ -1,4 +1,3 @@
-
 # Gemini Project Analysis: Fido
 
 This document provides a summary of the technologies used, project structure, and the overall purpose of the "Fido" application, as analyzed by the Gemini CLI.
@@ -47,3 +46,29 @@ The project follows a standard Laravel application structure:
 -   **`routes/`**: Defines all of the application's routes.
 -   **`storage/`**: Contains cached framework files, session files, and logs.
 -   **`tests/`**: Contains the application's automated tests.
+
+## Development To-Do List
+
+Here is a prioritized list of recommended improvements and fixes to enhance the Fido application.
+
+### High Priority
+
+| Task | Type | Description |
+|---|---|---|
+| **Sequential Document Numbering** | `Fix` | Implement a system to ensure all fee notes and debit notes have unique, sequential, and non-editable numbers (e.g., `FACT-2024-001`). This is a critical legal and accounting requirement. |
+| **Database-driven Tax & Fiscal Year** | `Fix` | Move tax rates and fiscal year settings from hardcoded `config` files to the database. Create a settings page in Filament to allow the accountant to manage these values directly. |
+| **Use Database Transactions** | `Fix` | Wrap all financial document creation logic (invoices, notes, etc.) in `DB::transaction()` blocks to ensure data integrity and prevent partial, corrupt records from being saved if an error occurs. |
+
+### Medium Priority
+
+| Task | Type | Description |
+|---|---|---|
+| **True Financial Dashboard** | `New Feature` | Enhance the main dashboard to show key financial KPIs: total invoiced (YTD/QTD), total outstanding fees, total withholding tax, and charts for revenue per client and monthly revenue trends. |
+| **Document Statuses & Client Portal** | `New Feature` | Add statuses (`Draft`, `Sent`, `Paid`, `Overdue`) to fee notes. This improves workflow and can be the foundation for a simple client portal where they can view and download their documents. |
+| **Robust PDF Generation** | `Fix` | For large reports (like annual statements), use a queued job to generate PDFs in the background. This prevents UI freezes and server timeouts, improving user experience. |
+
+### Low Priority
+
+| Task | Type | Description |
+|---|---|---|
+| **Expense Tracking** | `New Feature` | Add a new section for managing business expenses (rent, supplies, etc.). This provides a complete picture of profitability and is essential for tax declarations. |
