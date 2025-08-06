@@ -3,24 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Honoraire;
+use App\Models\NoteDeDebit;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helpers\NumberToWords;
 use App\Models\Client;
 use App\Models\CompanySetting;
 use Carbon\Carbon;
 
-class PdfController extends Controller
+class NoteDeDebitPdfController extends Controller
 {
-    public function __invoke(Honoraire $honoraire)
+    public function __invoke(NoteDeDebit $noteDeDebit)
     {
-        $formattedDate = Carbon::parse($honoraire->date)->format('d/m/Y');
+        $formattedDate = Carbon::parse($noteDeDebit->date)->format('d/m/Y');
         $currentDate = Carbon::now()->format('d-m-Y');
 
-        $paddedNote = str_pad($honoraire->note, 6, '0', STR_PAD_LEFT);
+        $paddedNote = str_pad($noteDeDebit->note, 6, '0', STR_PAD_LEFT);
 
-        $fileName = "Honoraire_{$paddedNote}_{$currentDate}.pdf";
-
+        $fileName = "NoteDeDebit_{$paddedNote}_{$currentDate}.pdf";
 
         $companySetting = CompanySetting::firstOrCreate(
             [],
@@ -39,8 +38,8 @@ class PdfController extends Controller
         );
 
         $taxSettings = \App\Models\TaxSetting::first();
-        return Pdf::loadView('pdf', [
-            'record' => $honoraire,
+        return Pdf::loadView('note-de-debit', [
+            'record' => $noteDeDebit,
             'formattedDate' => $formattedDate,
             'tva' => $taxSettings->tva,
             'rs' => $taxSettings->rs,

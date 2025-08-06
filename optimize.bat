@@ -21,6 +21,7 @@ if not exist "%PHP_EXECUTABLE%" (
     goto end
 )
 
+%PHP_EXECUTABLE% artisan route:clear
 %PHP_EXECUTABLE% artisan optimize
 if %errorlevel% neq 0 (
     echo [ERROR] Optimization failed.

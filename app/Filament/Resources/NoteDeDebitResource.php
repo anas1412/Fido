@@ -67,15 +67,15 @@ class NoteDeDebitResource extends Resource
                 Forms\Components\TextInput::make('amount')
                     ->label('Montant')
                     ->numeric()
-                    ->required(),
-                /* ->live(onBlur: true)
-                    
+                    ->required()
+                    ->live(onBlur: true)
                     ->afterStateUpdated(function ($state, callable $set, $get) {
                         if ($state) {
-                            $newTva = $get('exonere_tva') ? 0 : ($get('montantHT') * config('taxes.tva'));
+                            $taxSettings = \App\Models\TaxSetting::first();
+                            $newTva = $get('exonere_tva') ? 0 : ($get('montantHT') * $taxSettings->tva);
                             $newMontantTTC = $get('montantHT') + $newTva;
-                            $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * config('taxes.rs'));
-                            $newTf = $get('exonere_tf') ? 0 : config('taxes.tf');
+                            $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * $taxSettings->rs);
+                            $newTf = $get('exonere_tf') ? 0 : $taxSettings->tf;
                             $newNetapayer = $newMontantTTC - $newRs + $newTf;
 
                             $set('tva', $newTva);
@@ -84,7 +84,7 @@ class NoteDeDebitResource extends Resource
                             $set('tf', $newTf);
                             $set('netapayer', $newNetapayer);
                         }
-                    }),*/
+                    }),
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->label('Description')->columnSpanFull(),
@@ -126,7 +126,7 @@ class NoteDeDebitResource extends Resource
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
-                        ->url(fn(NoteDeDebit $record) => route('pdf', $record))
+                        ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', $record))
                         ->openUrlInNewTab(),
 
                     Tables\Actions\EditAction::make(),

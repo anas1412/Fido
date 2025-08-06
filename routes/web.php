@@ -15,8 +15,13 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+use App\Http\Controllers\NoteDeDebitPdfController;
+
 Route::get('pdf/{honoraire}', PdfController::class)->name('pdf')
-    ->middleware(['auth']);;
+    ->middleware(['auth']);
+
+Route::get('pdf-note-de-debit/{noteDeDebit}', NoteDeDebitPdfController::class)->name('pdf.note-de-debit')
+    ->middleware(['auth']);
 
 Route::post('pdf/retenue-source', [PdfController::class, 'generateRetenueSourcReport'])
     ->name('pdf.retenue-source')

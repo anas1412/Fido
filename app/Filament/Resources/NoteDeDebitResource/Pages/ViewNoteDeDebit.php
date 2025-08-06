@@ -34,8 +34,8 @@ class ViewNoteDeDebit extends ViewRecord
                     $pdf = Pdf::loadView('honoraire-report', [
                         'record' => $honoraire,
                         'formattedDate' => $formattedDate,
-                        'tva' => config('taxes.tva'),
-                        'rs' => config('taxes.rs')
+                        'tva' => \App\Models\TaxSetting::first()->tva,
+                        'rs' => \App\Models\TaxSetting::first()->rs
 
                     ])->setPaper('A4', 'portrait')->download($honoraire->note . '.pdf');;
 

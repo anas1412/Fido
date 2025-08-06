@@ -37,23 +37,24 @@ class ListHonoraireReports extends ListRecords
                     $startDateFormatted = date('d/m/Y', strtotime($data['start_date']));
                     $endDateFormatted = date('d/m/Y', strtotime($data['end_date']));
 
-                    $tva = config('taxes.tva') * 100;
-                    $rs = config('taxes.rs') * 100;
-                    $tf = config('taxes.tf') * 100;
+                    $taxSettings = \App\Models\TaxSetting::first();
+                    $tva = $taxSettings->tva * 100;
+                    $rs = $taxSettings->rs * 100;
+                    $tf = $taxSettings->tf * 100;
 
                     // Initialize totals
                     $totalHT = $hs->sum('montantHT');
-                    $totalTVA = $hs->sum(function ($honoraire) {
-                        return $honoraire->montantHT * config('taxes.tva');
+                    $totalTVA = $hs->sum(function ($honoraire) use ($taxSettings) {
+                        return $honoraire->montantHT * $taxSettings->tva;
                     });
-                    $totalRS = $hs->sum(function ($honoraire) use ($totalTVA) {
-                        return ($honoraire->montantHT + $honoraire->montantHT * config('taxes.tva')) * config('taxes.rs');
+                    $totalRS = $hs->sum(function ($honoraire) use ($totalTVA, $taxSettings) {
+                        return ($honoraire->montantHT + $honoraire->montantHT * $taxSettings->tva) * $taxSettings->rs;
                     });
-                    $totalTTC = $hs->sum(function ($honoraire) {
-                        return $honoraire->montantHT + ($honoraire->montantHT * config('taxes.tva'));
+                    $totalTTC = $hs->sum(function ($honoraire) use ($taxSettings) {
+                        return $honoraire->montantHT + ($honoraire->montantHT * $taxSettings->tva);
                     });
-                    $totalTF = $hs->sum(function () {
-                        return config('taxes.tf');
+                    $totalTF = $hs->sum(function () use ($taxSettings) {
+                        return $taxSettings->tf;
                     });
                     $totalNetapayer = $totalTTC - $totalRS + $totalTF;
 

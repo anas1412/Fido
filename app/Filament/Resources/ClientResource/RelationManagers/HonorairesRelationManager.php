@@ -58,11 +58,12 @@ class HonorairesRelationManager extends RelationManager
                     ->required()
                     ->afterStateUpdated(function ($state, callable $set, $get) {
                         if ($state) {
-                            $newTva = $get('exonere_tva') ? 0 : ($get('montantHT') * config('taxes.tva'));
+                            $taxSettings = \App\Models\TaxSetting::first();
+                            $newTva = $get('exonere_tva') ? 0 : ($get('montantHT') * $taxSettings->tva);
 
                             $newMontantTTC = $get('montantHT') + $newTva;
-                            $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * config('taxes.rs'));
-                            $newTf = $get('exonere_tf') ? 0 : config('taxes.tf');
+                            $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * $taxSettings->rs);
+                            $newTf = $get('exonere_tf') ? 0 : $taxSettings->tf;
                             $newNetapayer = $newMontantTTC - $newRs + $newTf;
 
                             $currentYear = date('Y');
@@ -103,9 +104,10 @@ class HonorairesRelationManager extends RelationManager
                     ->label('Exonération TVA')
                     ->live()
                     ->afterStateUpdated(function ($state, callable $set, $get) {
-                        $newTva = $state ? 0 : ($get('montantHT') * config('taxes.tva'));
+                        $taxSettings = \App\Models\TaxSetting::first();
+                        $newTva = $state ? 0 : ($get('montantHT') * $taxSettings->tva);
                         $newMontantTTC = $get('montantHT') + $newTva;
-                        $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * config('taxes.rs'));
+                        $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * $taxSettings->rs);
                         $set('tva', $newTva);
                         $set('montantTTC', $newMontantTTC);
                         $set('rs', $newRs);
@@ -115,7 +117,8 @@ class HonorairesRelationManager extends RelationManager
                     ->label('Exonération RS')
                     ->live()
                     ->afterStateUpdated(function ($state, callable $set, $get) {
-                        $newRs = $state ? 0 : ($get('montantTTC') * config('taxes.rs'));
+                        $taxSettings = \App\Models\TaxSetting::first();
+                        $newRs = $state ? 0 : ($get('montantTTC') * $taxSettings->rs);
                         $set('rs', $newRs);
                         $set('netapayer', $get('montantTTC') - $newRs + $get('tf'));
                     }),

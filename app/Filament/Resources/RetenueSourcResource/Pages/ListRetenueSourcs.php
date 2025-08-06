@@ -48,7 +48,7 @@ class ListRetenueSourcs extends ListRecords
                         'totalRS' => $totalRS,
                         'totalTTC' => $totalTTC,
                         'totalNET' => $totalNET,
-                        'rs' => config('taxes.rs') * 100,
+                        'rs' => \App\Models\TaxSetting::first()->rs * 100,
                     ]);
 
                     $currentDate = now()->format('d-m-Y');
@@ -100,7 +100,8 @@ class ListRetenueSourcs extends ListRecords
                     }
 
                     $fiscalYear = config('fiscal_year.current_year');
-                    $rs = config('taxes.rs') * 100;
+                    $taxSettings = \App\Models\TaxSetting::first();
+                    $rs = $taxSettings->rs * 100;
 
                     // Generate PDF
                     $pdf = Pdf::loadView('retenue-source-all', [
