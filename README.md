@@ -4,16 +4,7 @@
   </a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/laravel/framework/actions">
-    <img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status">
-  </a>
-  <a href="https://packagist.org/packages/laravel/framework">
-    <img src="https://img.shields.io/packagist/l/laravel/framework" alt="License">
-  </a>
-</p>
-
-# Fido: Automating Accounting with Ease
+<h1 align="center">Fido: Automating Accounting with Ease</h1>
 
 Fido is a freelancing project dashboard platform tailored to meet the unique needs of a Tunisian accountant. Designed with simplicity, compliance, and efficiency in mind, Fido uses the latest technologies to enhance accounting workflows, automate essential tasks, and provide professionals with tools to manage reports and tax obligations.
 
@@ -24,6 +15,37 @@ Fido is a freelancing project dashboard platform tailored to meet the unique nee
 -   **[TailwindCSS](https://tailwindcss.com/):** Utility-first CSS for rapid design.
 -   **[FilamentPHP](https://filamentphp.com/):** Elegant admin panel.
 -   **[SQLite](https://www.sqlite.org/):** Lightweight, serverless database.
+
+## Quick Start Guide (for Windows)
+
+Getting started with Fido is designed to be as simple as possible. Just follow these two steps:
+
+1.  **Download the Project:**
+    -   Download the project files as a ZIP and extract them to a folder on your computer.
+    -   Alternatively, if you have Git installed, you can clone the repository:
+        ```bash
+        git clone https://github.com/anas1412/Fido.git
+        cd Fido
+        ```
+
+2.  **Run the Server:**
+    -   Double-click the `server.bat` file.
+
+That's it! The script will automatically handle everything for you:
+-   It will download and set up the correct version of PHP if you don't have it.
+-   It will download and configure Composer (the PHP package manager).
+-   It will install all necessary dependencies.
+-   It will create and set up the database.
+-   It will start the application server and open it in your web browser.
+
+## Default Admin Account
+
+The application is pre-configured with a default administrator account. The credentials for this account are stored in the `.env` file in the project's root directory. You can edit this file to change the email and password.
+
+-   **Email:** `admin@example.com`
+-   **Password:** `password`
+
+When you first run the `server.bat` script, the admin credentials will be displayed in the terminal window for your convenience.
 
 ## Fido’s Key Features
 
@@ -52,97 +74,7 @@ Fido is a freelancing project dashboard platform tailored to meet the unique nee
 <p align="center">
   <img src="Demo1.png?raw=true" width="80%" alt="Demo Screenshot 1">
   <img src="Demo2.png?raw=true" width="80%" alt="Demo Screenshot 2">
-  <!-- <img src="DB_schema.png?raw=true" width="80%" alt="SQLite_DB_schema"> -->
 </p>
-
-## System Requirements
-
--   **Git:** [Install Git](https://git-scm.com/downloads)
--   **Composer:** [Install Composer](https://getcomposer.org/download/) (choose the php.exe inside PHP8.2 (8.3) folder inside the project folder)
-
-## Quick Start Guide
-
-### Clone the Repository
-
-    git clone https://github.com/anas1412/Fido.git
-    cd Fido
-
-### Environment Setup
-
-**Copy the example environment file and configure your settings:**
-
-    cp .env.example .env
-
-**Install Dependencies and Initialize Database**
-
-    composer install
-    php artisan migrate --seed
-
-## Running Fido Locally
-
-### Development Mode
-
-**Start the development server**
-
-    php artisan serve
-
-Or double click on `server.bat` in the project directory.
-Access the application at http://localhost:8000.
-
-### Production Mode
-
-Configure Apache for production:
-
-1.  **Virtual Host Configuration:**
-
-    Typically located in `/etc/apache2/sites-available` or `/etc/nginx/sites-available`. Create a new file named `fido.conf` and add the following content:
-
-    ```apache
-        <VirtualHost *:80>
-            ServerName fido.local
-            DocumentRoot "/home/username/Fido/public"
-            <Directory "/home/username/Fido/public">
-                AllowOverride All
-                Require all granted
-             </Directory>
-        </VirtualHost>
-    ```
-
-Replace `username` with your actual username.
-
-2.  **Finalize Setup**
-
-    ```
-    sudo a2ensite fido.conf
-    sudo nano /etc/hosts
-    ```
-
-    Add the following line:
-
-    ```
-    127.0.0.1   fido.local
-    ```
-
-    Restart Apache:
-
-    ```
-    sudo systemctl restart apache2
-    ```
-
-    Access the application at http://fido.local.
-
-### Default User Accounts
-
-The database seeder will create the following users:
-
--   **Admin User:**
-
-    -   Email: `admin@mail.com`
-    -   Password: `admin123`
-
--   **Normal User:**
-    -   Email: `user@mail.com`
-    -   Password: `user123`
 
 ## License
 

@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'current_year' => '2024',
+    'current_year' => '2025',
 ];
