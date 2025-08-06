@@ -33,11 +33,17 @@ class EditTaxes extends Page implements HasForms
     }
 
     public ?array $data = [];
+    public float $tva = 0;
+    public float $rs = 0;
+    public float $tf = 0;
 
     public function mount(): void
     {
         $taxSetting = TaxSetting::firstOrCreate([]);
         $this->form->fill($taxSetting->attributesToArray());
+        $this->tva = $this->data['tva'] ?? 0;
+        $this->rs = $this->data['rs'] ?? 0;
+        $this->tf = $this->data['tf'] ?? 0;
     }
 
     public function form(Form $form): Form
@@ -74,6 +80,9 @@ class EditTaxes extends Page implements HasForms
         try {
             $data = $this->form->getState();
             TaxSetting::firstOrCreate([])->update($data);
+            $this->tva = $data['tva'] ?? 0;
+            $this->rs = $data['rs'] ?? 0;
+            $this->tf = $data['tf'] ?? 0;
         } catch (\Exception $e) {
             Notification::make()
                 ->title('Error')

@@ -7,7 +7,7 @@
                 <h2 class="text-lg font-medium text-gray-900">TVA Rate</h2>
             </x-slot>
             <div class="flex items-baseline">
-                <span class="text-3xl font-semibold text-primary-600">{{ number_format($tva * 100, 2) }}%</span>
+                <span class="text-3xl font-semibold text-primary-600">{{ number_format($this->tva * 100, 2) }}%</span>
                 <span class="ml-2 text-sm text-gray-600">Pourcentage de TVA</span>
             </div>
         </x-filament::card>
@@ -17,7 +17,7 @@
                 <h2 class="text-lg font-medium text-gray-900">RS Value</h2>
             </x-slot>
             <div class="flex items-baseline">
-                <span class="text-3xl font-semibold text-primary-600">{{ number_format($rs * 100, 2) }}%</span>
+                <span class="text-3xl font-semibold text-primary-600">{{ number_format($this->rs * 100, 2) }}%</span>
                 <span class="ml-2 text-sm text-gray-600">Pourcentage de RS</span>
             </div>
         </x-filament::card>
@@ -27,7 +27,7 @@
                 <h2 class="text-lg font-medium text-gray-900">TF Value</h2>
             </x-slot>
             <div class="flex items-baseline">
-                <span class="text-3xl font-semibold text-primary-600">{{ number_format($tf * 1000, 0) }}</span>
+                <span class="text-3xl font-semibold text-primary-600">{{ number_format($this->tf * 1000, 0) }}</span>
                 <span class="ml-2 text-sm text-gray-600">Millimes (Timbre Fiscale)</span>
             </div>
         </x-filament::card>
@@ -38,7 +38,7 @@
             <h2 class="text-lg font-medium text-gray-900">Modifier les taux</h2>
         </x-slot>
 
-        <form wire:submit.prevent="submit" class="space-y-6">
+        <form wire:submit.prevent="save" class="space-y-6">
             {{ $this->form }}
 
             <div class="flex justify-end">
