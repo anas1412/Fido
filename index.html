@@ -1,73 +1,78 @@
 <!DOCTYPE html>
-<!-- No more x-data on the html tag. The store is global. -->
 <html lang="fr" style="scroll-behavior: smooth">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <!-- The title will now access the global store -->
         <title x-data x-text="$store.i18n.t('pageTitle')"></title>
         <script src="https://cdn.tailwindcss.com"></script>
         
-        <!-- Load Alpine Core & Plugins -->
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js"></script>
         
-        <!-- FINAL, WORKING SCRIPT -->
+        <!-- FINAL, CENTRALIZED, AND WORKING SCRIPT -->
         <script>
             document.addEventListener('alpine:init', () => {
-                // This is the "best practice" Alpine Global Store.
                 Alpine.store('i18n', {
-                    // 1. STATE
                     lang: 'fr',
                     translations: {
-                        // General
+                        // General & Nav
                         pageTitle: { en: 'FIDO - Smart Accounting Software', fr: 'FIDO - Logiciel de Comptabilité Intelligent' },
-                        // Navigation
                         navFeatures: { en: 'Features', fr: 'Fonctionnalités' },
                         navPricing: { en: 'Pricing', fr: 'Tarifs' },
                         navContact: { en: 'Contact', fr: 'Contact' },
                         navGetStarted: { en: 'Get Started', fr: 'Commencer' },
-                        // Hero Section
+                        
+                        // Hero & Features
                         heroTitle: { en: 'Accounting Software Made Simple', fr: 'Le Logiciel de Comptabilité Simplifié' },
-                        heroSubtitle: { en: 'Designed specifically for Tunisian accountants to automate tasks and manage clients easily', fr: 'Conçu spécifiquement pour les comptables tunisiens pour automatiser les tâches et gérer les clients facilement' },
+                        heroSubtitle: { en: 'Designed for Tunisian accountants to automate tasks and manage clients easily', fr: 'Conçu pour les comptables tunisiens pour automatiser les tâches et gérer les clients' },
                         heroBtnStart: { en: 'Get Started Now', fr: 'Commencez Maintenant' },
                         heroBtnContact: { en: 'Contact Us', fr: 'Nous Contacter' },
-                        // Features Section
                         featuresTitle: { en: 'Everything You Need', fr: 'Tout Ce Dont Vous Avez Besoin' },
-                        featuresSubtitle: { en: 'Comprehensive tools designed specifically for Tunisian accountants to streamline their workflow', fr: 'Des outils complets conçus pour les comptables tunisiens afin de rationaliser leur flux de travail' },
+                        featuresSubtitle: { en: 'Comprehensive tools for Tunisian accountants to streamline their workflow', fr: 'Outils complets pour les comptables tunisiens pour rationaliser leur flux de travail' },
                         feature1Title: { en: 'Professional Fees Report', fr: 'Rapport d\'Honoraires' },
-                        feature1Desc: { en: 'Generate and export detailed professional fees reports with automatic calculations and custom formatting options.', fr: 'Générez et exportez des rapports d\'honoraires détaillés avec des calculs automatiques et des options de formatage personnalisées.' },
+                        feature1Desc: { en: 'Generate detailed professional fees reports with automatic calculations.', fr: 'Générez des rapports d\'honoraires détaillés avec calculs automatiques.' },
                         feature2Title: { en: 'Withholding Tax', fr: 'Retenue à la Source' },
-                        feature2Desc: { en: 'Simplify management of withholding tax obligations with automated calculations and reporting.', fr: 'Simplifiez la gestion des obligations de retenue à la source avec des calculs et des rapports automatisés.' },
+                        feature2Desc: { en: 'Simplify management of withholding tax obligations with automated reporting.', fr: 'Simplifiez la gestion des retenues à la source avec des rapports automatisés.' },
                         feature3Title: { en: 'Debit Note Statement', fr: 'Relevé de Note de Débit' },
-                        feature3Desc: { en: 'Efficiently manage and record debit transactions with automated statement generation.', fr: 'Gérez et enregistrez efficacement les transactions de débit avec la génération de relevés automatisée.' },
+                        feature3Desc: { en: 'Efficiently manage and record debit transactions with automated statements.', fr: 'Gérez efficacement les transactions de débit avec des relevés automatisés.' },
                         feature4Title: { en: 'Employee Accounts', fr: 'Comptes Employés' },
-                        feature4Desc: { en: 'Manage employee access and permissions with role-based dashboard controls.', fr: 'Gérez l\'accès et les autorisations des employés avec des contrôles de tableau de bord basés sur les rôles.' },
+                        feature4Desc: { en: 'Manage employee access and permissions with role-based dashboard controls.', fr: 'Gérez l\'accès des employés avec des contrôles basés sur les rôles.' },
                         feature5Title: { en: 'Client Portal', fr: 'Portail Client' },
-                        feature5Desc: { en: 'Track clients and projects with an intuitive portal designed for better collaboration.', fr: 'Suivez les clients et les projets avec un portail intuitif conçu pour une meilleure collaboration.' },
+                        feature5Desc: { en: 'Track clients and projects with an intuitive portal for better collaboration.', fr: 'Suivez les clients et projets avec un portail intuitif.' },
                         feature6Title: { en: 'Advanced Analytics', fr: 'Analyses Avancées' },
-                        feature6Desc: { en: 'Gain insights with custom reports and advanced analytics for better decision-making.', fr: 'Obtenez des informations avec des rapports personnalisés et des analyses avancées pour une meilleure prise de décision.' },
-                        // Pricing Section
+                        feature6Desc: { en: 'Gain insights with custom reports for better decision-making.', fr: 'Obtenez des informations avec des rapports personnalisés pour de meilleures décisions.' },
+                        
+                        // --- PRICING SECTION DATA RESTRUCTURED ---
                         pricingTitle: { en: 'Flexible Plans to Fit Your Needs', fr: 'Des Formules Flexibles Selon Vos Besoins' },
+                        
+                        // Plan 1
                         plan1Title: { en: 'Self-Hosted (Open Source)', fr: 'Auto-Hébergé (Open Source)' },
                         plan1Price: { en: 'Free', fr: 'Gratuit' },
                         plan1Subtitle: { en: 'Take full control and host it yourself', fr: 'Prenez le contrôle total et hébergez-le vous-même' },
-                        plan1Feature1: { en: 'Full Source Code Access', fr: 'Accès Complet au Code Source' },
-                        plan1Feature2: { en: 'Unlimited Customization', fr: 'Personnalisation Illimitée' },
-                        plan1Feature3: { en: 'Community Support', fr: 'Support Communautaire' },
-                        plan1Feature4: { en: 'Ideal for Developers & Tech-Savvy Users', fr: 'Idéal pour les Développeurs et Utilisateurs Expérimentés' },
                         plan1Button: { en: 'View on GitHub', fr: 'Voir sur GitHub' },
+                        plan1Features: [
+                            { en: 'Full Source Code Access', fr: 'Accès Complet au Code Source' },
+                            { en: 'Automatic Updates', fr: 'Mises à Jour Automatiques' },
+                            { en: 'Unlimited Customization', fr: 'Personnalisation Illimitée' },
+                            { en: 'Full Data Privacy', fr: 'Confidentialité totale des données' },
+                            { en: 'Ideal for Developers & Tech-Savvy Users', fr: 'Idéal pour les Développeurs et Utilisateurs Expérimentés' }
+                        ],
+
+                        // Plan 2
                         plan2Title: { en: 'Managed Service', fr: 'Service Géré' },
                         plan2PriceUnit: { en: '/month', fr: '/mois' },
                         plan2Subtitle: { en: 'Hassle-free hosting, security, and support', fr: 'Hébergement, sécurité et support sans tracas' },
-                        plan2Feature1: { en: 'Fully Hosted Solution', fr: 'Solution Entièrement Hébergée' },
-                        plan2Feature2: { en: 'Automatic Updates & Backups', fr: 'Mises à Jour et Sauvegardes Automatiques' },
-                        plan2Feature3: { en: 'Dedicated Technical Support', fr: 'Support Technique Dédié' },
-                        plan2Feature4: { en: 'Enhanced Security & Performance', fr: 'Sécurité et Performances Améliorées' },
-                        // Contact Section
+                        plan2Features: [
+                            { en: 'Fully Hosted Solution', fr: 'Solution Entièrement Hébergée' },
+                            { en: 'Automatic Updates & Backups', fr: 'Mises à Jour et Sauvegardes Automatiques' },
+                            { en: 'Dedicated Technical Support', fr: 'Support Technique Dédié' },
+                            { en: 'Enhanced Security & Performance', fr: 'Sécurité et Performances Améliorées' },
+                            { en: 'Ideal for professionals who prioritize convenience', fr: 'Idéal pour les professionnels qui privilégient la commodité' }
+                        ],
+
+                        // Contact & Footer
                         contactTitle: { en: 'Get in Touch', fr: 'Contactez-Nous' },
                         contactSubtitle: { en: 'Have questions or need assistance? Reach out to us!', fr: 'Vous avez des questions ou besoin d\'aide ? Contactez-nous !' },
-                        // Footer
                         footerSlogan: { en: 'Smart accounting software for Tunisian professionals.', fr: 'Logiciel de comptabilité intelligent pour les professionnels tunisiens.' },
                         footerLinksTitle: { en: 'Quick Links', fr: 'Liens Rapides' },
                         footerSupportTitle: { en: 'Support', fr: 'Support' },
@@ -75,15 +80,22 @@
                         footerCopyright: { en: '© 2024 Fido. All rights reserved.', fr: '© 2024 Fido. Tous droits réservés.' },
                     },
 
-                    // 2. HELPER FUNCTION (GETTER)
                     t(key) {
-                        return this.translations[key]?.[this.lang] || this.translations[key]?.['en'] || key;
+                        const translation = this.translations[key];
+                        if (translation) {
+                            return translation[this.lang] || translation['en'] || key;
+                        }
+                        return key;
                     },
 
-                    // 3. ACTIONS
+                    getPlanFeatures(planKey) {
+                        const features = this.translations[planKey] || [];
+                        return features.map(feature => feature[this.lang] || feature['en']);
+                    },
+
                     setLang(newLang) {
                         this.lang = newLang;
-                        document.documentElement.lang = newLang; // Also update the main document language
+                        document.documentElement.lang = newLang;
                     }
                 });
             });
@@ -103,7 +115,6 @@
     </head>
     
     <body x-data="{ isMenuOpen: false, lightboxOpen: false, lightboxImage: '' }" @keydown.escape.window="isMenuOpen = false; lightboxOpen = false" class="bg-gray-50">
-        <!-- Navigation -->
         <nav class="fixed z-40 w-full bg-white shadow-md">
             <div class="flex items-center justify-between max-w-6xl px-4 py-4 mx-auto">
                 <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-primary">
@@ -115,7 +126,6 @@
                     <a href="#features" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
                     <a href="#pricing" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
                     <a href="#contact" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
-                    <!-- Language Switcher -->
                     <div class="flex items-center gap-3 text-sm font-medium">
                         <button @click="$store.i18n.setLang('en')" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="transition hover:text-primary">EN</button>
                         <span class="text-gray-300">|</span>
@@ -146,9 +156,6 @@
             </div>
         </nav>
 
-        <!-- The rest of the body content uses the new $store syntax -->
-        
-        <!-- Hero Section -->
         <div class="pt-24 bg-white">
             <div class="max-w-5xl px-4 py-20 mx-auto">
                 <div class="text-center">
@@ -167,7 +174,6 @@
             </div>
         </div>
 
-        <!-- Enhanced Features Section -->
         <div id="features" class="max-w-6xl px-4 py-20 mx-auto">
             <h2 class="mb-4 text-3xl font-bold text-center" x-text="$store.i18n.t('featuresTitle')"></h2>
             <p class="max-w-2xl mx-auto mb-12 text-center text-gray-600" x-text="$store.i18n.t('featuresSubtitle')"></p>
@@ -193,32 +199,37 @@
             </div>
         </div>
 
-        <!-- Pricing Section -->
         <div id="pricing" class="py-16 bg-white">
             <div class="max-w-5xl px-4 mx-auto">
                 <h2 class="mb-12 text-3xl font-bold text-center" x-text="$store.i18n.t('pricingTitle')"></h2>
                 <div class="grid gap-8 md:grid-cols-2">
+                    <!-- Self-Hosted Plan -->
                     <div class="p-8 border border-gray-100 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-xl">
                         <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan1Title')"></h3>
                         <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan1Price')"></p>
                         <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan1Subtitle')"></p>
                         <ul class="mb-8 space-y-4">
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan1Feature1')"></span></li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan1Feature2')"></span></li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan1Feature3')"></span></li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan1Feature4')"></span></li>
+                            <template x-for="featureText in $store.i18n.getPlanFeatures('plan1Features')" :key="featureText">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                                    <span x-text="featureText"></span>
+                                </li>
+                            </template>
                         </ul>
                         <div class="text-center"><a href="https://github.com/anas1412/Fido" target="_blank" class="bg-gray-800 text-white px-8 py-3 rounded-lg inline-block hover:bg-gray-700 transition shadow-md" x-text="$store.i18n.t('plan1Button')"></a></div>
                     </div>
+                    <!-- Managed Service Plan -->
                     <div class="p-8 border border-green-100 shadow-lg bg-gradient-to-br from-green-50 to-white rounded-xl">
                         <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan2Title')"></h3>
                         <p class="mb-2 text-4xl font-bold text-center">100 TND<span class="text-xl text-gray-600" x-text="$store.i18n.t('plan2PriceUnit')"></span></p>
                         <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan2Subtitle')"></p>
                         <ul class="mb-8 space-y-4">
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan2Feature1')"></span></li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan2Feature2')"></span></li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan2Feature3')"></span></li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><span x-text="$store.i18n.t('plan2Feature4')"></span></li>
+                            <template x-for="featureText in $store.i18n.getPlanFeatures('plan2Features')" :key="featureText">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                                    <span x-text="featureText"></span>
+                                </li>
+                            </template>
                         </ul>
                         <div class="text-center"><a href="#contact" class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md" x-text="$store.i18n.t('heroBtnStart')"></a></div>
                     </div>
@@ -226,7 +237,6 @@
             </div>
         </div>
 
-        <!-- Contact Section -->
         <div id="contact" class="py-16 bg-gray-50">
             <div class="max-w-5xl px-4 mx-auto text-center">
                 <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('contactTitle')"></h2>
@@ -239,7 +249,6 @@
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="py-12 text-white bg-gray-800">
             <div class="max-w-6xl px-4 mx-auto">
                 <div class="grid gap-8 mb-8 md:grid-cols-3">
@@ -251,13 +260,11 @@
             </div>
         </footer>
 
-        <!-- Lightbox Modal -->
         <div x-show="lightboxOpen" x-transition @click="lightboxOpen = false" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80" style="display: none;">
             <div @click.stop class="relative">
                 <button @click="lightboxOpen = false" class="absolute -top-2 -right-2 md:-top-4 md:-right-4 text-white bg-primary rounded-full p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 <img :src="lightboxImage" alt="Enlarged screenshot" class="object-contain w-auto rounded-lg shadow-lg max-h-[90vh]">
             </div>
         </div>
-
     </body>
 </html>
