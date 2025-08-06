@@ -32,20 +32,24 @@ class EditCompanySettings extends Page implements HasForms
 
     public function mount(): void
     {
-        $companySetting = CompanySetting::firstOrCreate([]);
+        $companySetting = CompanySetting::firstOrCreate(
+            [],
+            [
+                'company_name' => env('COMPANY_NAME', 'Your Company Name'),
+                'slogan' => env('COMPANY_SLOGAN', 'Your Company Slogan'),
+                'mf_number' => env('COMPANY_MF_NUMBER', 'MF123456789'),
+                'location' => env('COMPANY_LOCATION', 'Your City'),
+                'address_line1' => env('COMPANY_ADDRESS_LINE1', '123 Main St'),
+                'address_line2' => env('COMPANY_ADDRESS_LINE2', 'Suite 100'),
+                'phone1' => env('COMPANY_PHONE1', '+1234567890'),
+                'phone2' => env('COMPANY_PHONE2', '+0987654321'),
+                'fax' => env('COMPANY_FAX', '+1234567890'),
+                'email' => env('COMPANY_EMAIL', 'info@yourcompany.com'),
+            ]
+        );
 
         if ($companySetting->wasRecentlyCreated || empty($companySetting->company_name)) {
-            $companySetting->company_name = env('COMPANY_NAME', 'Your Company Name');
-            $companySetting->slogan = env('COMPANY_SLOGAN', 'Your Company Slogan');
-            $companySetting->mf_number = env('COMPANY_MF_NUMBER', 'MF123456789');
-            $companySetting->location = env('COMPANY_LOCATION', 'Your City');
-            $companySetting->address_line1 = env('COMPANY_ADDRESS_LINE1', '123 Main St');
-            $companySetting->address_line2 = env('COMPANY_ADDRESS_LINE2', 'Suite 100');
-            $companySetting->phone1 = env('COMPANY_PHONE1', '+1234567890');
-            $companySetting->phone2 = env('COMPANY_PHONE2', '+0987654321');
-            $companySetting->fax = env('COMPANY_FAX', '+1234567890');
-            $companySetting->email = env('COMPANY_EMAIL', 'info@yourcompany.com');
-            $companySetting->save();
+            
         }
 
         $this->form->fill($companySetting->attributesToArray());

@@ -39,7 +39,14 @@ class EditTaxes extends Page implements HasForms
 
     public function mount(): void
     {
-        $taxSetting = TaxSetting::firstOrCreate([]);
+        $taxSetting = TaxSetting::firstOrCreate(
+            [],
+            [
+                'tva' => 0.19,
+                'rs' => 0.03,
+                'tf' => 1,
+            ]
+        );
         $this->form->fill($taxSetting->attributesToArray());
         $this->tva = $this->data['tva'] ?? 0;
         $this->rs = $this->data['rs'] ?? 0;
