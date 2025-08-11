@@ -20,6 +20,13 @@ The project, named "Fido," is a web application built using the Laravel framewor
 | Barryvdh Laravel Dompdf | ^2.2 | A library for generating PDF documents. |
 | Pest | ^2.0 | A testing framework for PHP. |
 
+### Desktop
+
+| Technology | Version | Description |
+|---|---|---|
+| Electron | ^37.2.6 | A framework for creating native applications with web technologies. |
+| Electron Builder | ^26.0.12 | A solution to package and build a ready for distribution Electron app. |
+
 ### Frontend
 
 | Technology | Version | Description |

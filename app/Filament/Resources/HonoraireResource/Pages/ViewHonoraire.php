@@ -19,8 +19,8 @@ class ViewHonoraire extends ViewRecord
                 ->label('PDF')
                 ->color('success')
                 ->icon('heroicon-o-arrow-down-tray')
-                ->url(fn(Honoraire $record) => route('pdf', $record))
-                ->openUrlInNewTab(),
+                ->url(fn(Honoraire $record) => route('pdf', $record)),
+                
             /* Actions\Action::make('pdf')
                 ->label("Générer PDF")
                 ->color('success')

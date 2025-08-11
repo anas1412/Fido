@@ -235,8 +235,8 @@ class HonoraireResource extends Resource
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
-                        ->url(fn(Honoraire $record) => route('pdf', $record))
-                        ->openUrlInNewTab(),
+                        ->url(fn(Honoraire $record) => route('pdf', $record)),
+                        
 
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),

@@ -88,7 +88,8 @@ class NoteDeDebitsRelationManager extends RelationManager
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
-                        ->openUrlInNewTab(),
+                        ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
+                        
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                 ]),

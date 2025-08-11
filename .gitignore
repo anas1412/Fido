@@ -20,3 +20,5 @@ yarn-error.log
 /database/database.sqlite
 /php/
 composer.phar
+/dist/
+*.asar

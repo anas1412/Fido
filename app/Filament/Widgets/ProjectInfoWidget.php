@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\Widget;
+use Illuminate\Support\Facades\File;
 
 class ProjectInfoWidget extends Widget
 {
@@ -17,8 +18,21 @@ class ProjectInfoWidget extends Widget
     }
         public function getViewData(): array
     {
+        $version = 'N/A'; // Default value
+
+        $packageJsonPath = base_path('package.json');
+
+        if (File::exists($packageJsonPath)) {
+            $packageJsonContent = File::get($packageJsonPath);
+            $packageData = json_decode($packageJsonContent, true);
+
+            if (isset($packageData['version'])) {
+                $version = $packageData['version'];
+            }
+        }
+
         return [
-            'version' => config('app.version'), // Pass version from config
+            'version' => $version,
         ];
     }
 }

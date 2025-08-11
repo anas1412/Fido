@@ -126,8 +126,8 @@ class NoteDeDebitResource extends Resource
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
-                        ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id]))
-                        ->openUrlInNewTab(),
+                        ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
+                        
 
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),

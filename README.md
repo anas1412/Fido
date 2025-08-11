@@ -38,6 +38,39 @@ That's it! The script will automatically handle everything for you:
 -   It will create and set up the database.
 -   It will start the application server using Laravel's built-in development server and open it in your web browser.
 
+## Desktop Application (Electron)
+
+The Fido dashboard can also be run as a standalone desktop application using Electron. This provides a more integrated, native-like experience.
+
+### Prerequisites
+
+Make sure you have [Node.js](https://nodejs.org/) and npm installed on your system.
+
+### Running in Development
+
+1.  **Install Dependencies:**
+    Open a terminal in the project root and run:
+    ```bash
+    npm install
+    ```
+
+2.  **Start the Application:**
+    Once the installation is complete, run:
+    ```bash
+    npm start
+    ```
+    This will launch the Electron application and the necessary PHP server in development mode.
+
+### Building for Production
+
+To package the application into a distributable executable (`.exe` for Windows), run the following command:
+
+```bash
+npm run dist
+```
+
+This command uses `electron-builder` to create a production-ready build. The final executable and associated files will be located in the `dist` directory.
+
 ## Default Admin Account
 
 The application is pre-configured with a default administrator account. The credentials for this account are stored in the `.env` file in the project's root directory. You can edit this file to change the email and password.

@@ -19,8 +19,8 @@ class ViewNoteDeDebit extends ViewRecord
                 ->label('PDF')
                 ->color('success')
                 ->icon('heroicon-o-arrow-down-tray')
-                ->url(fn(NoteDeDebit $record) => route('pdf', $record))
-                ->openUrlInNewTab(),
+                ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
+                
             /* Actions\Action::make('pdf')
                 ->label("Générer PDF")
                 ->color('success')
