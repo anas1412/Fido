@@ -108,13 +108,6 @@ echo [OK] Composer downloaded successfully.
 set "COMPOSER_CMD=%PHP_EXECUTABLE% %COMPOSER_PHAR%"
 
 :: === Project Setup ===
-:pull_changes
-echo Pulling latest changes from main branch...
-git pull origin main || (
-    echo [ERROR] Git pull failed.
-    goto end
-)
-
 :install_dependencies
 if exist "vendor" goto :dependencies_installed
 echo "vendor" folder not found. Running composer install...
