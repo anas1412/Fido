@@ -1,6 +1,7 @@
 const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
+const fs = require('fs');
 
 let mainWindow;
 let phpServerProcess;
@@ -14,7 +15,7 @@ const phpPath = isDev
   : path.join(process.resourcesPath, 'php', 'php.exe');
 
 // The artisan script path
-const artisanPath = path.join(__dirname, 'artisan');
+const artisanPath = path.join(process.resourcesPath, 'artisan');
 
 function startPhpServer() {
   return new Promise(async (resolve, reject) => {
@@ -27,7 +28,7 @@ function startPhpServer() {
 
       // Note: We are running 'php artisan serve'
       phpServerProcess = spawn(phpPath, [artisanPath, 'serve', `--port=${port}`], {
-        cwd: __dirname,
+        cwd: process.resourcesPath,
         windowsHide: true,
       });
 
@@ -130,12 +131,107 @@ app.whenReady().then(async () => {
     // Dynamically import get-port
     getPort = (await import('get-port')).default;
 
+    // Define the path for the application initialized flag file
+    const appInitializedFlagPath = path.join(app.getPath('userData'), '.app_initialized');
+    const envFilePath = path.join(process.resourcesPath, '.env');
+    const envExamplePath = path.join(process.resourcesPath, '.env.example');
+
+    // Function to initialize the application (DB migrations, seeding, key generation)
+    async function initializeApplication() {
+      if (fs.existsSync(appInitializedFlagPath)) {
+        console.log('Application already initialized. Skipping setup.');
+        return;
+      }
+
+      console.log('Initializing application (DB migrations, seeding, key generation)...');
+      try {
+        // Copy .env.example to .env if .env does not exist
+        if (!fs.existsSync(envFilePath)) {
+          console.log('Copying .env.example to .env...');
+          fs.copyFileSync(envExamplePath, envFilePath);
+        }
+
+        // Run migrations
+        console.log('Running migrations...');
+        const migrateProcess = spawn(phpPath, [artisanPath, 'migrate', '--force'], {
+          cwd: process.resourcesPath,
+          windowsHide: true,
+        });
+
+        await new Promise((resolve, reject) => {
+          migrateProcess.stdout.on('data', (data) => console.log(`Migrate stdout: ${data.toString()}`));
+          migrateProcess.stderr.on('data', (data) => console.error(`Migrate stderr: ${data.toString()}`));
+          migrateProcess.on('close', (code) => {
+            if (code === 0) {
+              console.log('Migrations completed successfully.');
+              resolve();
+            } else {
+              reject(new Error(`Migrations failed with code ${code}`));
+            }
+          });
+          migrateProcess.on('error', (err) => reject(err));
+        });
+
+        // Run seeders
+        console.log('Running database seeders...');
+        const seedProcess = spawn(phpPath, [artisanPath, 'db:seed'], {
+          cwd: process.resourcesPath,
+          windowsHide: true,
+        });
+
+        await new Promise((resolve, reject) => {
+          seedProcess.stdout.on('data', (data) => console.log(`Seed stdout: ${data.toString()}`));
+          seedProcess.stderr.on('data', (data) => console.error(`Seed stderr: ${data.toString()}`));
+          seedProcess.on('close', (code) => {
+            if (code === 0) {
+              console.log('Database seeding completed successfully.');
+              resolve();
+            } else {
+              reject(new Error(`Database seeding failed with code ${code}`));
+            }
+          });
+          seedProcess.on('error', (err) => reject(err));
+        });
+
+        // Generate application key
+        console.log('Generating application key...');
+        const keyGenerateProcess = spawn(phpPath, [artisanPath, 'key:generate'], {
+          cwd: process.resourcesPath,
+          windowsHide: true,
+        });
+
+        await new Promise((resolve, reject) => {
+          keyGenerateProcess.stdout.on('data', (data) => console.log(`Key Generate stdout: ${data.toString()}`));
+          keyGenerateProcess.stderr.on('data', (data) => console.error(`Key Generate stderr: ${data.toString()}`));
+          keyGenerateProcess.on('close', (code) => {
+            if (code === 0) {
+              console.log('Application key generated successfully.');
+              fs.writeFileSync(appInitializedFlagPath, 'true'); // Create flag file
+              resolve();
+            } else {
+              reject(new Error(`Application key generation failed with code ${code}`));
+            }
+          });
+          keyGenerateProcess.on('error', (err) => reject(err));
+        });
+
+      } catch (error) {
+        console.error('Application initialization failed:', error);
+        dialog.showErrorBox('Application Setup Error', `Failed to initialize application: ${error.message}. The application will now exit.`);
+        app.quit();
+      }
+    }
+
+    await initializeApplication(); // Call application initialization
+
     const serverUrl = await startPhpServer();
     createWindow(serverUrl);
 
     app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow(serverUrl); // Re-create window, server should still be running
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (process.platform === 'darwin' && BrowserWindow.getAllWindows().length === 0) {
+        createWindow(serverUrl);
       }
     });
 
@@ -155,9 +251,22 @@ app.on('window-all-closed', () => {
 app.on('will-quit', () => {
   if (phpServerProcess) {
     console.log('Stopping PHP server...');
+    console.log(`Attempting to kill PHP server process with PID: ${phpServerProcess.pid}`);
     // Forcefully kill the process and its children on Windows
     if (process.platform === 'win32') {
-      spawn('taskkill', ['/pid', phpServerProcess.pid, '/f', '/t']);
+      const killProcess = spawn('taskkill', ['/pid', phpServerProcess.pid, '/f', '/t']);
+      killProcess.stdout.on('data', (data) => {
+        console.log(`taskkill stdout: ${data.toString()}`);
+      });
+      killProcess.stderr.on('data', (data) => {
+        console.error(`taskkill stderr: ${data.toString()}`);
+      });
+      killProcess.on('close', (code) => {
+        console.log(`taskkill process exited with code ${code}`);
+      });
+      killProcess.on('error', (err) => {
+        console.error('Failed to spawn taskkill process.', err);
+      });
     } else {
       phpServerProcess.kill();
     }

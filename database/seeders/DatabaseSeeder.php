@@ -13,10 +13,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create an admin account from .env variables
-        User::factory()->admin()->create([
-            'name' => env('ADMIN_NAME', 'Admin'),
-            'email' => env('ADMIN_EMAIL', 'admin@example.com'),
-            'password' => bcrypt(env('ADMIN_PASSWORD', 'password')),
-        ]);
+        User::firstOrCreate(
+            ['email' => env('ADMIN_EMAIL', 'admin@example.com')],
+            [
+                'name' => env('ADMIN_NAME', 'Admin'),
+                'password' => bcrypt(env('ADMIN_PASSWORD', 'password')),
+                'is_admin' => true,
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }

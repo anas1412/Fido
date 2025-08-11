@@ -10,7 +10,8 @@
         "start": "electron .",
         "dev": "vite",
         "build": "vite build",
-        "dist": "electron-builder"
+        "dist": "npm run build && electron-builder",
+    "postdist": "robocopy .\\vendor .\\dist\\win-unpacked\\resources\\app.asar.unpacked\\vendor /E /IS /NP && icacls .\\dist\\win-unpacked\\resources\\app.asar.unpacked\\storage /grant Users:(OI)(CI)F /T"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
@@ -25,5 +26,76 @@
     },
     "dependencies": {
         "get-port": "^7.1.0"
-    }
+    },
+    "build": {
+      "appId": "com.yourcompany.fido",
+      "productName": "Fido",
+      "files": [
+        "**/*"
+      ],
+      "win": {
+        "icon": "public/images/favicon.ico"
+      },
+      "asarUnpack": [],
+      "extraResources": [
+        {
+          "from": "vendor",
+          "to": "vendor",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "php",
+          "to": "php",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "artisan",
+          "to": "artisan"
+        },
+        {
+          "from": "bootstrap",
+          "to": "bootstrap",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "app",
+          "to": "app",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "config",
+          "to": "config",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "database",
+          "to": "database",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "public",
+          "to": "public",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "resources",
+          "to": "resources",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "routes",
+          "to": "routes",
+          "filter": ["**/*"]
+        },
+        {
+          "from": "storage",
+          "to": "storage",
+          "filter": ["**/*"]
+        },                                                                                                                                
+        {                                                                                                                                     
+          "from": ".env.example",                                                                                                             
+          "to": ".env.example"
+       }                                                                                                                                     
+   ]                                                                                                                                       
+  }
 }
