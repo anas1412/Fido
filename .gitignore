@@ -17,9 +17,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/database/database.sqlite
+/database/*.sqlite
 /php/
 composer.phar
 /dist/
 *.asarrr
-/storage/database.sqlite
+/storage/*.sqlite
