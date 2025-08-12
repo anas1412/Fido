@@ -7,6 +7,10 @@ use App\Http\Controllers\PdfController;
 
 Route::redirect('/', '/dashboard');
 
+Route::redirect('/login', '/dashboard/login');
+
+Route::get('/login', function () { return redirect('/dashboard/login'); })->name('login');
+
 /* Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
