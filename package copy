@@ -34,12 +34,6 @@
             "icon": "public/images/favicon.ico",
             "target": "nsis"
         },
-        "nsis": {
-            "oneClick": false,
-            "perMachine": true,
-            "allowToChangeInstallationDirectory": true,
-            "createDesktopShortcut": true
-        },
         "files": [
             "main.cjs",
             "package.json",
@@ -58,6 +52,12 @@
                     "!.idea",
                     "!.vscode"
                 ]
+            }
+        ],
+        "extraFiles": [
+            {
+                "from": "storage",
+                "to": "storage"
             }
         ]
     }

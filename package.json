@@ -10,7 +10,9 @@
         "start": "electron .",
         "dev": "vite",
         "build": "vite build",
-        "dist": "npm run build && electron-builder"
+        "laravel:prod": "php artisan optimize:clear && php artisan migrate:fresh --seed && php artisan config:cache && php artisan route:cache && php artisan view:cache",
+        "dist": "npm run laravel:prod && npm run build && electron-builder",
+        "dev:clear": "php artisan optimize:clear"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
@@ -34,10 +36,17 @@
             "icon": "public/images/favicon.ico",
             "target": "nsis"
         },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": true,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": true
+        },
         "files": [
             "main.cjs",
             "package.json",
-            "dist/**/*"
+            "dist/**/*",
+            "preload.js"
         ],
         "extraResources": [
             {
@@ -52,12 +61,6 @@
                     "!.idea",
                     "!.vscode"
                 ]
-            }
-        ],
-        "extraFiles": [
-            {
-                "from": "storage",
-                "to": "storage"
             }
         ]
     }

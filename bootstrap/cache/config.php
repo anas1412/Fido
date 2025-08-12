@@ -361,7 +361,8 @@
   ),
   'fiscal_year' => 
   array (
-    'current_year' => 2025,
+    'current_year' => '2025',
+    'year' => '2025',
   ),
   'logging' => 
   array (
