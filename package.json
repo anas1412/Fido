@@ -10,15 +10,14 @@
         "start": "electron .",
         "dev": "vite",
         "build": "vite build",
-        "dist": "npm run build && electron-builder",
-    "postdist": "robocopy .\\vendor .\\dist\\win-unpacked\\resources\\app.asar.unpacked\\vendor /E /IS /NP && icacls .\\dist\\win-unpacked\\resources\\app.asar.unpacked\\storage /grant Users:(OI)(CI)F /T"
+        "dist": "npm run build && electron-builder"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
         "autoprefixer": "^10.4.2",
         "axios": "^1.6.4",
-        "electron": "^37.2.6",
-        "electron-builder": "^26.0.12",
+        "electron": "^31.0.2",
+        "electron-builder": "^24.13.3",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.31",
         "tailwindcss": "^3.1.0",
@@ -28,74 +27,38 @@
         "get-port": "^7.1.0"
     },
     "build": {
-      "appId": "com.yourcompany.fido",
-      "productName": "Fido",
-      "files": [
-        "**/*"
-      ],
-      "win": {
-        "icon": "public/images/favicon.ico"
-      },
-      "asarUnpack": [],
-      "extraResources": [
-        {
-          "from": "vendor",
-          "to": "vendor",
-          "filter": ["**/*"]
+        "appId": "com.yourcompany.fido",
+        "productName": "Fido",
+        "asar": true,
+        "win": {
+            "icon": "public/images/favicon.ico",
+            "target": "nsis"
         },
-        {
-          "from": "php",
-          "to": "php",
-          "filter": ["**/*"]
-        },
-        {
-          "from": "artisan",
-          "to": "artisan"
-        },
-        {
-          "from": "bootstrap",
-          "to": "bootstrap",
-          "filter": ["**/*"]
-        },
-        {
-          "from": "app",
-          "to": "app",
-          "filter": ["**/*"]
-        },
-        {
-          "from": "config",
-          "to": "config",
-          "filter": ["**/*"]
-        },
-        {
-          "from": "database",
-          "to": "database",
-          "filter": ["**/*"]
-        },
-        {
-          "from": "public",
-          "to": "public",
-          "filter": ["**/*"]
-        },
-        {
-          "from": "resources",
-          "to": "resources",
-          "filter": ["**/*"]
-        },
-        {
-          "from": "routes",
-          "to": "routes",
-          "filter": ["**/*"]
-        },
-        {
-          "from": "storage",
-          "to": "storage",
-          "filter": ["**/*"]
-        },                                                                                                                                
-        {                                                                                                                                     
-          "from": ".env.example",                                                                                                             
-          "to": ".env.example"
-       }                                                                                                                                     
-   ]                                                                                                                                       
-  }
+        "files": [
+            "main.cjs",
+            "package.json",
+            "dist/**/*"
+        ],
+        "extraResources": [
+            {
+                "from": ".",
+                "to": "app",
+                "filter": [
+                    "**/*",
+                    "!dist",
+                    "!node_modules",
+                    "!.git",
+                    "!electron-builder.yml",
+                    "!.idea",
+                    "!.vscode"
+                ]
+            }
+        ],
+        "extraFiles": [
+            {
+                "from": "storage",
+                "to": "storage"
+            }
+        ]
+    }
 }

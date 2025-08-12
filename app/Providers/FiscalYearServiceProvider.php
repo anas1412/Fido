@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Models\FiscalYearSetting;
+use Illuminate\Support\Facades\Schema; // <-- ADD THIS LINE
 
 class FiscalYearServiceProvider extends ServiceProvider
 {
@@ -20,12 +21,19 @@ class FiscalYearServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $fiscalYearSetting = FiscalYearSetting::first();
+        // ADD THIS CHECK: Only try to query the database if the application's
+        // database has been migrated and the 'fiscal_year_settings' table exists.
+        if (Schema::hasTable('fiscal_year_settings')) {
+            $fiscalYearSetting = FiscalYearSetting::first();
 
-        if ($fiscalYearSetting) {
-            config(['fiscal_year.current_year' => $fiscalYearSetting->year]);
+            if ($fiscalYearSetting) {
+                config(['fiscal_year.current_year' => $fiscalYearSetting->year]);
+            } else {
+                // Default to current year if the table is empty
+                config(['fiscal_year.year' => date('Y')]);
+            }
         } else {
-            // Default to current year if no setting is found
+            // Default to current year if the table doesn't even exist yet (e.g., during migration)
             config(['fiscal_year.year' => date('Y')]);
         }
     }
