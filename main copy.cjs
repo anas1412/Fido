@@ -1,126 +1,48 @@
 // main.cjs
-const { app, BrowserWindow, dialog, ipcMain, net } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 const fs = require('fs');
 
-// --- Global Variables, Paths, Env, and Helper Functions are all correct ---
-let mainWindow; let phpServerProcess; let getPort;
+// --- Global Variables ---
+let mainWindow;
+let phpServerProcess;
+let getPort;
+
 const isDev = !app.isPackaged;
+
+// Determine paths based on development or packaged app
 const artisanCwd = isDev ? __dirname : path.join(process.resourcesPath, 'app');
 const storagePath = isDev ? path.join(__dirname, 'storage') : path.join(app.getPath('userData'), 'storage');
 const phpExecutable = isDev ? path.join(__dirname, 'php', 'php.exe') : path.join(process.resourcesPath, 'app', 'php', 'php.exe');
 const artisanScript = path.join(artisanCwd, 'artisan');
+
+// Environment variables to pass to PHP
 const phpEnv = {
     ...process.env,
     APP_STORAGE_PATH: storagePath,
     DB_DATABASE: path.join(storagePath, 'database.sqlite')
 };
-function runArtisanCommand(args) { /* ... same as your file ... */ }
-function startPhpServer() { /* ... same as your file ... */ }
 
-
-function createWindow(serverUrl) {
-    mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
-        show: false,
-        backgroundColor: '#2e2c29',
-        autoHideMenuBar: true,
-        icon: isDev ? path.join(__dirname, 'public', 'images', 'favicon.ico') : path.join(process.resourcesPath, 'app', 'public', 'images', 'favicon.ico'),
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'preload.js')
-        },
-    });
-
-    // We no longer need the will-download handler here.
-    // The entire logic is now in the ipcMain handler below.
-
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show();
-    });
-
-    mainWindow.loadURL(serverUrl);
-    if (isDev) mainWindow.webContents.openDevTools();
-    mainWindow.on('closed', () => { mainWindow = null; });
-}
-
-// --- THIS IS THE NEW, DEFINITIVE DOWNLOAD HANDLER ---
-ipcMain.on('download-pdf', (event, url) => {
-    console.log(`Main process received download request for: ${url}`);
-    
-    // 1. Get the filename from the URL. A more robust regex could be used if needed.
-    const urlParts = url.split('/');
-    const potentialFilename = urlParts[urlParts.length - 1] + '.pdf'; // Guess a filename
-
-    // 2. Use the synchronous dialog to get a save path from the user *before* we download.
-    const filePath = dialog.showSaveDialogSync(mainWindow, {
-        title: 'Save PDF',
-        defaultPath: `Honoraire_${potentialFilename}`,
-        filters: [{ name: 'PDF Documents', extensions: ['pdf'] }]
-    });
-
-    // 3. If the user cancelled, do nothing.
-    if (!filePath) {
-        console.log('User cancelled the save dialog.');
-        return;
-    }
-
-    // 4. Perform the download entirely in the main process.
-    const request = net.request(url);
-    
-    request.on('response', (response) => {
-        if (response.statusCode === 200) {
-            const fileStream = fs.createWriteStream(filePath);
-            
-            response.on('data', (chunk) => {
-                fileStream.write(chunk);
-            });
-
-            response.on('end', () => {
-                fileStream.end();
-                console.log('Download completed successfully.');
-                dialog.showMessageBox(mainWindow, { title: 'Download Complete', message: `File saved to ${filePath}` });
-            });
-
-            response.on('error', (err) => {
-                console.error('Error during download response:', err);
-                dialog.showErrorBox('Download Failed', 'An error occurred while downloading the file.');
-            });
-        } else {
-            console.error(`Server responded with status: ${response.statusCode}`);
-            dialog.showErrorBox('Download Failed', `The server responded with an error: ${response.statusCode}`);
-        }
-    });
-
-    request.on('error', (err) => {
-        console.error('Error making download request:', err);
-        dialog.showErrorBox('Download Failed', 'An error occurred while trying to connect to the server.');
-    });
-
-    request.end();
-});
-
-// --- Your app.whenReady() and other lifecycle events are all correct ---
-// --- They do not need to be changed ---
-
-// --- PASTE IN ALL YOUR OTHER FUNCTIONS AND LIFECYCLE EVENTS HERE ---
-// For brevity, I'll add them back in below
 
 // --- Helper function to run Artisan commands ---
 function runArtisanCommand(args) {
     const commandArgs = [artisanScript, ...args];
+
     return new Promise((resolve, reject) => {
         const commandProcess = spawn(phpExecutable, commandArgs, { cwd: artisanCwd, env: phpEnv, windowsHide: true });
-        let stdout = '', stderr = '';
+
+        let stdout = '';
+        let stderr = '';
+
         commandProcess.stdout.on('data', (data) => (stdout += data.toString()));
         commandProcess.stderr.on('data', (data) => (stderr += data.toString()));
+
         commandProcess.on('error', (err) => {
             console.error(`Failed to spawn command: ${phpExecutable} ${commandArgs.join(' ')}`, err);
             reject(err);
         });
+
         commandProcess.on('close', (code) => {
             const stdoutStr = stdout.trim();
             const stderrStr = stderr.trim();
@@ -138,6 +60,7 @@ function runArtisanCommand(args) {
         });
     });
 }
+
 // --- Main Application Functions ---
 function startPhpServer() {
     return new Promise(async (resolve, reject) => {
@@ -145,19 +68,23 @@ function startPhpServer() {
             const port = await getPort({ port: 8000 });
             const serverUrl = `http://127.0.0.1:${port}`;
             const serverArgs = [artisanScript, 'serve', `--port=${port}`];
+
             console.log(`Starting PHP server: ${phpExecutable} ${serverArgs.join(' ')} in ${artisanCwd}`);
             phpServerProcess = spawn(phpExecutable, serverArgs, { cwd: artisanCwd, env: phpEnv });
+
             phpServerProcess.on('error', (err) => {
                 console.error('Failed to start PHP server process.', err);
                 reject(err);
             });
+
             phpServerProcess.on('close', (code) => {
-                if (code !== 0 && !app.isQuitting) {
+                if (code !== 0) {
                     const errorMessage = `PHP server process exited unexpectedly with code ${code}.`;
                     console.error(errorMessage);
-                    reject(new Error(errorMessage));
+                    if (!app.isQuitting) reject(new Error(errorMessage));
                 }
             });
+
             const onServerOutput = (data) => {
                 const message = data.toString();
                 process.stdout.write(message);
@@ -168,29 +95,95 @@ function startPhpServer() {
                     resolve(serverUrl);
                 }
             };
+
             phpServerProcess.stdout.on('data', onServerOutput);
             phpServerProcess.stderr.on('data', onServerOutput);
+
         } catch (err) {
             console.error('An error occurred in startPhpServer.', err);
             reject(err);
         }
     });
 }
+
+function createWindow(serverUrl) {
+    mainWindow = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        show: false,
+        backgroundColor: '#2e2c29',
+        autoHideMenuBar: true,
+        icon: isDev ? path.join(__dirname, 'public', 'images', 'favicon.ico') : path.join(process.resourcesPath, 'app', 'public', 'images', 'favicon.ico'),
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
+    });
+
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+    });
+    
+    // --- ROBUST PDF DOWNLOAD HANDLER ---
+    mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
+        // 1. Prevent Electron from automatically handling the download
+        event.preventDefault();
+
+        // 2. Prompt the user for a save location
+        dialog.showSaveDialog({
+            title: 'Save PDF',
+            defaultPath: item.getFilename(),
+            filters: [{ name: 'PDF Documents', extensions: ['pdf'] }]
+        }).then(({ filePath, canceled }) => {
+            // 3. If the user cancels the dialog, we must cancel the download
+            if (canceled) {
+                console.log('User cancelled the download.');
+                item.cancel();
+                return;
+            }
+
+            // 4. Set the final save path for the download item
+            console.log('Setting save path to:', filePath);
+            item.setSavePath(filePath);
+
+            // 5. Listen for the 'done' event to give feedback to the user
+            item.once('done', (e, state) => {
+                if (state === 'completed') {
+                    console.log('Download completed successfully.');
+                    dialog.showMessageBox(mainWindow, { title: 'Download Complete', message: `File saved to ${filePath}` });
+                } else {
+                    console.error(`Download failed: ${state}`);
+                    dialog.showErrorBox('Download Failed', `Failed to download file: ${state}`);
+                }
+            });
+        }).catch(err => {
+            console.error('Error in save dialog:', err);
+        });
+    });
+
+    mainWindow.loadURL(serverUrl);
+    if (isDev) mainWindow.webContents.openDevTools();
+    mainWindow.on('closed', () => { mainWindow = null; });
+}
+
 // --- Application Lifecycle Events ---
 app.whenReady().then(async () => {
     try {
         getPort = (await import('get-port')).default;
         const appInitializedFlagPath = path.join(app.getPath('userData'), '.initialized');
+        
         if (!fs.existsSync(storagePath)) {
             console.log(`Creating writable storage directory at: ${storagePath}`);
             fs.mkdirSync(storagePath, { recursive: true });
             const originalStorage = isDev ? path.join(__dirname, 'storage') : path.join(process.resourcesPath, 'app', 'storage');
             fs.cpSync(originalStorage, storagePath, { recursive: true, filter: (src) => !path.basename(src).endsWith('.gitignore') });
         }
+        
         if (!fs.existsSync(phpEnv.DB_DATABASE)) {
             console.log(`Creating SQLite database at: ${phpEnv.DB_DATABASE}`);
             fs.writeFileSync(phpEnv.DB_DATABASE, '');
         }
+
         if (!fs.existsSync(appInitializedFlagPath)) {
             console.log('Performing first-time application setup...');
             const envExamplePath = path.join(artisanCwd, '.env.example');
@@ -198,30 +191,37 @@ app.whenReady().then(async () => {
             if (fs.existsSync(envExamplePath) && !fs.existsSync(envFilePath)) {
                 fs.copyFileSync(envExamplePath, envFilePath);
             }
+            
             await runArtisanCommand(['migrate', '--force']);
             await runArtisanCommand(['key:generate', '--force']);
             await runArtisanCommand(['db:seed', '--force']);
+
             fs.writeFileSync(appInitializedFlagPath, 'true');
             console.log('Application setup complete.');
         } else {
             console.log('Application already initialized. Skipping setup.');
         }
+
         const serverUrl = await startPhpServer();
         createWindow(serverUrl);
+
         app.on('activate', () => {
             if (process.platform === 'darwin' && BrowserWindow.getAllWindows().length === 0) {
                 createWindow(serverUrl);
             }
         });
+
     } catch (err) {
         console.error("Fatal application startup error:", err);
         dialog.showErrorBox('Application Startup Error', `A critical error occurred: ${err.message}. The application will now exit.`);
         app.quit();
     }
 });
+
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
+
 app.on('will-quit', () => {
     if (phpServerProcess) {
         console.log(`Stopping PHP server (PID: ${phpServerProcess.pid})...`);
