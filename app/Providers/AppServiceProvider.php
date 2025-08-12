@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
                 ->displayLocale('fr') // Sets French as the language for label localization
-                ->locales(['ar', 'en', 'fr']); // also accepts a closure
+                ->locales(['fr', 'en']); // also accepts a closure
         });
     }
 }
