@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Form;
 use App\Http\Controllers\PdfController;
 
-Route::view('/', 'welcome');
+
 Route::redirect('/', '/dashboard');
 
 /* Route::view('dashboard', 'dashboard')

@@ -21,4 +21,5 @@ yarn-error.log
 /php/
 composer.phar
 /dist/
-*.asar
+*.asarrr
+

@@ -20,21 +20,13 @@ class FiscalYearServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Ensure the database is connected before trying to access it
-        if (app()->runningInConsole() || app()->runningUnitTests()) {
-            return;
-        }
+        $fiscalYearSetting = FiscalYearSetting::first();
 
-        try {
-            $fiscalYearSetting = FiscalYearSetting::firstOrCreate(
-                [],
-                ['year' => date('Y')]
-            );
-            config(['fiscal_year.current_year' => $fiscalYearSetting->year ?? date('Y')]);
-        } catch (\Exception $e) {
-            // Log the error, but don't prevent the application from booting
-            // This can happen if migrations haven't run yet
-            
+        if ($fiscalYearSetting) {
+            config(['fiscal_year.current_year' => $fiscalYearSetting->year]);
+        } else {
+            // Default to current year if no setting is found
+            config(['fiscal_year.year' => date('Y')]);
         }
     }
 }
