@@ -22,4 +22,4 @@ yarn-error.log
 composer.phar
 /dist/
 *.asarrr
-
+/storage/database.sqlite

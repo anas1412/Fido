@@ -1,7 +1,7 @@
 // main.cjs
 const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const fs = require('fs');
 
 // --- Global Variables ---
@@ -44,10 +44,8 @@ function runArtisanCommand(args) {
         });
 
         commandProcess.on('close', (code) => {
-            // Trim whitespace for cleaner logs
             const stdoutStr = stdout.trim();
             const stderrStr = stderr.trim();
-
             if (stdoutStr) console.log(`Command '${args.join(' ')}' stdout:\n${stdoutStr}`);
             if (stderrStr) console.error(`Command '${args.join(' ')}' stderr:\n${stderrStr}`);
             
@@ -125,24 +123,41 @@ function createWindow(serverUrl) {
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
     });
-
+    
+    // --- ROBUST PDF DOWNLOAD HANDLER ---
     mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
+        // 1. Prevent Electron from automatically handling the download
         event.preventDefault();
+
+        // 2. Prompt the user for a save location
         dialog.showSaveDialog({
             title: 'Save PDF',
             defaultPath: item.getFilename(),
             filters: [{ name: 'PDF Documents', extensions: ['pdf'] }]
-        }).then(({ filePath }) => {
-            if (filePath) {
-                item.setSavePath(filePath);
-                item.once('done', (event, state) => {
-                    if (state === 'completed') {
-                        dialog.showMessageBox(mainWindow, { title: 'Download Complete', message: `File saved to ${filePath}` });
-                    } else {
-                        dialog.showErrorBox('Download Failed', `Failed to download file: ${state}`);
-                    }
-                });
+        }).then(({ filePath, canceled }) => {
+            // 3. If the user cancels the dialog, we must cancel the download
+            if (canceled) {
+                console.log('User cancelled the download.');
+                item.cancel();
+                return;
             }
+
+            // 4. Set the final save path for the download item
+            console.log('Setting save path to:', filePath);
+            item.setSavePath(filePath);
+
+            // 5. Listen for the 'done' event to give feedback to the user
+            item.once('done', (e, state) => {
+                if (state === 'completed') {
+                    console.log('Download completed successfully.');
+                    dialog.showMessageBox(mainWindow, { title: 'Download Complete', message: `File saved to ${filePath}` });
+                } else {
+                    console.error(`Download failed: ${state}`);
+                    dialog.showErrorBox('Download Failed', `Failed to download file: ${state}`);
+                }
+            });
+        }).catch(err => {
+            console.error('Error in save dialog:', err);
         });
     });
 
@@ -177,12 +192,8 @@ app.whenReady().then(async () => {
                 fs.copyFileSync(envExamplePath, envFilePath);
             }
             
-            // --- CORRECTED ORDER OF OPERATIONS ---
-            // 1. Migrate the database first to create tables.
             await runArtisanCommand(['migrate', '--force']);
-            // 2. Now it's safe to generate the key.
             await runArtisanCommand(['key:generate', '--force']);
-            // 3. Seed the database with initial data.
             await runArtisanCommand(['db:seed', '--force']);
 
             fs.writeFileSync(appInitializedFlagPath, 'true');
@@ -215,9 +226,10 @@ app.on('will-quit', () => {
     if (phpServerProcess) {
         console.log(`Stopping PHP server (PID: ${phpServerProcess.pid})...`);
         if (process.platform === 'win32') {
-            spawn('taskkill', ['/pid', phpServerProcess.pid, '/f', '/t']);
+            spawnSync('taskkill', ['/pid', phpServerProcess.pid, '/f', '/t']);
         } else {
             phpServerProcess.kill();
         }
+        console.log('PHP server stopped.');
     }
 });
