@@ -225,12 +225,7 @@ app.whenReady().then(async () => {
         
 
 
-        // Manually delete the config cache file to force Laravel to re-read .env
-        const configCachePath = path.join(artisanCwd, 'bootstrap', 'cache', 'config.php');
-        if (fs.existsSync(configCachePath)) {
-            console.log(`Deleting old config cache: ${configCachePath}`);
-            fs.unlinkSync(configCachePath);
-        }
+        
 
         
 
