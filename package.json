@@ -10,7 +10,7 @@
         "start": "electron .",
         "dev": "vite",
         "build": "vite build",
-        "laravel:prod": "php artisan optimize:clear && php artisan migrate:fresh --seed && php artisan config:cache && php artisan route:cache && php artisan view:cache",
+        "laravel:prod": "call scripts/build-laravel.bat",
         "dist": "npm run laravel:prod && npm run build && electron-builder",
         "dev:clear": "php artisan optimize:clear"
     },
