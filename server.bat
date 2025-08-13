@@ -124,7 +124,7 @@ copy .env.example .env >nul
 :env_file_exists
 
 :run_migrations
-if exist "database\database.sqlite" goto :database_exists
+if exist "storage\database.sqlite" goto :database_exists
 echo database.sqlite not found. Running migrations with seed...
 %PHP_EXECUTABLE% artisan migrate --seed || (
     echo [ERROR] Migrate --seed failed.

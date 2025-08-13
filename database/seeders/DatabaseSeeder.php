@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(TaxSettingSeeder::class);
+        $this->call(CompanySettingSeeder::class);
+
         // Create an admin account from .env variables
         User::firstOrCreate(
             ['email' => env('ADMIN_EMAIL', 'admin@example.com')],

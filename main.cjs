@@ -1,8 +1,17 @@
+require('dotenv').config();
 // main.cjs
 const { app, BrowserWindow, dialog, ipcMain, net } = require('electron');
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 const fs = require('fs');
+
+function expandAppDataPath(dbPathString) {
+    if (process.platform === 'win32' && dbPathString.startsWith('%APPDATA%')) {
+        return path.join(process.env.APPDATA, dbPathString.substring('%APPDATA%'.length));
+    }
+    return dbPathString;
+}
+
 
 // --- Global Variables, Paths, Env, and Helper Functions are all correct ---
 let mainWindow; let phpServerProcess; let getPort;
@@ -11,11 +20,14 @@ const artisanCwd = isDev ? __dirname : path.join(process.resourcesPath, 'app');
 const storagePath = isDev ? path.join(__dirname, 'storage') : path.join(app.getPath('userData'), 'storage');
 const phpExecutable = isDev ? path.join(__dirname, 'php', 'php.exe') : path.join(process.resourcesPath, 'app', 'php', 'php.exe');
 const artisanScript = path.join(artisanCwd, 'artisan');
-const phpEnv = {
-    ...process.env,
-    APP_STORAGE_PATH: storagePath,
-    DB_DATABASE: path.join(storagePath, 'database.sqlite')
-};
+const dbPath = path.join(storagePath, 'database.sqlite');
+
+// Ensure the directory for the database exists before starting the server.
+if (!fs.existsSync(path.dirname(dbPath))) {
+    fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+}
+
+
 function runArtisanCommand(args) { /* ... same as your file ... */ }
 function startPhpServer() { /* ... same as your file ... */ }
 
@@ -113,7 +125,14 @@ ipcMain.on('download-pdf', (event, url) => {
 function runArtisanCommand(args) {
     const commandArgs = [artisanScript, ...args];
     return new Promise((resolve, reject) => {
-        const commandProcess = spawn(phpExecutable, commandArgs, { cwd: artisanCwd, env: phpEnv, windowsHide: true });
+        // Create a new env object for the Artisan command, explicitly setting DB_DATABASE
+        const artisanEnv = {
+            ...process.env, // Inherit existing process environment variables
+            DB_DATABASE: expandAppDataPath(process.env.DB_DATABASE), // Expand %APPDATA% in DB_DATABASE
+            APP_STORAGE_PATH: storagePath // Also ensure storage path is set
+        };
+
+        const commandProcess = spawn(phpExecutable, commandArgs, { cwd: artisanCwd, env: artisanEnv, windowsHide: true });
         let stdout = '', stderr = '';
         commandProcess.stdout.on('data', (data) => (stdout += data.toString()));
         commandProcess.stderr.on('data', (data) => (stderr += data.toString()));
@@ -146,6 +165,11 @@ function startPhpServer() {
             const serverUrl = `http://127.0.0.1:${port}`;
             const serverArgs = [artisanScript, 'serve', `--port=${port}`];
             console.log(`Starting PHP server: ${phpExecutable} ${serverArgs.join(' ')} in ${artisanCwd}`);
+            const phpEnv = {
+                ...process.env,
+                DB_DATABASE: expandAppDataPath(process.env.DB_DATABASE),
+                APP_STORAGE_PATH: storagePath
+            };
             phpServerProcess = spawn(phpExecutable, serverArgs, { cwd: artisanCwd, env: phpEnv });
             phpServerProcess.on('error', (err) => {
                 console.error('Failed to start PHP server process.', err);
@@ -180,32 +204,52 @@ function startPhpServer() {
 app.whenReady().then(async () => {
     try {
         getPort = (await import('get-port')).default;
-        const appInitializedFlagPath = path.join(app.getPath('userData'), '.initialized');
-        if (!fs.existsSync(storagePath)) {
-            console.log(`Creating writable storage directory at: ${storagePath}`);
-            fs.mkdirSync(storagePath, { recursive: true });
-            const originalStorage = isDev ? path.join(__dirname, 'storage') : path.join(process.resourcesPath, 'app', 'storage');
-            fs.cpSync(originalStorage, storagePath, { recursive: true, filter: (src) => !path.basename(src).endsWith('.gitignore') });
+
+        
+
+        // 1. Define all necessary paths
+        const dbDir = path.join(app.getPath('userData'), 'storage');
+        const dbPath = path.join(dbDir, 'database.sqlite');
+        const envFilePath = path.join(artisanCwd, '.env');
+        const envExamplePath = path.join(artisanCwd, '.env.example');
+
+        // 2. Ensure the database directory exists
+        if (!fs.existsSync(dbDir)) {
+            fs.mkdirSync(dbDir, { recursive: true });
         }
-        if (!fs.existsSync(phpEnv.DB_DATABASE)) {
-            console.log(`Creating SQLite database at: ${phpEnv.DB_DATABASE}`);
-            fs.writeFileSync(phpEnv.DB_DATABASE, '');
+
+        
+
+        
+
+        
+
+
+        // Manually delete the config cache file to force Laravel to re-read .env
+        const configCachePath = path.join(artisanCwd, 'bootstrap', 'cache', 'config.php');
+        if (fs.existsSync(configCachePath)) {
+            console.log(`Deleting old config cache: ${configCachePath}`);
+            fs.unlinkSync(configCachePath);
         }
-        if (!fs.existsSync(appInitializedFlagPath)) {
-            console.log('Performing first-time application setup...');
-            const envExamplePath = path.join(artisanCwd, '.env.example');
-            const envFilePath = path.join(artisanCwd, '.env');
-            if (fs.existsSync(envExamplePath) && !fs.existsSync(envFilePath)) {
-                fs.copyFileSync(envExamplePath, envFilePath);
-            }
-            await runArtisanCommand(['migrate', '--force']);
+
+        
+
+        // 4. Check if the database itself needs to be created
+        if (!fs.existsSync(dbPath)) {
+            console.log('Database not found. Running first-time setup...');
+            // Create the blank database file
+            fs.writeFileSync(dbPath, '');
+
+            // Now that the database file exists, run key:generate, migrate, and seed
             await runArtisanCommand(['key:generate', '--force']);
+            await runArtisanCommand(['migrate', '--force']);
             await runArtisanCommand(['db:seed', '--force']);
-            fs.writeFileSync(appInitializedFlagPath, 'true');
-            console.log('Application setup complete.');
+            console.log('Database created and migrated successfully.');
         } else {
-            console.log('Application already initialized. Skipping setup.');
+            console.log('Existing database found.');
         }
+
+        // 5. Start the application
         const serverUrl = await startPhpServer();
         createWindow(serverUrl);
         app.on('activate', () => {
@@ -213,6 +257,7 @@ app.whenReady().then(async () => {
                 createWindow(serverUrl);
             }
         });
+
     } catch (err) {
         console.error("Fatal application startup error:", err);
         dialog.showErrorBox('Application Startup Error', `A critical error occurred: ${err.message}. The application will now exit.`);
