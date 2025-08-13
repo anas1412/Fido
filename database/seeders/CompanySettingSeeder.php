@@ -15,7 +15,7 @@ class CompanySettingSeeder extends Seeder
         // Create a default company setting if none exists
         if (CompanySetting::count() === 0) {
             CompanySetting::create([
-                'name' => env('COMPANY_NAME', 'Default Company Name'),
+                'company_name' => env('COMPANY_NAME', 'Default Company Name'),
                 'slogan' => env('COMPANY_SLOGAN', 'Default Slogan'),
                 'mf_number' => env('COMPANY_MF_NUMBER', 'Default MF Number'),
                 'location' => env('COMPANY_LOCATION', 'Default Location'),
