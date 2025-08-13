@@ -165,6 +165,8 @@ function startPhpServer() {
             const serverUrl = `http://127.0.0.1:${port}`;
             const serverArgs = [artisanScript, 'serve', `--port=${port}`];
             console.log(`Starting PHP server: ${phpExecutable} ${serverArgs.join(' ')} in ${artisanCwd}`);
+            console.log('DEBUG: process.env.DB_DATABASE before expandAppDataPath:', process.env.DB_DATABASE);
+            console.log('DEBUG: process.env.APPDATA before expandAppDataPath:', process.env.APPDATA);
             const phpEnv = {
                 ...process.env,
                 DB_DATABASE: expandAppDataPath(process.env.DB_DATABASE),
@@ -228,6 +230,28 @@ app.whenReady().then(async () => {
         
 
         
+
+        // 3. Prepare the .env file
+        if (!fs.existsSync(envFilePath)) {
+            if (fs.existsSync(envExamplePath)) {
+                fs.copyFileSync(envExamplePath, envFilePath);
+            } else {
+                fs.writeFileSync(envFilePath, '');
+            }
+        }
+
+        let envContent = fs.readFileSync(envFilePath, 'utf8');
+        let lines = envContent.split(/\r?\n/);
+        lines = lines.filter(line => 
+            !line.startsWith('DB_CONNECTION=') && 
+            !line.startsWith('DB_DATABASE=')
+        );
+        const dbPathForEnv = dbPath.replace(/\\/g, '/');
+        lines.push('DB_CONNECTION=sqlite');
+        lines.push(`DB_DATABASE=${dbPathForEnv}`);
+        fs.writeFileSync(envFilePath, lines.join('\n'));
+        console.log(`Ensured ${envFilePath} is configured for AppData database.`);
+
 
         // 4. Check if the database itself needs to be created
         if (!fs.existsSync(dbPath)) {
