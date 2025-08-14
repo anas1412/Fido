@@ -1,32 +1,21 @@
 // =================================================================
 //  1. IMPORTS
-//     Modules are imported in order: Node built-ins, then Electron.
 // =================================================================
 
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 const fs = require('fs');
 const { app, BrowserWindow, dialog, ipcMain, net } = require('electron');
+const axios = require('axios'); // Using axios for polling
 
 // =================================================================
 //  2. ENVIRONMENT SETUP & SANITIZATION
 // =================================================================
 
-// Determine if we are in development or packaged mode
 const isDev = !app.isPackaged;
-
-// Define the correct path to the .env file for both dev and prod
-const envPath = isDev
-    ? path.join(__dirname, '.env')
-    : path.join(process.resourcesPath, 'app', '.env');
-
-// Load environment variables from the .env file
+const envPath = isDev ? path.join(__dirname, '.env') : path.join(process.resourcesPath, 'app', '.env');
 require('dotenv').config({ path: envPath });
 
-// --- CRITICAL FIX: Sanitize the environment ---
-// Expand the %APPDATA% variable and update process.env immediately.
-// This ensures the main process and all child processes have a consistent,
-// fully resolved path for the database.
 if (process.platform === 'win32' && process.env.DB_DATABASE && process.env.DB_DATABASE.startsWith('%APPDATA%')) {
     process.env.DB_DATABASE = path.join(process.env.APPDATA, process.env.DB_DATABASE.substring('%APPDATA%'.length));
 }
@@ -36,23 +25,21 @@ if (process.platform === 'win32' && process.env.DB_DATABASE && process.env.DB_DA
 // =================================================================
 
 let mainWindow;
+let loadingWindow; // Window for the loading screen
 let phpServerProcess;
-let getPort; // Will be dynamically imported in app.whenReady()
+let getPort;
 
-// --- Path Definitions (now simpler, relying on the sanitized environment) ---
 const artisanCwd = isDev ? __dirname : path.join(process.resourcesPath, 'app');
 const phpExecutable = isDev ? path.join(__dirname, 'php', 'php.exe') : path.join(process.resourcesPath, 'app', 'php', 'php.exe');
 const artisanScript = path.join(artisanCwd, 'artisan');
-const dbPath = process.env.DB_DATABASE; // This is now the fully resolved path
-const storagePath = dbPath ? path.dirname(dbPath) : null; // Derive storage path
+const dbPath = process.env.DB_DATABASE;
+const storagePath = dbPath ? path.dirname(dbPath) : null;
 
 // =================================================================
-//  4. HELPER FUNCTIONS (ARTISAN & PHP SERVER)
+//  4. HELPER FUNCTIONS
 // =================================================================
 
 function getPhpEnvironment() {
-    // This environment is now passed to all child processes
-    // ensuring they know the correct DB path and storage path.
     return { ...process.env, APP_STORAGE_PATH: storagePath };
 }
 
@@ -63,11 +50,9 @@ function runArtisanCommand(args) {
             env: getPhpEnvironment(),
             windowsHide: true
         });
-
         let stdout = '', stderr = '';
         commandProcess.stdout.on('data', (data) => (stdout += data.toString()));
         commandProcess.stderr.on('data', (data) => (stderr += data.toString()));
-
         commandProcess.on('error', reject);
         commandProcess.on('close', (code) => {
             if (code === 0) {
@@ -101,12 +86,12 @@ function startPhpServer() {
                 const message = data.toString();
                 if (message.includes('Server running on')) {
                     console.log(`PHP server started successfully at ${serverUrl}`);
-                    phpServerProcess.stdout.removeListener('data', onServerOutput); // Clean up listener
+                    phpServerProcess.stdout.removeListener('data', onServerOutput);
                     resolve(serverUrl);
                 }
             };
             phpServerProcess.stdout.on('data', onServerOutput);
-            phpServerProcess.stderr.on('data', (data) => console.error(`PHP Server Stderr: ${data}`)); // Log errors
+            phpServerProcess.stderr.on('data', (data) => console.error(`PHP Server Stderr: ${data}`));
         } catch (err) {
             reject(err);
         }
@@ -114,60 +99,54 @@ function startPhpServer() {
 }
 
 // =================================================================
-//  5. MAIN WINDOW & IPC HANDLERS
+//  5. WINDOW MANAGEMENT
 // =================================================================
 
-function createWindow(serverUrl) {
+function createLoadingWindow() {
+    loadingWindow = new BrowserWindow({
+        width: 400,
+        height: 300,
+        frame: false,
+        resizable: false,
+        movable: true,
+        backgroundColor: '#2e2c29',
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+        },
+    });
+    loadingWindow.loadFile('loading.html');
+    loadingWindow.once('ready-to-show', () => {
+        loadingWindow.show();
+    });
+    loadingWindow.on('closed', () => {
+        loadingWindow = null;
+    });
+}
+
+function createMainWindow(serverUrl) {
     mainWindow = new BrowserWindow({
         width: 1200, height: 800, show: false, backgroundColor: '#2e2c29',
         autoHideMenuBar: true,
-        icon: path.join(__dirname, 'public', 'images', 'favicon.ico'), // This works for both dev/prod
+        icon: path.join(__dirname, 'public', 'images', 'favicon.ico'),
         webPreferences: {
             nodeIntegration: false, contextIsolation: true,
             preload: path.join(__dirname, 'preload.js')
         },
     });
     
-    mainWindow.once('ready-to-show', () => mainWindow.show());
     mainWindow.loadURL(serverUrl);
     if (isDev) mainWindow.webContents.openDevTools();
     mainWindow.on('closed', () => { mainWindow = null; });
 }
-
-ipcMain.on('download-pdf', (event, url) => {
-    // This logic is robust and correct. No changes needed.
-    const potentialFilename = path.basename(url) + '.pdf';
-    
-    const filePath = dialog.showSaveDialogSync(mainWindow, {
-        title: 'Save PDF',
-        defaultPath: `Honoraire_${potentialFilename}`,
-        filters: [{ name: 'PDF Documents', extensions: ['pdf'] }]
-    });
-
-    if (!filePath) return;
-
-    const request = net.request(url);
-    request.on('response', (response) => {
-        if (response.statusCode === 200) {
-            const fileStream = fs.createWriteStream(filePath);
-            response.pipe(fileStream); // Simpler way to stream data
-            fileStream.on('finish', () => {
-                dialog.showMessageBox(mainWindow, { title: 'Download Complete', message: `File saved to ${filePath}` });
-            });
-            fileStream.on('error', (err) => dialog.showErrorBox('Save Failed', `An error occurred while saving the file: ${err.message}`));
-        } else {
-            dialog.showErrorBox('Download Failed', `The server responded with an error: ${response.statusCode}`);
-        }
-    });
-    request.on('error', (err) => dialog.showErrorBox('Download Failed', `An error occurred making the request: ${err.message}`));
-    request.end();
-});
 
 // =================================================================
 //  6. APPLICATION LIFECYCLE
 // =================================================================
 
 app.whenReady().then(async () => {
+    createLoadingWindow();
+
     try {
         getPort = (await import('get-port')).default;
 
@@ -175,16 +154,13 @@ app.whenReady().then(async () => {
             throw new Error("Database path is not defined in the .env file.");
         }
 
-        // Ensure the directory for the database exists.
         if (!fs.existsSync(storagePath)) {
-            console.log(`Storage path not found. Creating directory: ${storagePath}`);
             fs.mkdirSync(storagePath, { recursive: true });
         }
         
-        // First-time setup for a user if the database file is missing.
         if (!fs.existsSync(dbPath)) {
             console.log('Database not found. Running first-time user setup...');
-            fs.writeFileSync(dbPath, ''); // Create blank file
+            fs.writeFileSync(dbPath, '');
             await runArtisanCommand(['key:generate', '--force']);
             await runArtisanCommand(['migrate', '--force']);
             await runArtisanCommand(['db:seed', '--force']);
@@ -194,10 +170,38 @@ app.whenReady().then(async () => {
         }
 
         const serverUrl = await startPhpServer();
-        createWindow(serverUrl);
+
+        // Poll the server to see when it's ready
+        // Poll the server to see when it's ready
+        const pollServer = async () => {
+            const pollUrl = serverUrl + '/dashboard/login'; // Use the login page to check for readiness
+            console.log(`Polling server at: ${pollUrl}`)
+            try {
+                const response = await axios.get(pollUrl, { timeout: 1000 });
+                if (response.status === 200) {
+                    console.log('Server responded with 200 OK. Closing loading screen.');
+                    if (loadingWindow) {
+                        loadingWindow.close();
+                    }
+                    createMainWindow(serverUrl);
+                    mainWindow.once('ready-to-show', () => mainWindow.show());
+                } else {
+                    console.log(`Server responded with status: ${response.status}. Retrying...`);
+                    setTimeout(pollServer, 500);
+                }
+            } catch (error) {
+                console.error('Polling error:', error.message);
+                // Server not ready yet, try again
+                setTimeout(pollServer, 500);
+            }
+        };
+
+        pollServer();
+
     } catch (err) {
         console.error("Fatal application startup error:", err);
         dialog.showErrorBox('Application Startup Error', `A critical error occurred: ${err.message}. The application will now exit.`);
+        if (loadingWindow) loadingWindow.close();
         app.quit();
     }
 });
@@ -220,8 +224,39 @@ app.on('will-quit', () => {
 
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0 && app.isReady()) {
-        // Re-running the startup logic on macOS if the app is activated
-        // after all windows are closed can be complex. For now, we do nothing
-        // as the primary platform is Windows.
+        // Re-running startup logic on activate
+        app.whenReady();
     }
+});
+
+// =================================================================
+//  7. IPC HANDLERS
+// =================================================================
+
+ipcMain.on('download-pdf', (event, url) => {
+    const potentialFilename = path.basename(url) + '.pdf';
+    
+    const filePath = dialog.showSaveDialogSync(mainWindow, {
+        title: 'Save PDF',
+        defaultPath: `Honoraire_${potentialFilename}`,
+        filters: [{ name: 'PDF Documents', extensions: ['pdf'] }]
+    });
+
+    if (!filePath) return;
+
+    const request = net.request(url);
+    request.on('response', (response) => {
+        if (response.statusCode === 200) {
+            const fileStream = fs.createWriteStream(filePath);
+            response.pipe(fileStream);
+            fileStream.on('finish', () => {
+                dialog.showMessageBox(mainWindow, { title: 'Download Complete', message: `File saved to ${filePath}` });
+            });
+            fileStream.on('error', (err) => dialog.showErrorBox('Save Failed', `An error occurred while saving the file: ${err.message}`));
+        } else {
+            dialog.showErrorBox('Download Failed', `The server responded with an error: ${response.statusCode}`);
+        }
+    });
+    request.on('error', (err) => dialog.showErrorBox('Download Failed', `An error occurred making the request: ${err.message}`));
+    request.end();
 });
