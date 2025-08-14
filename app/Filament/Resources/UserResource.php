@@ -23,9 +23,19 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = "Espace Administrateur"; // Updated to French
+    protected static ?string $navigationGroup = null;
 
-    protected static ?string $navigationLabel = 'Gestion des utilisateurs';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Admin Area');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Users Management');
+    }
 
 
 
@@ -45,21 +55,24 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label(__('Name'))
                     ->required()
                     ->minLength(3)
                     ->maxLength(30),
                 Forms\Components\TextInput::make('password')
+                    ->label(__('Password'))
                     ->required()
                     ->minLength(8)
                     ->maxLength(30)
                     ->revealable()
                     ->password(),
                 Forms\Components\TextInput::make('email')
+                    ->label(__('Email'))
                     ->required()
                     ->email()
                     ->maxLength(50),
                 Forms\Components\Toggle::make('is_admin')
-                    ->label('Role Admin')
+                    ->label(__('Admin'))
                     ->required(),
             ]);
     }
@@ -69,16 +82,19 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label(__('Name'))
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label(__('Email'))
                     ->toggleable()
                     ->searchable(),
                 Tables\Columns\ToggleColumn::make('is_admin')
+                    ->label(__('Admin'))
                     ->toggleable()
-                    ->sortable()
-                    ->label('admin'),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('Created at'))
                     ->sortable()
                     ->datetime(),
             ])

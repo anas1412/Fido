@@ -15,16 +15,30 @@ class EditTaxes extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cog';
-    protected static ?string $navigationLabel = 'Modifier les Taxes';
+    protected static ?string $navigationLabel = null;
     protected static ?string $slug = 'edit-taxes';
-    protected static ?string $title = 'Modifier les Paramètres de Taxes';
+    protected static ?string $title = null;
     protected static string $view = 'filament.pages.edit-taxes';
-    protected static ?string $navigationGroup = "Parametres";
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Edit Tax');
+    }
+
+    public function getTitle(): string
+    {
+        return __('Edit Tax');
+    }
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Settings');
+    }
 
     public static function getNavigationSort(): ?int
     {
-        return 100; // A high number to ensure it appears at the bottom
+        return 1000;
     }
 
     public static function canView(): bool
@@ -58,15 +72,15 @@ class EditTaxes extends Page implements HasForms
         return $form
             ->schema([
                 TextInput::make('tva')
-                    ->label('Valeur de TVA en virgule')
+                    ->label(__('TVA Value (decimal)'))
                     ->numeric()
                     ->required(),
                 TextInput::make('rs')
-                    ->label('Valeur de RS en virgule')
+                    ->label(__('RS Value (decimal)'))
                     ->numeric()
                     ->required(),
                 TextInput::make('tf')
-                    ->label('Valeur de Timbre Fiscale en dinars')
+                    ->label(__('Fiscal Stamp Value (dinars)'))
                     ->numeric()
                     ->required(),
             ])
@@ -77,7 +91,7 @@ class EditTaxes extends Page implements HasForms
     {
         return [
             Action::make('save')
-                ->label('Sauvegarder')
+                ->label(__('Save'))
                 ->submit('save'),
         ];
     }
@@ -92,15 +106,15 @@ class EditTaxes extends Page implements HasForms
             $this->tf = $data['tf'] ?? 0;
         } catch (\Exception $e) {
             Notification::make()
-                ->title('Error')
-                ->body('There was an error saving your changes.')
+                ->title(__('Error'))
+                ->body(__('There was an error saving your changes.'))
                 ->danger()
                 ->send();
             return;
         }
 
         Notification::make()
-            ->title('Taxes mises à jour avec succès!')
+            ->title(__('Taxes updated successfully!'))
             ->success()
             ->send();
     }

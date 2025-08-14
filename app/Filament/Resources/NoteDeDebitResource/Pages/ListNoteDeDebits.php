@@ -16,4 +16,9 @@ class ListNoteDeDebits extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    public function getTitle(): string
+    {
+        return __('Note de Débit');
+    }
 }

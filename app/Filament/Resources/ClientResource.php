@@ -29,9 +29,19 @@ class ClientResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
-    protected static ?string $navigationGroup = "Espace Client";
+    protected static ?string $navigationGroup = null;
 
-    protected static ?string $recordTitleAttribute = "name";
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Clients Area');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Clients');
+    }
 
     protected static int $globalSearchResultsLimit = 20;
 
@@ -61,17 +71,17 @@ class ClientResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label("Nom de client")
+                    ->label(__('Name'))
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
-                    ->label("Adresse")
+                    ->label(__('Address'))
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
-                    ->label("Numéro de Téléphone")
+                    ->label(__('Phone'))
                     ->maxLength(15),
                 Forms\Components\TextInput::make('mf')
-                    ->label("Matricule Fiscale")
+                    ->label(__('Tax ID'))
                     ->maxLength(255),
             ]);
     }
@@ -81,16 +91,16 @@ class ClientResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nom')
+                    ->label(__('Name'))
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('address')
-                    ->label('Adresse'),
+                    ->label(__('Address')),
                 Tables\Columns\TextColumn::make('phone')
-                    ->label('Numéro de téléphone')
+                    ->label(__('Phone'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mf')
-                    ->label('Matricule Fiscale')
+                    ->label(__('Tax ID'))
                     ->searchable(),
             ])
             ->filters([

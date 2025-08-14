@@ -10,12 +10,15 @@ class ListUsers extends ListRecords
 {
     protected static string $resource = UserResource::class;
 
-    protected static ?string $title = "Liste des utilisateurs";
-
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
         ];
+    }
+
+    public function getTitle(): string
+    {
+        return __('Users');
     }
 }

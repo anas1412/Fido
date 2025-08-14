@@ -32,7 +32,19 @@ class HonoraireResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationGroup = "Espace Client";
+    protected static ?string $navigationGroup = null;
+
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Clients Area');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Honoraires');
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -57,10 +69,10 @@ class HonoraireResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Wizard::make([
-                    Forms\Components\Wizard\Step::make('Information sur le client')
+                    Forms\Components\Wizard\Step::make(__('Client Information'))
                         ->schema([
                             Forms\Components\Select::make('client_id')
-                                ->label('Client')
+                                ->label(__('Client'))
                                 ->relationship('client', 'name')
                                 ->searchable()
                                 ->required()
@@ -68,32 +80,32 @@ class HonoraireResource extends Resource
                                 ->disabledOn('edit')
                                 ->createOptionForm([
                                     Forms\Components\TextInput::make('name')
-                                        ->label("Nom de client")
+                                        ->label(__('Name'))
                                         ->required()
                                         ->maxLength(255),
                                     Forms\Components\TextInput::make('address')
-                                        ->label("Adresse")
+                                        ->label(__('Address'))
                                         ->maxLength(255),
                                     Forms\Components\TextInput::make('phone')
-                                        ->label("Numéro de téléphone")
+                                        ->label(__('Phone'))
                                         ->maxLength(15),
                                     Forms\Components\TextInput::make('mf')
-                                        ->label("Matricule Fiscale")
+                                        ->label(__('Tax ID'))
                                         ->maxLength(255),
                                 ])
                                 ->editOptionForm([
                                     Forms\Components\TextInput::make('name')
-                                        ->label("Nom de client")
+                                        ->label(__('Name'))
                                         ->required()
                                         ->maxLength(255),
                                     Forms\Components\TextInput::make('address')
-                                        ->label("Adresse")
+                                        ->label(__('Address'))
                                         ->maxLength(255),
                                     Forms\Components\TextInput::make('phone')
-                                        ->label("Numéro de téléphone")
+                                        ->label(__('Phone'))
                                         ->maxLength(15),
                                     Forms\Components\TextInput::make('mf')
-                                        ->label("Matricule Fiscale")
+                                        ->label(__('Tax ID'))
                                         ->maxLength(255),
                                 ])
                                 ->afterStateUpdated(function ($state, callable $set) {
@@ -117,7 +129,7 @@ class HonoraireResource extends Resource
                                     }
                                 }),
                             Forms\Components\TextInput::make('montantHT')
-                                ->label("Montant H.T")
+                                ->label(__('Amount HT'))
                                 ->live(onBlur: true)
                                 ->required()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
@@ -137,7 +149,7 @@ class HonoraireResource extends Resource
                                     }
                                 }),
                             Toggle::make('exonere_tf')
-                                ->label('Exonération TF')
+                                ->label(__('TF Exemption'))
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                     $taxSettings = \App\Models\TaxSetting::first();
@@ -146,7 +158,7 @@ class HonoraireResource extends Resource
                                     $set('netapayer', $get('montantTTC') - $get('rs') + $newTf);
                                 }),
                             Toggle::make('exonere_rs')
-                                ->label('Exonération RS')
+                                ->label(__('RS Exemption'))
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                     $taxSettings = \App\Models\TaxSetting::first();
@@ -155,7 +167,7 @@ class HonoraireResource extends Resource
                                     $set('netapayer', $get('montantTTC') - $newRs + $get('tf'));
                                 }),
                             Toggle::make('exonere_tva')
-                                ->label('Exonération TVA')
+                                ->label(__('TVA Exemption'))
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                     $taxSettings = \App\Models\TaxSetting::first();
@@ -168,29 +180,29 @@ class HonoraireResource extends Resource
                                     $set('netapayer', $newMontantTTC - $newRs + $get('tf'));
                                 }),
                         ]),
-                    Forms\Components\Wizard\Step::make("Information de l'honoraire")
+                    Forms\Components\Wizard\Step::make(__('Fee Information'))
                         ->schema([
                             Forms\Components\TextInput::make('note')
-                                ->label("Note d'honoraire")
+                                ->label(__('Fee Note'))
                                 ->disabled(),
                             Forms\Components\TextInput::make('object')
-                                ->label("Objet d'honoraire"),
+                                ->label(__('Fee Object')),
                             Forms\Components\DatePicker::make('date')
-                                ->label("Date d'honoraire")
+                                ->label(__('Fee Date'))
                                 ->default(now()->toDateString()),
                         ]),
-                    Forms\Components\Wizard\Step::make('Autre Information')
+                    Forms\Components\Wizard\Step::make(__('Other Information'))
                         ->schema([
                             Forms\Components\TextInput::make('tva')
-                                ->label("T.V.A"),
+                                ->label(__('T.V.A')),
                             Forms\Components\TextInput::make('montantTTC')
-                                ->label("Montant T.T.C"),
+                                ->label(__('Amount TTC')),
                             Forms\Components\TextInput::make('rs')
-                                ->label("R/S"),
+                                ->label(__('R/S')),
                             Forms\Components\TextInput::make('tf')
-                                ->label("Timbre Fisacle"),
+                                ->label(__('Fiscal Stamp')),
                             Forms\Components\TextInput::make('netapayer')
-                                ->label("Net à Payer"),
+                                ->label(__('Net to Pay')),
                         ]),
                 ]),
             ])->columns(1);

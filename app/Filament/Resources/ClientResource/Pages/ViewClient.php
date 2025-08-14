@@ -17,4 +17,9 @@ class ViewClient extends ViewRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    public function getTitle(): string
+    {
+        return __('View Client');
+    }
 }

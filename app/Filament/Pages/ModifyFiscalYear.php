@@ -15,16 +15,30 @@ class ModifyFiscalYear extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
-    protected static ?string $navigationLabel = 'Modifier Année Fiscale';
+    protected static ?string $navigationLabel = null;
     protected static ?string $slug = 'modify-fiscal-year';
-    protected static ?string $title = 'Modifier l\'Année Fiscale';
+    protected static ?string $title = null;
     protected static string $view = 'filament.pages.modify-fiscal-year';
-    protected static ?string $navigationGroup = "Parametres";
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Edit Fiscal Year');
+    }
+
+    public function getTitle(): string
+    {
+        return __('Edit Fiscal Year');
+    }
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Settings');
+    }
 
     public static function getNavigationSort(): ?int
     {
-        return 101; // Just after EditTaxes
+        return 1001;
     }
 
     public static function canView(): bool
@@ -50,7 +64,7 @@ class ModifyFiscalYear extends Page implements HasForms
         return $form
             ->schema([
                 TextInput::make('year')
-                    ->label('Année Fiscale')
+                    ->label(__('Fiscal Year'))
                     ->numeric()
                     ->required()
                     ->minValue(1900)
@@ -63,7 +77,7 @@ class ModifyFiscalYear extends Page implements HasForms
     {
         return [
             Action::make('save')
-                ->label('Sauvegarder')
+                ->label(__('Save'))
                 ->submit('save'),
         ];
     }
@@ -78,15 +92,15 @@ class ModifyFiscalYear extends Page implements HasForms
             $this->year = $data['year'] ?? 0;
         } catch (\Exception $e) {
             Notification::make()
-                ->title('Error')
-                ->body('There was an error saving your changes.')
+                ->title(__('Error'))
+                ->body(__('There was an error saving your changes.'))
                 ->danger()
                 ->send();
             return;
         }
 
         Notification::make()
-            ->title('Année Fiscale mise à jour avec succès!')
+            ->title(__('Fiscal Year updated successfully!'))
             ->success()
             ->send();
     }

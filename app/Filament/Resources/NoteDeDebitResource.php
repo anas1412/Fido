@@ -24,9 +24,19 @@ class NoteDeDebitResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document';
 
-    protected static ?string $navigationGroup = "Espace Client";
+    protected static ?string $navigationGroup = null;
 
-    protected static ?string $navigationLabel = 'Notes de Débit';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Clients Area');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Note de Débit');
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -39,12 +49,12 @@ class NoteDeDebitResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('note')
-                    ->label("Référence")
+                    ->label(__('Reference'))
                     ->disabled(),
                 Forms\Components\DatePicker::make('date') // Add date picker
-                    ->label('Date d\'émission'),
+                    ->label(__('Issue Date')),
                 Forms\Components\Select::make('client_id')
-                    ->label('Client')
+                    ->label(__('Client'))
                     ->relationship('client', 'name')
                     ->searchable()
                     ->disabledOn('edit')
@@ -65,7 +75,7 @@ class NoteDeDebitResource extends Resource
                         }
                     }),
                 Forms\Components\TextInput::make('amount')
-                    ->label('Montant')
+                    ->label(__('Amount'))
                     ->numeric()
                     ->required()
                     ->live(onBlur: true)
@@ -87,7 +97,7 @@ class NoteDeDebitResource extends Resource
                     }),
                 Forms\Components\TextInput::make('description')
                     ->required()
-                    ->label('Description')->columnSpanFull(),
+                    ->label(__('Description'))->columnSpanFull(),
             ]);
     }
 
@@ -97,7 +107,7 @@ class NoteDeDebitResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('note')
                     ->sortable()
-                    ->label("Réference")
+                    ->label(__('Reference'))
                     ->getStateUsing(function ($record) {
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     })
@@ -106,14 +116,14 @@ class NoteDeDebitResource extends Resource
                         $query->where('note', 'like', "%{$paddedSearch}%");
                     }),
                 Tables\Columns\TextColumn::make('client.name')
-                    ->label('Client'),
+                    ->label(__('Client')),
                 Tables\Columns\TextColumn::make('amount')
-                    ->label('Montant')
+                    ->label(__('Amount'))
                     ->money('TND'),
                 Tables\Columns\TextColumn::make('description')
-                    ->label('Description'),
+                    ->label(__('Description')),
                 Tables\Columns\TextColumn::make('date')
-                    ->label('Date d\'émission')
+                    ->label(__('Issue Date'))
                     ->date(),
             ])
             ->filters([

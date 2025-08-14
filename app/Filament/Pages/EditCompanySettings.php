@@ -15,15 +15,28 @@ class EditCompanySettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationLabel = null;
 
-    protected static ?string $navigationLabel = 'Modifier l\'entreprise';
+    protected static ?string $navigationGroup = null;
 
-    protected static ?string $navigationGroup = "Parametres";
+    public function getTitle(): string
+    {
+        return __('Edit Company');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Edit Company');
+    }
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Settings');
+    }
 
     public static function getNavigationSort(): ?int
     {
-        return 99; // A high number to ensure it appears at the bottom
+        return 999;
     }
 
     protected static string $view = 'filament.pages.edit-company-settings';
@@ -60,28 +73,38 @@ class EditCompanySettings extends Page implements HasForms
         return $form
             ->schema([
                 TextInput::make('company_name')
+                    ->label(__('Company Name'))
                     ->required()
                     ->maxLength(255),
                 TextInput::make('slogan')
+                    ->label(__('Slogan'))
                     ->maxLength(255),
                 TextInput::make('mf_number')
+                    ->label(__('Tax ID Number'))
                     ->maxLength(255),
                 TextInput::make('location')
+                    ->label(__('Location'))
                     ->maxLength(255),
                 TextInput::make('address_line1')
+                    ->label(__('Address Line 1'))
                     ->maxLength(255),
                 TextInput::make('address_line2')
+                    ->label(__('Address Line 2'))
                     ->maxLength(255),
                 TextInput::make('phone1')
+                    ->label(__('Phone 1'))
                     ->tel()
                     ->maxLength(255),
                 TextInput::make('phone2')
+                    ->label(__('Phone 2'))
                     ->tel()
                     ->maxLength(255),
                 
                 TextInput::make('fax')
+                    ->label(__('Fax'))
                     ->maxLength(255),
                 TextInput::make('email')
+                    ->label(__('Email'))
                     ->email()
                     ->maxLength(255),
             ])
@@ -92,7 +115,7 @@ class EditCompanySettings extends Page implements HasForms
     {
         return [
             Action::make('save')
-                ->label('Save Changes')
+                ->label(__('Save Changes'))
                 ->submit('save'),
         ];
     }
@@ -105,15 +128,15 @@ class EditCompanySettings extends Page implements HasForms
             CompanySetting::firstOrCreate([])->update($data);
         } catch (\Exception $e) {
             Notification::make()
-                ->title('Error')
-                ->body('There was an error saving your changes.')
+                ->title(__('Error'))
+                ->body(__('There was an error saving your changes.'))
                 ->danger()
                 ->send();
             return;
         }
 
         Notification::make()
-            ->title('Saved successfully')
+            ->title(__('Saved successfully'))
             ->success()
             ->send();
     }

@@ -25,9 +25,19 @@ class NoteDeDebitReportResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
 
-    protected static ?string $navigationGroup = "Génération des Rapports";
+    protected static ?string $navigationGroup = null;
 
-    protected static ?string $navigationLabel = 'List des Notes de Débit';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Reports Generation');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Report of Debit Notes');
+    }
 
     protected static ?int $navigationSort = 3;
 

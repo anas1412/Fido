@@ -25,8 +25,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
-                ->displayLocale('fr') // Sets French as the language for label localization
-                ->locales(['fr', 'en']); // also accepts a closure
+                ->locales(['fr', 'en', 'ar']);
         });
     }
 }

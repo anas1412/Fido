@@ -26,9 +26,19 @@ class HonoraireReportResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
 
-    protected static ?string $navigationGroup = "Génération des Rapports";
+        protected static ?string $navigationGroup = null;
 
-    protected static ?string $navigationLabel = 'List des Honoraires';
+    protected static ?string $navigationLabel = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Reports Generation');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Report of Honoraires');
+    }
 
     public static function getEloquentQuery(): Builder
     {

@@ -18,4 +18,9 @@ class CreateHonoraire extends CreateRecord
             return parent::handleRecordCreation($data);
         });
     }
+
+    public function getTitle(): string
+    {
+        return __('Create Honoraire');
+    }
 }
