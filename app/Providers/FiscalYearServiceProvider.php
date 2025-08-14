@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\FiscalYearSetting;
 use Illuminate\Support\Facades\Schema; // <-- ADD THIS LINE
+use Illuminate\Support\Facades\Cache;
 
 class FiscalYearServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,9 @@ class FiscalYearServiceProvider extends ServiceProvider
         // ADD THIS CHECK: Only try to query the database if the application's
         // database has been migrated and the 'fiscal_year_settings' table exists.
         if (Schema::hasTable('fiscal_year_settings')) {
-            $fiscalYearSetting = FiscalYearSetting::first();
+            $fiscalYearSetting = Cache::rememberForever('fiscal_year_setting', function () {
+                return FiscalYearSetting::first();
+            });
 
             if ($fiscalYearSetting) {
                 config(['fiscal_year.current_year' => $fiscalYearSetting->year]);
