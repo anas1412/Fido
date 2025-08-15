@@ -361,8 +361,7 @@
   ),
   'fiscal_year' => 
   array (
-    'current_year' => '2025',
-    'year' => '2025',
+    'current_year' => 2025,
   ),
   'logging' => 
   array (
@@ -527,7 +526,7 @@
     'from' => 
     array (
       'address' => 'hello@example.com',
-      'name' => 'Laravel',
+      'name' => '${APP_NAME}',
     ),
     'markdown' => 
     array (

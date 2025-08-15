@@ -10,6 +10,7 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use App\Models\FiscalYearSetting;
+use Illuminate\Support\Facades\Cache;
 
 class ModifyFiscalYear extends Page implements HasForms
 {
@@ -89,6 +90,7 @@ class ModifyFiscalYear extends Page implements HasForms
             $fiscalYearSetting = FiscalYearSetting::firstOrNew([]);
             $fiscalYearSetting->fill($data);
             $fiscalYearSetting->save();
+            Cache::forget('fiscal_year_setting');
             $this->year = $data['year'] ?? 0;
         } catch (\Exception $e) {
             Notification::make()

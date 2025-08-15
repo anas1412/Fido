@@ -115,7 +115,7 @@ function createLoadingWindow() {
             nodeIntegration: true,
         },
     });
-    loadingWindow.loadFile('loading.html');
+    loadingWindow.loadFile(path.join(__dirname, 'loading.html'));
     loadingWindow.once('ready-to-show', () => {
         loadingWindow.show();
     });
