@@ -48,7 +48,8 @@
             "main.cjs",
             "package.json",
             "dist/**/*",
-            "preload.js"
+            "preload.js",
+            "loading.html"
         ],
         "extraResources": [
             {
