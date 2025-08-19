@@ -31,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('dashboard')
-            ->login()
+            ->login() 
             ->profile(isSimple: false)
             /* ->userMenuItems([
                 'profile' => MenuItem::make()->label('Edit profile'),
@@ -78,9 +78,10 @@ class AdminPanelProvider extends PanelProvider
 
     public function boot(): void
     {
-        FilamentView::registerRenderHook(
+         FilamentView::registerRenderHook(
             PanelsRenderHook::BODY_START,
             fn (): string => Blade::render('<x-demo-banner />')
         );
     }
+            
 }

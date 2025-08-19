@@ -95,6 +95,9 @@ class UserResource extends Resource
                 Forms\Components\Toggle::make('is_admin')
                     ->label(__('Admin'))
                     ->required(),
+                Forms\Components\Toggle::make('is_demo')
+                    ->label(__('Demo User'))
+                    ->disabled(fn (?Model $record) => $record !== null),
             ]);
     }
 
@@ -114,6 +117,11 @@ class UserResource extends Resource
                     ->label(__('Admin'))
                     ->toggleable()
                     ->sortable(),
+                Tables\Columns\ToggleColumn::make('is_demo')
+                    ->label(__('Demo User'))
+                    ->toggleable()
+                    ->sortable()
+                    ->disabled(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Created at'))
                     ->sortable()

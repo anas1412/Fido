@@ -13,12 +13,24 @@ const axios = require('axios'); // Using axios for polling
 // =================================================================
 
 const isDev = !app.isPackaged;
-const envPath = isDev ? path.join(__dirname, '.env') : path.join(process.resourcesPath, 'app', '.env');
-require('dotenv').config({ path: envPath });
+let currentEnvPath;
 
-if (process.platform === 'win32' && process.env.DB_DATABASE && process.env.DB_DATABASE.startsWith('%APPDATA%')) {
-    process.env.DB_DATABASE = path.join(process.env.APPDATA, process.env.DB_DATABASE.substring('%APPDATA%'.length));
+const isDemoBuild = process.env.APP_DEMO_BUILD === 'true';
+
+if (isDemoBuild) {
+    currentEnvPath = app.isPackaged ? path.join(process.resourcesPath, 'app', '.env.demo') : path.join(__dirname, '.env.demo');
+} else {
+    currentEnvPath = app.isPackaged ? path.join(process.resourcesPath, 'app', '.env') : path.join(__dirname, '.env');
 }
+
+require('dotenv').config({ path: currentEnvPath, override: true });
+
+console.log('isDemoBuild:', isDemoBuild);
+
+// Add explicit logging here
+console.log('DB_DATABASE after dotenv load:', process.env.DB_DATABASE);
+
+
 
 // =================================================================
 //  3. GLOBAL VARIABLES & PATHS
@@ -32,36 +44,50 @@ let getPort;
 const artisanCwd = isDev ? __dirname : path.join(process.resourcesPath, 'app');
 const phpExecutable = isDev ? path.join(__dirname, 'php', 'php.exe') : path.join(process.resourcesPath, 'app', 'php', 'php.exe');
 const artisanScript = path.join(artisanCwd, 'artisan');
+
 const dbPath = process.env.DB_DATABASE;
-const storagePath = dbPath ? path.dirname(dbPath) : null;
+const storagePath = path.join(artisanCwd, 'storage'); // Base storage path
 
 // =================================================================
 //  4. HELPER FUNCTIONS
 // =================================================================
 
-function getPhpEnvironment() {
-    return { ...process.env, APP_STORAGE_PATH: storagePath };
+function getPhpEnvironment(dbPathToUse) {
+    // Pass the absolute path of the database file to PHP's environment
+    return { ...process.env, APP_STORAGE_PATH: storagePath, DB_DATABASE: dbPathToUse };
 }
 
-function runArtisanCommand(args) {
+function runArtisanCommand(args, dbPathToUse) { // Added dbPathToUse
     return new Promise((resolve, reject) => {
+        console.log(`Running Artisan Command: php ${artisanScript} ${args.join(' ')}`); // Log the command
         const commandProcess = spawn(phpExecutable, [artisanScript, ...args], {
             cwd: artisanCwd,
-            env: getPhpEnvironment(),
+            env: getPhpEnvironment(dbPathToUse), // Pass dbPathToUse here
             windowsHide: true
         });
         let stdout = '', stderr = '';
         commandProcess.stdout.on('data', (data) => (stdout += data.toString()));
         commandProcess.stderr.on('data', (data) => (stderr += data.toString()));
-        commandProcess.on('error', reject);
-        commandProcess.on('close', (code) => {
+
+        let timeoutId = setTimeout(() => {
+            commandProcess.kill(); // Kill if it takes too long
+            reject(new Error(`Command '${args.join(' ')}' timed out. Stderr: ${stderr.trim()}`));
+        }, 60000); // 60 seconds timeout
+
+        commandProcess.on('exit', (code) => { // Changed from 'close' to 'exit'
+            clearTimeout(timeoutId);
             if (code === 0) {
                 console.log(`Command '${args.join(' ')}' completed successfully.`);
                 resolve(stdout.trim());
             } else {
-                reject(new Error(`Command '${args.join(' ')}' failed with exit code ${code}. Stderr: ${stderr.trim()}`));
+                // Log both stdout and stderr here when command fails
+                console.error(`Command '${args.join(' ')}' failed with exit code ${code}.`);
+                console.error(`Stdout: ${stdout.trim()}`); // <--- ADDED THIS LINE
+                console.error(`Stderr: ${stderr.trim()}`);
+                reject(new Error(`Command '${args.join(' ')}' failed with exit code ${code}. Stdout: ${stdout.trim()} Stderr: ${stderr.trim()}`));
             }
         });
+        commandProcess.on('error', reject); // Keep this for process errors
     });
 }
 
@@ -150,41 +176,79 @@ app.whenReady().then(async () => {
     try {
         getPort = (await import('get-port')).default;
 
-        if (!storagePath || !dbPath) {
-            throw new Error("Database path is not defined in the .env file.");
-        }
-
+        // Ensure the base storage directory exists
         if (!fs.existsSync(storagePath)) {
+            console.log(`Creating base storage directory: ${storagePath}`);
             fs.mkdirSync(storagePath, { recursive: true });
         }
-        
-        if (!fs.existsSync(dbPath)) {
-            console.log('Database not found. Running first-time user setup...');
-            fs.writeFileSync(dbPath, '');
-            await runArtisanCommand(['key:generate', '--force']);
-            await runArtisanCommand(['migrate', '--force']);
-            await runArtisanCommand(['db:seed', '--force']);
-            console.log('Database created and seeded successfully.');
+
+        const fullDbPath = path.join(artisanCwd, dbPath); // Calculate full path here
+
+        // Ensure the database directory exists (e.g., storage/database)
+        const dbDir = path.dirname(fullDbPath);
+        if (!fs.existsSync(dbDir)) {
+            console.log(`Creating database directory: ${dbDir}`);
+            fs.mkdirSync(dbDir, { recursive: true });
+        }
+
+        let wasDbCreated = false;
+        if (!fs.existsSync(fullDbPath)) {
+            console.log(`Database file not found at ${fullDbPath}. Creating empty file...`);
+            fs.writeFileSync(fullDbPath, ''); // Creates an empty file
+            console.log('Empty database file created.');
+            wasDbCreated = true;
         } else {
-            console.log('Existing database found.');
+            console.log(`Existing database file found at ${fullDbPath}.`);
+        }
+
+        // Always run key:generate, migrate:fresh, and initial seed if it was a first-time setup or demo build
+        if (wasDbCreated || isDemoBuild) { // Run fresh setup for new DB or demo builds
+            console.log('Running key:generate, migrate:fresh, and initial seeding...');
+            await runArtisanCommand(['key:generate', '--force'], fullDbPath);
+            await runArtisanCommand(['migrate:fresh', '--force'], fullDbPath); // Changed to migrate:fresh
+            await runArtisanCommand(['db:seed', '--force'], fullDbPath); // Run base seeder (Tax & Company Settings)
+            console.log('Base database setup completed.');
+
+            if (isDemoBuild) {
+                console.log('Running demo data seeder...');
+                                await runArtisanCommand(['seed:demo'], fullDbPath); 
+                console.log('Demo data seeder completed.');
+            } else { // Non-demo build, seed admin user
+                console.log('Running admin user seeder...');
+                                await runArtisanCommand(['seed:admin'], fullDbPath); 
+                console.log('Admin user seeder completed.');
+            }
+
+            // Clear caches after all database operations
+            /* console.log('Clearing application caches...');
+            await runArtisanCommand(['cache:clear'], fullDbPath);
+            await runArtisanCommand(['config:clear'], fullDbPath);
+            await runArtisanCommand(['route:clear'], fullDbPath);
+            await runArtisanCommand(['view:clear'], fullDbPath);
+            console.log('Caches cleared.'); */
+        } else {
+            console.log('Skipping fresh setup. Running only migrate to ensure up-to-date...');
+            await runArtisanCommand(['migrate', '--force'], fullDbPath); // Just migrate if not fresh setup
+            console.log('Database migrated.');
         }
 
         const serverUrl = await startPhpServer();
 
         // Poll the server to see when it's ready
-        // Poll the server to see when it's ready
         const pollServer = async () => {
             const pollUrl = serverUrl + '/dashboard/login'; // Use the login page to check for readiness
             console.log(`Polling server at: ${pollUrl}`)
             try {
-                const response = await axios.get(pollUrl, { timeout: 1000 });
+                const response = await axios.get(pollUrl, { timeout: 5000 });
                 if (response.status === 200) {
                     console.log('Server responded with 200 OK. Closing loading screen.');
                     if (loadingWindow) {
                         loadingWindow.close();
                     }
                     createMainWindow(serverUrl);
-                    mainWindow.once('ready-to-show', () => mainWindow.show());
+                        mainWindow.once('ready-to-show', () => {
+                            mainWindow.show();
+                    });
                 } else {
                     console.log(`Server responded with status: ${response.status}. Retrying...`);
                     setTimeout(pollServer, 500);

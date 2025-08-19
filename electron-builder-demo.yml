@@ -1,0 +1,24 @@
+appId: com.yourcompany.fido.demo
+productName: Fido Demo
+files:
+  - main.cjs
+  - package.json
+  - dist/**/*
+  - preload.js
+  - loading.html
+extraResources:
+  - from: ./
+    to: app
+    filter:
+      - "**/*"
+      - "!dist"
+      - "!node_modules"
+      - "!.git"
+      - "!electron-builder.yml"
+      - "!electron-builder-demo.yml"
+      - "!.idea"
+      - "!.vscode"
+      - "!.env"
+      - "!database/seeders/DatabaseSeeder.php"
+      - "database/seeders/DemoAppSeeder.php"
+      - ".env.demo"

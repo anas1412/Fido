@@ -71,14 +71,39 @@ npm run dist
 
 This command uses `electron-builder` to create a production-ready build. The final executable and associated files will be located in the `dist` directory.
 
-## Default Admin Account
+## Database Seeding
 
-The application is pre-configured with a default administrator account. The credentials for this account are stored in the `.env` file in the project's root directory. You can edit this file to change the email and password.
+After setting up the project and running migrations, you can seed your database with initial data.
 
--   **Email:** `admin@example.com`
--   **Password:** `password`
+### Initial Settings
 
-When you first run the `server.bat` script, the admin credentials will be displayed in the terminal window for your convenience.
+To seed essential settings like tax rates and company information (which are required for the application to function correctly), run:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+### Admin Account
+
+To create the default administrator account, use the following command. This will only create the account if an admin user with the specified email does not already exist. The credentials are configured in your `.env` file.
+
+-   **Email:** `admin@fido.tn` (configurable in `.env`)
+-   **Password:** `password` (configurable in `.env`)
+
+```bash
+php artisan seed:admin
+```
+
+### Demo Data
+
+To seed demo data, including a demo user, sample clients, honoraires, and debit notes, use:
+
+-   **Demo User Email:** `demo@fido.tn` (configurable in `.env`)
+-   **Demo User Password:** `password` (configurable in `.env`)
+
+```bash
+php artisan seed:demo
+```
 
 ## Fido’s Key Features
 

@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-set "DB_DATABASE_PATH_EXPANDED=%APPDATA%\fido\storage\database.sqlite"
+rem set "DB_DATABASE_PATH_EXPANDED=%APPDATA%\fido\storage\database.sqlite"
 set "DB_STORAGE_DIR=%APPDATA%\fido\storage"
 
 rem Ensure the directory exists
@@ -16,7 +16,7 @@ if not exist "%DB_DATABASE_PATH_EXPANDED%" (
 
 rem Set DB_DATABASE for the current session and run Laravel commands
 rem This is crucial for php artisan commands run directly by this script
-set "DB_DATABASE=%DB_DATABASE_PATH_EXPANDED%"
+rem set "DB_DATABASE=%DB_DATABASE_PATH_EXPANDED%"
 php artisan optimize:clear
 php artisan migrate:fresh --seed
 php artisan config:cache

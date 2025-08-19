@@ -17,12 +17,15 @@ class DemoUserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Demo User',
-            'email' => 'demo@fido.tn',
-            'password' => Hash::make('password'),
-            'is_demo' => true,
-        ]);
+        User::firstOrCreate(
+            ['email' => env('DEMO_EMAIL', 'demo@fido.tn')],
+            [
+                'name' => env('DEMO_NAME', 'Admin'),
+                'password' => Hash::make(env('DEMO_PASSWORD', 'password')),
+                'is_demo' => true,
+                'email_verified_at' => now(),
+            ]
+        );
 
         Client::factory(10)->create()->each(function ($client) {
             Honoraire::factory(5)->create(['client_id' => $client->id]);

@@ -8,16 +8,18 @@
     "main": "main.cjs",
     "scripts": {
         "start": "electron .",
+        "start:demo": "cross-env APP_DEMO_BUILD=true electron .",
         "dev": "vite",
         "build": "vite build",
         "laravel:prod": "call scripts/build-laravel.bat",
         "dist": "npm run laravel:prod && npm run build && electron-builder",
+        "dist:demo": "npm run laravel:prod && npm run build && electron-builder --config electron-builder-demo.yml",
         "dev:clear": "php artisan cache:clear && php artisan config:clear && php artisan route:clear && php artisan view:clear"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
         "autoprefixer": "^10.4.2",
-        
+        "cross-env": "^10.0.0",
         "electron": "^37.2.6",
         "electron-builder": "^24.13.3",
         "laravel-vite-plugin": "^2.0.0",
@@ -26,9 +28,9 @@
         "vite": "^7.1.2"
     },
     "dependencies": {
+        "axios": "^1.11.0",
         "dotenv": "^17.2.1",
-        "get-port": "^7.1.0",
-        "axios": "^1.11.0"
+        "get-port": "^7.1.0"
     },
     "build": {
         "appId": "com.yourcompany.fido",
@@ -40,8 +42,8 @@
         },
         "nsis": {
             "oneClick": false,
-            "perMachine": true,
-            "allowToChangeInstallationDirectory": true,
+            "perMachine": false,
+            "allowToChangeInstallationDirectory": false,
             "createDesktopShortcut": true
         },
         "files": [
