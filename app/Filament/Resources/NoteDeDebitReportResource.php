@@ -18,6 +18,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
+use Illuminate\Database\Eloquent\Model;
 
 class NoteDeDebitReportResource extends Resource
 {
@@ -110,5 +111,25 @@ class NoteDeDebitReportResource extends Resource
         return [
             'index' => Pages\ListNoteDeDebitReports::route('/'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return !auth()->user()?->is_demo;
     }
 }

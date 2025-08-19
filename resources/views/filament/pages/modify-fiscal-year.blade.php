@@ -22,9 +22,7 @@
             {{ $this->form }}
 
             <div class="flex justify-end">
-                <x-filament::button type="submit" color="primary">
-                    Sauvegarder
-                </x-filament::button>
+                <x-filament-actions::actions :actions="$this->getFormActions()" />
             </div>
         </form>
     </x-filament::card>

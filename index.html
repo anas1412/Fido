@@ -51,6 +51,18 @@
                         
                         // --- PRICING SECTION DATA RESTRUCTURED ---
                         pricingTitle: { en: 'Flexible Plans to Fit Your Needs', fr: 'Des Formules Flexibles Selon Vos Besoins' },
+                        testimonialsTitle: { en: 'Trusted by Professionals', fr: 'Approuvé par les professionnels' },
+                        testimonialsSubtitle: { en: 'Our software is used and recommended by accountants in Hammamet, Tunisia.', fr: 'Notre logiciel est utilisé et recommandé par des experts-comptables de Hammamet, Tunisie.' },
+                        testimonials: [
+                            {
+                                quote: { fr: 'Fido a changé la donne pour notre cabinet. C\'est intuitif, puissant et nous a fait gagner un temps précieux.', en: 'Fido a été un game-changer pour notre cabinet. C\'est intuitif, puissant et nous a fait gagner un temps précieux.' },
+                                author: 'Ezeeddine Haouel'
+                            },
+                            {
+                                quote: { fr: 'Le meilleur logiciel de comptabilité pour les professionnels tunisiens. Je le recommande vivement à tous mes confrères.', en: 'The best accounting software for Tunisian professionals. I highly recommend it to all my colleagues.' },
+                                author: 'Nabil Karoui'
+                            }
+                        ],
                         
                         // Plan 1
                         plan1Title: { en: 'Self-Hosted (Open Source)', fr: 'Auto-Hébergé (Open Source)' },
@@ -218,6 +230,21 @@
                 </div>
             </div>
         </div>
+
+<!--         <div id="testimonials" class="py-16 bg-gray-50">
+            <div class="max-w-5xl px-4 mx-auto text-center">
+                <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('testimonialsTitle')"></h2>
+                <p class="max-w-2xl mx-auto mb-12 text-gray-600" x-text="$store.i18n.t('testimonialsSubtitle')"></p>
+                <div class="grid gap-8 md:grid-cols-2">
+                    <template x-for="testimonial in $store.i18n.translations.testimonials" :key="testimonial.author">
+                        <div class="p-8 bg-white rounded-lg shadow-md">
+                            <p class="mb-4 text-lg italic text-gray-600" x-text="testimonial.quote[$store.i18n.lang] || testimonial.quote.en"></p>
+                            <p class="font-bold text-primary" x-text="'- ' + testimonial.author"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div> -->
 
         <div id="pricing" class="py-16 bg-white">
             <div class="max-w-5xl px-4 mx-auto">

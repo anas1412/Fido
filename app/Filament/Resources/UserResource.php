@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
+use Illuminate\Database\Eloquent\Model;
 
 class UserResource extends Resource
 {
@@ -48,6 +49,26 @@ class UserResource extends Resource
     public static function canViewAny(): bool
     {
         return auth()->user()->isAdmin();
+    }
+
+    public static function canCreate(): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return !auth()->user()?->is_demo;
     }
 
     public static function form(Form $form): Form

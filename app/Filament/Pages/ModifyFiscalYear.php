@@ -79,7 +79,8 @@ class ModifyFiscalYear extends Page implements HasForms
         return [
             Action::make('save')
                 ->label(__('Save'))
-                ->submit('save'),
+                ->submit('save')
+                ->disabled(auth()->user()->is_demo),
         ];
     }
 

@@ -25,6 +25,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Forms\Components\Toggle;
+use Illuminate\Database\Eloquent\Model;
 
 class HonoraireResource extends Resource
 {
@@ -350,5 +351,25 @@ class HonoraireResource extends Resource
             'view' => Pages\ViewHonoraire::route('/{record}'),
             'edit' => Pages\EditHonoraire::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return !auth()->user()?->is_demo;
     }
 }

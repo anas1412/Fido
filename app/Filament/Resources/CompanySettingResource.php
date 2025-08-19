@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class CompanySettingResource extends Resource
 {
@@ -54,5 +55,25 @@ class CompanySettingResource extends Resource
                     ->email()
                     ->maxLength(255),
             ]);
+    }
+
+    public static function canCreate(): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return !auth()->user()?->is_demo;
     }
 }

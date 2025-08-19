@@ -17,6 +17,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Forms\Components\Toggle;
+use Illuminate\Database\Eloquent\Model;
 
 class NoteDeDebitResource extends Resource
 {
@@ -199,5 +200,25 @@ class NoteDeDebitResource extends Resource
             'view' => Pages\ViewNoteDeDebit::route('/{record}'),
             'edit' => Pages\EditNoteDeDebit::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return !auth()->user()?->is_demo;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return !auth()->user()?->is_demo;
     }
 }

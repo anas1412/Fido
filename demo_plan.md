@@ -20,8 +20,9 @@ A demo is only useful if it has data to display. We will create a comprehensive 
     *   A new seeder will be created, `DemoUserSeeder.php`, to insert a specific user into the `users` table (e.g., `email: demo@fido.com`, `password: password`).
     *   A new migration will be created to add an `is_demo` boolean column to the `users` table. This flag will be set to `true` for the demo user and will be the primary way the application identifies when to activate read-only mode.
 
-3.  **Update the Main Database Seeder:**
-    *   The primary `DatabaseSeeder.php` will be updated to call the new factories and the `DemoUserSeeder`. This will ensure that running `php artisan db:seed` populates the entire database with the required sample data for the demo.
+3.  **Seed the Demo Data:**
+    *   The demo data, including the demo user and sample records, can be seeded by running a specific artisan command: `php artisan db:seed --class=DemoUserSeeder`.
+    *   This keeps the demo data separate from the main database seeder.
 
 ---
 
@@ -80,4 +81,6 @@ For a local Electron application, the reset mechanism can be straightforward.
 **Action:**
 
 1.  **Leverage Existing Artisan Commands:**
-    *   The demo can be reset to its initial state by running `php artisan migrate:fresh --seed` from the command line within the project. This will wipe the SQLite database and re-populate it with the fresh demo data. A simple `.bat` script can be created to simplify this process for the developer.
+    *   The application database can be reset to its initial state by running `php artisan migrate:fresh --seed`. This will wipe the database and run the main seeders.
+    *   To add the demo data, a separate command must be run: `php artisan db:seed --class=DemoUserSeeder`.
+    *   A simple `.bat` script can be created to combine these commands for a full demo reset.

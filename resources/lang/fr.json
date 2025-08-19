@@ -65,7 +65,7 @@
     "Reference": "Référence",
     "Issue Date": "Date d'émission",
     "Amount": "Montant",
-    "Description": "الوصف",
+    "Description": "Description",
     "Clients Area": "Espace Client",
     "Admin Area": "Espace Administrateur",
     "Users Management": "Gestion des utilisateurs",
@@ -95,5 +95,6 @@
     "Taxes updated successfully!": "Taxes mises à jour avec succès !",
     "Edit Fiscal Year": "Modifier l'Année Fiscale",
     "Fiscal Year": "Année Fiscale",
-    "Fiscal Year updated successfully!": "Année Fiscale mise à jour avec succès !"
+    "Fiscal Year updated successfully!": "Année Fiscale mise à jour avec succès !",
+    "You are in Demo Mode. Changes will not be saved.": "Vous êtes en mode Démo. Les modifications ne seront pas enregistrées."
 }

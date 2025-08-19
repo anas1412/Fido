@@ -95,5 +95,6 @@
     "Taxes updated successfully!": "تم تحديث الضرائب بنجاح!",
     "Edit Fiscal Year": "تعديل السنة المالية",
     "Fiscal Year": "السنة المالية",
-    "Fiscal Year updated successfully!": "تم تحديث السنة المالية بنجاح!"
+    "Fiscal Year updated successfully!": "تم تحديث السنة المالية بنجاح!",
+    "You are in Demo Mode. Changes will not be saved.": "أنت في الوضع التجريبي. لن يتم حفظ التغييرات."
 }
