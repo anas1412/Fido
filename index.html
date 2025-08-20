@@ -34,6 +34,11 @@
                             demoModalPassword: { en: 'Password', fr: 'Mot de passe' },
                             demoModalDownload: { en: 'Download Demo', fr: 'Télécharger la Démo' },
                             demoModalInstructions: { en: 'Please use the following credentials to access the demo:', fr: 'Veuillez utiliser les informations suivantes pour accéder à la démo :' },
+                            demoNoticeReadOnly: {
+                                en: 'Please note: This demo is a read-only environment, designed for exploration. Functionalities such as adding, editing, or deleting data are disabled.',
+                                fr: 'Veuillez noter : Cette démo est un environnement en lecture seule, conçu pour l\'exploration. Les fonctionnalités telles que l\'ajout, la modification ou la suppression de données sont désactivées.'
+                                },
+                            demoNoticePerformance: { en: 'As a demonstration, occasional delays may occur; your patience is appreciated.', fr: "S'agissant d'une démonstration, des ralentissements occasionnels peuvent survenir ; votre patience est appréciée." },
                             demoModalContact: { en: 'Having trouble? Contact us.', fr: 'Un problème ? Contactez-nous.' },
                             heroBtnDemo: { en: 'Download Demo', fr: 'Télécharger la Démo' },
                             featuresTitle: { en: 'Everything You Need', fr: 'Tout Ce Dont Vous Avez Besoin' },
@@ -346,6 +351,10 @@
                 <div @click.away="isDemoModalOpen = false" class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full text-center">
                     <h3 class="text-2xl font-bold mb-4" x-text="$store.i18n.t('demoModalTitle')"></h3>
                     <p class="text-gray-600 mb-6" x-text="$store.i18n.t('demoModalInstructions')"></p>
+                    <!-- New Notice -->
+                    <p class="text-sm text-red-600 mb-2" x-text="$store.i18n.t('demoNoticeReadOnly')"></p>
+                    <p class="text-sm text-red-600 mb-6" x-text="$store.i18n.t('demoNoticePerformance')"></p>
+                    <!-- End New Notice -->
                     <div class="space-y-4 text-left bg-gray-100 p-4 rounded-lg mb-6">
                         <div>
                             <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalEmail')"></label>
@@ -356,7 +365,7 @@
                             <p class="text-lg text-gray-800">password</p>
                         </div>
                     </div>
-                    <a href="https://github.com/anas1412/Fido/releases" target="_blank" class="w-full bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md mb-4" x-text="$store.i18n.t('demoModalDownload')"></a>
+                    <a href="https://github.com/anas1412/Fido/releases/latest/download/Fido.Demo.Setup.exe" target="_blank" class="w-full bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md mb-4" x-text="$store.i18n.t('demoModalDownload')"></a>
                     <p class="text-sm text-gray-500" x-text="$store.i18n.t('demoModalContact')"></p>
                 </div>
             </div>
