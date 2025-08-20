@@ -198,7 +198,8 @@ app.whenReady().then(async () => {
         }
 
         // Define writable paths for user data, storage, and the database
-        const userDataPath = app.getPath('userData');
+        const appName = isDemoBuild ? 'Fido Demo' : 'Fido';
+        const userDataPath = path.join(app.getPath('appData'), appName);
         storagePath = path.join(userDataPath, 'storage'); // Re-assign global storage path
         const fullDbPath = path.join(userDataPath, dbPath);
 
@@ -241,33 +242,25 @@ app.whenReady().then(async () => {
         }
 
         // Always run key:generate, migrate:fresh, and initial seed if it was a first-time setup or demo build
-        if (wasDbCreated || isDemoBuild) { // Run fresh setup for new DB or demo builds
+        if (wasDbCreated) { // Only run fresh setup if DB was just created
             console.log('Running key:generate, migrate:fresh, and initial seeding...');
             await runArtisanCommand(['key:generate', '--force'], fullDbPath);
-            await runArtisanCommand(['migrate:fresh', '--force'], fullDbPath); // Changed to migrate:fresh
-            await runArtisanCommand(['db:seed', '--force'], fullDbPath); // Run base seeder (Tax & Company Settings)
+            await runArtisanCommand(['migrate:fresh', '--force'], fullDbPath);
+            await runArtisanCommand(['db:seed', '--force'], fullDbPath);
             console.log('Base database setup completed.');
 
             if (isDemoBuild) {
                 console.log('Running demo data seeder...');
-                                await runArtisanCommand(['seed:demo'], fullDbPath); 
+                await runArtisanCommand(['seed:demo'], fullDbPath); 
                 console.log('Demo data seeder completed.');
             } else { // Non-demo build, seed admin user
                 console.log('Running admin user seeder...');
-                                await runArtisanCommand(['seed:admin'], fullDbPath); 
+                await runArtisanCommand(['seed:admin'], fullDbPath); 
                 console.log('Admin user seeder completed.');
             }
-
-            // Clear caches after all database operations
-            /* console.log('Clearing application caches...');
-            await runArtisanCommand(['cache:clear'], fullDbPath);
-            await runArtisanCommand(['config:clear'], fullDbPath);
-            await runArtisanCommand(['route:clear'], fullDbPath);
-            await runArtisanCommand(['view:clear'], fullDbPath);
-            console.log('Caches cleared.'); */
-        } else {
+        } else { // DB already exists, just migrate to ensure up-to-date
             console.log('Skipping fresh setup. Running only migrate to ensure up-to-date...');
-            await runArtisanCommand(['migrate', '--force'], fullDbPath); // Just migrate if not fresh setup
+            await runArtisanCommand(['migrate', '--force'], fullDbPath);
             console.log('Database migrated.');
         }
 
