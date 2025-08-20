@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
         <title x-data x-text="$store.i18n.t('pageTitle')"></title>
         <script src="https://cdn.tailwindcss.com"></script>
         
@@ -27,6 +28,13 @@
                         heroSubtitle: { en: 'Designed for Tunisian accountants to automate tasks and manage clients easily', fr: 'Conçu pour les comptables tunisiens pour automatiser les tâches et gérer les clients' },
                         heroBtnStart: { en: 'Get Started Now', fr: 'Commencez Maintenant' },
                         heroBtnContact: { en: 'Contact Us', fr: 'Nous Contacter' },
+                        heroBtnRequestDemo: { en: 'Request a Demo', fr: 'Demander une démo' },
+                        demoModalTitle: { en: 'Demo Access', fr: 'Accès Démo' },
+                        demoModalEmail: { en: 'Email', fr: 'Email' },
+                        demoModalPassword: { en: 'Password', fr: 'Mot de passe' },
+                        demoModalDownload: { en: 'Download Demo', fr: 'Télécharger la Démo' },
+                        demoModalInstructions: { en: 'Please use the following credentials to access the demo:', fr: 'Veuillez utiliser les informations suivantes pour accéder à la démo :' },
+                        demoModalContact: { en: 'Having trouble? Contact us.', fr: 'Un problème ? Contactez-nous.' },
                         heroBtnDemo: { en: 'Download Demo', fr: 'Télécharger la Démo' },
                         featuresTitle: { en: 'Everything You Need', fr: 'Tout Ce Dont Vous Avez Besoin' },
                         featuresSubtitle: { en: 'Comprehensive tools for Tunisian accountants to streamline their workflow', fr: 'Outils complets pour les comptables tunisiens pour rationaliser leur flux de travail' },
@@ -137,7 +145,7 @@
         </style>
     </head>
     
-    <body x-data="{ isMenuOpen: false, lightboxOpen: false, lightboxImage: '' }" @keydown.escape.window="isMenuOpen = false; lightboxOpen = false" class="bg-gray-50">
+    <body x-data="{ isMenuOpen: false, lightboxOpen: false, lightboxImage: '', isDemoModalOpen: false }" @keydown.escape.window="isMenuOpen = false; lightboxOpen = false; isDemoModalOpen = false" class="bg-gray-50">
         <nav class="fixed z-40 w-full bg-white shadow-md">
             <div class="flex items-center justify-between max-w-6xl px-4 py-4 mx-auto">
                 <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-primary">
@@ -187,7 +195,7 @@
                     <p class="max-w-2xl mx-auto mb-8 text-xl text-gray-600" x-text="$store.i18n.t('heroSubtitle')"></p>
                     <div class="flex flex-col justify-center gap-4 sm:flex-row mb-12">
                         <a href="#pricing" class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-[#5da939] transition shadow-lg" x-text="$store.i18n.t('heroBtnStart')"></a>
-                        <a href="https://github.com/anas1412/Fido/releases" target="_blank" class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50" x-text="$store.i18n.t('heroBtnDemo')"></a>
+                        <a href="#" @click.prevent="isDemoModalOpen = true" class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50" x-text="$store.i18n.t('heroBtnRequestDemo')"></a>
                     </div>
                     <div class="flex flex-col md:flex-row justify-center gap-8">
                         <a href="#" @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true'; lightboxOpen = true" class="max-w-2xl cursor-pointer"><img src="https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true" alt="FIDO Dashboard 1" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/></a>
@@ -311,6 +319,26 @@
             <div @click.stop class="relative">
                 <button @click="lightboxOpen = false" class="absolute -top-2 -right-2 md:-top-4 md:-right-4 text-white bg-primary rounded-full p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 <img :src="lightboxImage" alt="Enlarged screenshot" class="object-contain w-auto rounded-lg shadow-lg max-h-[90vh]">
+            </div>
+        </div>
+
+        <!-- Demo Request Modal -->
+        <div x-show="isDemoModalOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70" style="display: none;">
+            <div @click.away="isDemoModalOpen = false" class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full text-center">
+                <h3 class="text-2xl font-bold mb-4" x-text="$store.i18n.t('demoModalTitle')"></h3>
+                <p class="text-gray-600 mb-6" x-text="$store.i18n.t('demoModalInstructions')"></p>
+                <div class="space-y-4 text-left bg-gray-100 p-4 rounded-lg mb-6">
+                    <div>
+                        <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalEmail')"></label>
+                        <p class="text-lg text-gray-800">demo@fido.tn</p>
+                    </div>
+                    <div>
+                        <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalPassword')"></label>
+                        <p class="text-lg text-gray-800">password</p>
+                    </div>
+                </div>
+                <a href="https://github.com/anas1412/Fido/releases" target="_blank" class="w-full bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md mb-4" x-text="$store.i18n.t('demoModalDownload')"></a>
+                <p class="text-sm text-gray-500" x-text="$store.i18n.t('demoModalContact')"></p>
             </div>
         </div>
     </body>
