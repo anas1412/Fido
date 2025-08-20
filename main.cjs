@@ -14,13 +14,19 @@ const axios = require('axios'); // Using axios for polling
 
 const isDev = !app.isPackaged;
 let currentEnvPath;
+let isDemoBuild = false; // Default to false
 
-const isDemoBuild = process.env.APP_DEMO_BUILD === 'true';
+// The path to the .env.demo file is determined differently in dev vs. packaged
+const demoEnvPath = isDev ? path.join(__dirname, '.env.demo') : path.join(process.resourcesPath, 'app', '.env.demo');
 
-if (isDemoBuild) {
-    currentEnvPath = app.isPackaged ? path.join(process.resourcesPath, 'app', '.env.demo') : path.join(__dirname, '.env.demo');
+// In a packaged app, we determine the build type by checking if .env.demo exists.
+if (!isDev && fs.existsSync(demoEnvPath)) {
+    isDemoBuild = true;
+    currentEnvPath = demoEnvPath;
 } else {
-    currentEnvPath = app.isPackaged ? path.join(process.resourcesPath, 'app', '.env') : path.join(__dirname, '.env');
+    // In dev, we rely on the environment variable. In a packaged prod build, we just use the standard .env path.
+    isDemoBuild = isDev && process.env.APP_DEMO_BUILD === 'true';
+    currentEnvPath = isDemoBuild ? demoEnvPath : (isDev ? path.join(__dirname, '.env') : path.join(process.resourcesPath, 'app', '.env'));
 }
 
 require('dotenv').config({ path: currentEnvPath, override: true });
