@@ -1,355 +1,364 @@
 <!DOCTYPE html>
-<html lang="fr" style="scroll-behavior: smooth">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
-        <title x-data x-text="$store.i18n.t('pageTitle')"></title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js"></script>
-        
-        <!-- FINAL, CENTRALIZED, AND WORKING SCRIPT -->
-        <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.store('i18n', {
-                    lang: 'fr',
-                    translations: {
-                        // General & Nav
-                        pageTitle: { en: 'FIDO - Smart Accounting Software', fr: 'FIDO - Logiciel de Comptabilité Intelligent' },
-                        navFeatures: { en: 'Features', fr: 'Fonctionnalités' },
-                        navPricing: { en: 'Pricing', fr: 'Tarifs' },
-                        navContact: { en: 'Contact', fr: 'Contact' },
-                        navGetStarted: { en: 'Get Started', fr: 'Commencer' },
-                        
-                        // Hero & Features
-                        heroTitle: { en: 'Accounting Software Made Simple', fr: 'Le Logiciel de Comptabilité Simplifié' },
-                        heroSubtitle: { en: 'Designed for Tunisian accountants to automate tasks and manage clients easily', fr: 'Conçu pour les comptables tunisiens pour automatiser les tâches et gérer les clients' },
-                        heroBtnStart: { en: 'Get Started Now', fr: 'Commencez Maintenant' },
-                        heroBtnContact: { en: 'Contact Us', fr: 'Nous Contacter' },
-                        heroBtnRequestDemo: { en: 'Request a Demo', fr: 'Demander une démo' },
-                        demoModalTitle: { en: 'Demo Access', fr: 'Accès Démo' },
-                        demoModalEmail: { en: 'Email', fr: 'Email' },
-                        demoModalPassword: { en: 'Password', fr: 'Mot de passe' },
-                        demoModalDownload: { en: 'Download Demo', fr: 'Télécharger la Démo' },
-                        demoModalInstructions: { en: 'Please use the following credentials to access the demo:', fr: 'Veuillez utiliser les informations suivantes pour accéder à la démo :' },
-                        demoModalContact: { en: 'Having trouble? Contact us.', fr: 'Un problème ? Contactez-nous.' },
-                        heroBtnDemo: { en: 'Download Demo', fr: 'Télécharger la Démo' },
-                        featuresTitle: { en: 'Everything You Need', fr: 'Tout Ce Dont Vous Avez Besoin' },
-                        featuresSubtitle: { en: 'Comprehensive tools for Tunisian accountants to streamline their workflow', fr: 'Outils complets pour les comptables tunisiens pour rationaliser leur flux de travail' },
-                        feature1Title: { en: 'Fee Note Management', fr: 'Gestion des Honoraires' },
-                        feature1Desc: { en: 'Create, manage, and track professional fee notes with ease.', fr: 'Créez, gérez et suivez facilement les notes d\'honoraires.' },
-                        feature2Title: { en: 'Withholding Tax', fr: 'Retenue à la Source' },
-                        feature2Desc: { en: 'Simplify management of withholding tax obligations with automated reporting.', fr: 'Simplifiez la gestion des retenues à la source avec des rapports automatisés.' },
-                        feature3Title: { en: 'Debit Note Management', fr: 'Gestion des Notes de Débit' },
-                        feature3Desc: { en: 'Efficiently create and manage debit notes for various transactions.', fr: 'Créez et gérez efficacement les notes de débit pour diverses transactions.' },
-                        feature4Title: { en: 'Employee Accounts', fr: 'Comptes Employés' },
-                        feature4Desc: { en: 'Manage employee access and permissions with role-based dashboard controls.', fr: 'Gérez l\'accès des employés avec des contrôles basés sur les rôles.' },
-                        feature5Title: { en: 'Client Management', fr: 'Gestion des Clients' },
-                        feature5Desc: { en: 'Maintain a centralized database of all your clients and their information.', fr: 'Maintenez une base de données centralisée de tous vos clients et de leurs informations.' },
-                        feature6Title: { en: 'Financial Reporting', fr: 'Rapports Financiers' },
-                        feature6Desc: { en: 'Generate detailed reports for fee notes and debit notes for better insights.', fr: 'Générez des rapports détaillés pour les notes d\'honoraires et de débit pour de meilleures informations.' },
-                        feature7Title: { en: 'Client Invoice Management', fr: 'Gestion des Factures Client' },
-                        feature7Desc: { en: 'Manage commercial invoices for your clients directly within the application.', fr: 'Gérez les factures commerciales de vos clients directement dans l\'application.' },
-                        feature8Title: { en: 'Advanced Configuration', fr: 'Configuration Avancée' },
-                        feature8Desc: {en: 'Configure company details, tax rates (VAT, SR et FT), and fiscal year settings.', fr: 'Configurez les détails de l\'entreprise, les taux de taxe (TVA, RS et TF), et les paramètres de l\'année fiscale.' },
-                        feature9Title: { en: 'Automated Backups', fr: 'Sauvegardes Automatisées' },
-                        feature9Desc: { en: 'Secure your data with automated daily or weekly database backups. (In Progress)', fr: 'Sécurisez vos données avec des sauvegardes de base de données automatisées. (En cours)' },
-                        feature10Title: { en: 'Customizable Templates', fr: 'Modèles Personnalisables' },
-                        feature10Desc: { en: 'Tailor the design of your fee notes, invoices, and debit notes to match your professional brand.', fr: 'Personnalisez le design de vos notes d\'honoraires, factures et notes de débit pour correspondre à votre image de marque.' },
-                        feature11Title: { en: 'One-Click PDF Export', fr: 'Export PDF en un Clic' },
-                        feature11Desc: { en: 'Download and share any document—reports, invoices, or statements—as a professional, print-ready PDF.', fr: 'Téléchargez et partagez n\'importe quel document (rapports, factures ou relevés) en tant que PDF professionnel prêt à imprimer.' },
-                        
-                        // --- PRICING SECTION DATA RESTRUCTURED ---
-                        pricingTitle: { en: 'Flexible Plans to Fit Your Needs', fr: 'Des Formules Flexibles Selon Vos Besoins' },
-                        testimonialsTitle: { en: 'Trusted by Professionals', fr: 'Approuvé par les professionnels' },
-                        testimonialsSubtitle: { en: 'Our software is used and recommended by accountants in Hammamet, Tunisia.', fr: 'Notre logiciel est utilisé et recommandé par des experts-comptables de Hammamet, Tunisie.' },
-                        testimonials: [
-                            {
-                                quote: { fr: 'Fido a changé la donne pour notre cabinet. C\'est intuitif, puissant et nous a fait gagner un temps précieux.', en: 'Fido a été un game-changer pour notre cabinet. C\'est intuitif, puissant et nous a fait gagner un temps précieux.' },
-                                author: 'Ezeeddine Haouel'
-                            },
-                            {
-                                quote: { fr: 'Le meilleur logiciel de comptabilité pour les professionnels tunisiens. Je le recommande vivement à tous mes confrères.', en: 'The best accounting software for Tunisian professionals. I highly recommend it to all my colleagues.' },
-                                author: 'Nabil Karoui'
-                            }
-                        ],
-                        
-                        // Plan 1
-                        plan1Title: { en: 'Self-Hosted (Open Source)', fr: 'Auto-Hébergé (Open Source)' },
-                        plan1Price: { en: 'Free', fr: 'Gratuit' },
-                        plan1Subtitle: { en: 'Take full control and host it yourself', fr: 'Prenez le contrôle total et hébergez-le vous-même' },
-                        plan1Button: { en: 'View on GitHub', fr: 'Voir sur GitHub' },
-                        plan1Features: [
-                            { en: 'Full Source Code Access', fr: 'Accès Complet au Code Source' },
-                            { en: 'Automatic Updates', fr: 'Mises à Jour Automatiques' },
-                            { en: 'Unlimited Customization', fr: 'Personnalisation Illimitée' },
-                            { en: 'Full Data Privacy', fr: 'Confidentialité totale des données' },
-                            { en: 'Ideal for Developers & Tech-Savvy Users', fr: 'Idéal pour les Développeurs et Utilisateurs Expérimentés' }
-                        ],
-
-                        // Plan 2
-                        plan2Title: { en: 'Managed Service', fr: 'Service Géré' },
-                        plan2Price: { en: 'Starting from 300 TND', fr: 'À partir de 300 TND' },
-                        plan2Subtitle: { en: 'Locally installed solution with dedicated support.', fr: 'Solution installée localement avec support dédié.' },
-                                                plan2Features: [
-                            { en: 'Base website setup (300 TND)', fr: 'Site de base (300 TND)' },
-                            { en: 'Optional Modules (100 TND each): Fee Notes, Client Invoices, Withholding Tax, Debit Notes, Reporting, etc.', fr: 'Modules Optionnels (100 TND chacun) : Honoraires, Factures Client, Retenue à la Source, Notes de Débit, Rapports, etc.' },
-                            { en: 'Enhanced Privacy & Security', fr: 'Confidentialité et Sécurité Améliorées' },
-                            { en: 'Technical support (from 20 to 50 TND)', fr: 'Support technique (de 20 à 50 TND)' },
-                            { en: 'Delivered as a local .exe installer', fr: 'Livré sous forme d\'installateur .exe local' },
-                            { en: 'Ideal for professionals who want a ready-to-use solution', fr: 'Idéal pour les professionnels souhaitant une solution clé en main' }
-                        ],
-
-                        // Contact & Footer
-                        contactTitle: { en: 'Get in Touch', fr: 'Contactez-Nous' },
-                        contactSubtitle: { en: 'Have questions or need assistance? Reach out to us!', fr: 'Vous avez des questions ou besoin d\'aide ? Contactez-nous !' },
-                        footerSlogan: { en: 'Smart accounting software for Tunisian professionals.', fr: 'Logiciel de comptabilité intelligent pour les professionnels tunisiens.' },
-                        footerLinksTitle: { en: 'Quick Links', fr: 'Liens Rapides' },
-                        footerSupportTitle: { en: 'Support', fr: 'Support' },
-                        footerRepoLink: { en: 'GitHub Repository', fr: 'Dépôt GitHub' },
-                        footerCopyright: { 
-                            en: `© ${new Date().getFullYear()} Fido. All rights reserved.`, 
-                            fr: `© ${new Date().getFullYear()} Fido. Tous droits réservés.` 
-                        },
-                    },
-
-                    t(key) {
-                        const translation = this.translations[key];
-                        if (translation) {
-                            return translation[this.lang] || translation['en'] || key;
-                        }
-                        return key;
-                    },
-
-                    getPlanFeatures(planKey) {
-                        const features = this.translations[planKey] || [];
-                        return features.map(feature => feature[this.lang] || feature['en']);
-                    },
-
-                    setLang(newLang) {
-                        this.lang = newLang;
-                        document.documentElement.lang = newLang;
-                    }
-                });
-            });
-        </script>
-        
-        <script>
-            tailwind.config = {
-                theme: { extend: { colors: { primary: "#6FBF44" } } },
-            };
-        </script>
-        <style>
-            @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-            body { font-family: "Inter", sans-serif; }
-            [id] { scroll-margin-top: 80px; }
-            .lang-active { font-weight: 700; color: #6FBF44; text-decoration: underline; text-underline-offset: 4px; }
-        </style>
-    </head>
-    
-    <body x-data="{ isMenuOpen: false, lightboxOpen: false, lightboxImage: '', isDemoModalOpen: false }" @keydown.escape.window="isMenuOpen = false; lightboxOpen = false; isDemoModalOpen = false" class="bg-gray-50">
-        <nav class="fixed z-40 w-full bg-white shadow-md">
-            <div class="flex items-center justify-between max-w-6xl px-4 py-4 mx-auto">
-                <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-primary">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" /></svg>
-                    <span>FIDO</span>
-                </a>
-                
-                <div class="items-center hidden gap-8 md:flex">
-                    <a href="#features" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
-                    <a href="#pricing" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
-                    <a href="#contact" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
-                    <div class="flex items-center gap-3 text-sm font-medium">
-                        <button @click="$store.i18n.setLang('en')" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="transition hover:text-primary">EN</button>
-                        <span class="text-gray-300">|</span>
-                        <button @click="$store.i18n.setLang('fr')" :class="{ 'lang-active': $store.i18n.lang === 'fr' }" class="transition hover:text-primary">FR</button>
-                    </div>
-                    <a href="#pricing" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5da939] transition" x-text="$store.i18n.t('navGetStarted')"></a>
-                </div>
-
-                <div class="md:hidden">
-                    <button @click="isMenuOpen = !isMenuOpen" aria-label="Open Menu" :aria-expanded="isMenuOpen" aria-controls="mobile-menu">
-                        <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path x-show="!isMenuOpen" d="M4 6h16M4 12h16M4 18h16"></path><path x-show="isMenuOpen" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-            </div>
+    <html lang="fr" style="scroll-behavior: smooth">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="icon" href="favicon.ico" type="image/x-icon">
+            <title x-data x-text="$store.i18n.t('pageTitle')"></title>
+            <script src="https://cdn.tailwindcss.com"></script>
             
-            <div id="mobile-menu" x-show="isMenuOpen" x-transition class="absolute w-full bg-white shadow-lg md:hidden" @click.away="isMenuOpen = false">
-                <div class="flex flex-col px-4 pt-2 pb-4 space-y-4">
-                    <a href="#features" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
-                    <a href="#pricing" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
-                    <a href="#contact" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
-                    <a href="#pricing" @click="isMenuOpen = false" class="block w-full text-center bg-primary text-white px-4 py-2 mt-2 rounded-lg hover:bg-[#5da939] transition" x-text="$store.i18n.t('navGetStarted')"></a>
-                    <div class="flex items-center justify-center gap-4 pt-4 mt-4 border-t border-gray-100">
-                        <button @click="$store.i18n.setLang('en'); isMenuOpen = false" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="text-lg transition hover:text-primary">EN</button>
-                        <span class="text-gray-300">|</span>
-                        <button @click="$store.i18n.setLang('fr'); isMenuOpen = false" :class="{ 'lang-active': $store.i18n.lang === 'fr' }" class="text-lg transition hover:text-primary">FR</button>
+            <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js"></script>
+            
+            <!-- FINAL, CENTRALIZED, AND WORKING SCRIPT -->
+            <script>
+                document.addEventListener('alpine:init', () => {
+                    Alpine.store('i18n', {
+                        lang: 'fr',
+                        translations: {
+                            // General & Nav
+                            pageTitle: { en: 'FIDO - Smart Accounting Software', fr: 'FIDO - Logiciel de Comptabilité Intelligent' },
+                            navFeatures: { en: 'Features', fr: 'Fonctionnalités' },
+                            navPricing: { en: 'Pricing', fr: 'Tarifs' },
+                            navContact: { en: 'Contact', fr: 'Contact' },
+                            navGetStarted: { en: 'Get Started', fr: 'Commencer' },
+                            
+                            // Hero & Features
+                            heroTitle: { en: 'Accounting Software Made Simple', fr: 'Le Logiciel de Comptabilité Simplifié' },
+                            heroSubtitle: { en: 'Designed for Tunisian accountants to automate tasks and manage clients easily', fr: 'Conçu pour les comptables tunisiens pour automatiser les tâches et gérer les clients' },
+                            heroBtnStart: { en: 'Get Started Now', fr: 'Commencez Maintenant' },
+                            heroBtnContact: { en: 'Contact Us', fr: 'Nous Contacter' },
+                            heroBtnRequestDemo: { en: 'Request a Demo', fr: 'Demander une démo' },
+                            demoModalTitle: { en: 'Demo Access', fr: 'Accès Démo' },
+                            demoModalEmail: { en: 'Email', fr: 'Email' },
+                            demoModalPassword: { en: 'Password', fr: 'Mot de passe' },
+                            demoModalDownload: { en: 'Download Demo', fr: 'Télécharger la Démo' },
+                            demoModalInstructions: { en: 'Please use the following credentials to access the demo:', fr: 'Veuillez utiliser les informations suivantes pour accéder à la démo :' },
+                            demoModalContact: { en: 'Having trouble? Contact us.', fr: 'Un problème ? Contactez-nous.' },
+                            heroBtnDemo: { en: 'Download Demo', fr: 'Télécharger la Démo' },
+                            featuresTitle: { en: 'Everything You Need', fr: 'Tout Ce Dont Vous Avez Besoin' },
+                            featuresSubtitle: { en: 'Comprehensive tools for Tunisian accountants to streamline their workflow', fr: 'Outils complets pour les comptables tunisiens pour rationaliser leur flux de travail' },
+                            
+                            features: [
+                                {
+                                    title: { en: 'Fee Note Management', fr: 'Gestion des Honoraires' },
+                                    description: { en: 'Create, manage, and track professional fee notes with ease.', fr: 'Créez, gérez et suivez facilement les notes d\'honoraires.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Withholding Tax', fr: 'Retenue à la Source' },
+                                    description: { en: 'Simplify management of withholding tax obligations with automated reporting.', fr: 'Simplifiez la gestion des retenues à la source avec des rapports automatisés.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Debit Note Management', fr: 'Gestion des Notes de Débit' },
+                                    description: { en: 'Efficiently create and manage debit notes for various transactions.', fr: 'Créez et gérez efficacement les notes de débit pour diverses transactions.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Employee Accounts', fr: 'Comptes Employés' },
+                                    description: { en: 'Manage employee access and permissions with role-based dashboard controls.', fr: 'Gérez l\'accès des employés avec des contrôles basés sur les rôles.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Client Management', fr: 'Gestion des Clients' },
+                                    description: { en: 'Maintain a centralized database of all your clients and their information.', fr: 'Maintenez une base de données centralisée de tous vos clients et de leurs informations.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Financial Reporting', fr: 'Rapports Financiers' },
+                                    description: { en: 'Generate detailed reports for fee notes and debit notes for better insights.', fr: 'Générez des rapports détaillés pour les notes d\'honoraires et de débit pour de meilleures informations.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Client Invoice Management', fr: 'Gestion des Factures Client' },
+                                    description: { en: 'Manage commercial invoices for your clients directly within the application.', fr: 'Gérez les factures commerciales de vos clients directement dans l\'application.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Advanced Configuration', fr: 'Configuration Avancée' },
+                                    description: {en: 'Configure company details, tax rates (VAT, SR et FT), and fiscal year settings.', fr: 'Configurez les détails de l\'entreprise, les taux de taxe (TVA, RS et TF), et les paramètres de l\'année fiscale.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Customizable Templates', fr: 'Modèles Personnalisables' },
+                                    description: { en: 'Tailor the design of your fee notes, invoices, and debit notes to match your professional brand.', fr: 'Personnalisez le design de vos notes d\'honoraires, factures et notes de débit pour correspondre à votre image de marque.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'One-Click PDF Export', fr: 'Export PDF en un Clic' },
+                                    description: { en: 'Download and share any document—reports, invoices, or statements—as a professional, print-ready PDF.', fr: 'Téléchargez et partagez n\'importe quel document (rapports, factures ou relevés) en tant que PDF professionnel prêt à imprimer.' },
+                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></div>'
+                                },
+                                {
+                                    title: { en: 'Automated Backups', fr: 'Sauvegardes Automatisées' },
+                                    description: { en: 'Secure your data with automated daily or weekly database backups. (In Progress)', fr: 'Sécurisez vos données avec des sauvegardes de base de données automatisées. (En cours)' },
+                                    icon: '<div class="p-3 bg-blue-100 rounded-lg"><svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m16 0L8 12m8 0l-8 5"></path></svg></div>'
+                                }
+                            ],
+                            
+                            // --- PRICING SECTION DATA RESTRUCTURED ---
+                            pricingTitle: { en: 'Flexible Plans to Fit Your Needs', fr: 'Des Formules Flexibles Selon Vos Besoins' },
+                            testimonialsTitle: { en: 'Trusted by Professionals', fr: 'Approuvé par les professionnels' },
+                            testimonialsSubtitle: { en: 'Our software is used and recommended by accountants in Hammamet, Tunisia.', fr: 'Notre logiciel est utilisé et recommandé par des experts-comptables de Hammamet, Tunisie.' },
+                            testimonials: [
+                                {
+                                    quote: { fr: 'Fido a changé la donne pour notre cabinet. C\'est intuitif, puissant et nous a fait gagner un temps précieux.', en: 'Fido a été un game-changer pour notre cabinet. C\'est intuitif, puissant et nous a fait gagner un temps précieux.' },
+                                    author: 'Ezeeddine Haouel'
+                                },
+                                {
+                                    quote: { fr: 'Le meilleur logiciel de comptabilité pour les professionnels tunisiens. Je le recommande vivement à tous mes confrères.', en: 'The best accounting software for Tunisian professionals. I highly recommend it to all my colleagues.' },
+                                    author: 'Nabil Karoui'
+                                }
+                            ],
+                            
+                            // Plan 1
+                            plan1Title: { en: 'Self-Hosted (Open Source)', fr: 'Auto-Hébergé (Open Source)' },
+                            plan1Price: { en: 'Free', fr: 'Gratuit' },
+                            plan1Subtitle: { en: 'Take full control and host it yourself', fr: 'Prenez le contrôle total et hébergez-le vous-même' },
+                            plan1Button: { en: 'View on GitHub', fr: 'Voir sur GitHub' },
+                            plan1Features: [
+                                { en: 'Full Source Code Access', fr: 'Accès Complet au Code Source' },
+                                { en: 'Automatic Updates', fr: 'Mises à Jour Automatiques' },
+                                { en: 'Unlimited Customization', fr: 'Personnalisation Illimitée' },
+                                { en: 'Full Data Privacy', fr: 'Confidentialité totale des données' },
+                                { en: 'Ideal for Developers & Tech-Savvy Users', fr: 'Idéal pour les Développeurs et Utilisateurs Expérimentés' }
+                            ],
+
+                            // Plan 2
+                            plan2Title: { en: 'Managed Service', fr: 'Service Géré' },
+                            plan2Price: { en: 'Starting from 300 TND', fr: 'À partir de 300 TND' },
+                            plan2Subtitle: { en: 'Locally installed solution with dedicated support.', fr: 'Solution installée localement avec support dédié.' },
+                                                    plan2Features: [
+                                { en: 'Base website setup (300 TND)', fr: 'Site de base (300 TND)' },
+                                { en: 'Optional Modules (100 TND each): Fee Notes, Client Invoices, Withholding Tax, Debit Notes, Reporting, etc.', fr: 'Modules Optionnels (100 TND chacun) : Honoraires, Factures Client, Retenue à la Source, Notes de Débit, Rapports, etc.' },
+                                { en: 'Enhanced Privacy & Security', fr: 'Confidentialité et Sécurité Améliorées' },
+                                { en: 'Technical support (from 20 to 50 TND)', fr: 'Support technique (de 20 à 50 TND)' },
+                                { en: 'Delivered as a local .exe installer', fr: 'Livré sous forme d\'installateur .exe local' },
+                                { en: 'Ideal for professionals who want a ready-to-use solution', fr: 'Idéal pour les professionnels souhaitant une solution clé en main' }
+                            ],
+
+                            // Contact & Footer
+                            contactTitle: { en: 'Get in Touch', fr: 'Contactez-Nous' },
+                            contactSubtitle: { en: 'Have questions or need assistance? Reach out to us!', fr: 'Vous avez des questions ou besoin d\'aide ? Contactez-nous !' },
+                            footerSlogan: { en: 'Smart accounting software for Tunisian professionals.', fr: 'Logiciel de comptabilité intelligent pour les professionnels tunisiens.' },
+                            footerLinksTitle: { en: 'Quick Links', fr: 'Liens Rapides' },
+                            footerSupportTitle: { en: 'Support', fr: 'Support' },
+                            footerRepoLink: { en: 'GitHub Repository', fr: 'Dépôt GitHub' },
+                            footerCopyright: {
+                                en: `© ${new Date().getFullYear()} Fido. All rights reserved.`, 
+                                fr: `© ${new Date().getFullYear()} Fido. Tous droits réservés.` 
+                            },
+                        },
+
+                        t(key) {
+                            const translation = this.translations[key];
+                            if (translation) {
+                                return translation[this.lang] || translation['en'] || key;
+                            }
+                            return key;
+                        },
+
+                        getPlanFeatures(planKey) {
+                            const features = this.translations[planKey] || [];
+                            return features.map(feature => feature[this.lang] || feature['en']);
+                        },
+
+                        setLang(newLang) {
+                            this.lang = newLang;
+                            document.documentElement.lang = newLang;
+                        }
+                    });
+                });
+            </script>
+            
+            <script>
+                tailwind.config = {
+                    theme: { extend: { colors: { primary: "#6FBF44" } } },
+                };
+            </script>
+            <style>
+                @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+                body { font-family: "Inter", sans-serif; }
+                [id] { scroll-margin-top: 80px; }
+                .lang-active { font-weight: 700; color: #6FBF44; text-decoration: underline; text-underline-offset: 4px; }
+            </style>
+        </head>
+        
+        <body x-data="{ isMenuOpen: false, lightboxOpen: false, lightboxImage: '', isDemoModalOpen: false }" @keydown.escape.window="isMenuOpen = false; lightboxOpen = false; isDemoModalOpen = false" class="bg-gray-50">
+            <nav class="fixed z-40 w-full bg-white shadow-md">
+                <div class="flex items-center justify-between max-w-6xl px-4 py-4 mx-auto">
+                    <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-primary">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" /></svg>
+                        <span>FIDO</span>
+                    </a>
+                    
+                    <div class="items-center hidden gap-8 md:flex">
+                        <a href="#features" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
+                        <a href="#pricing" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
+                        <a href="#contact" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
+                        <div class="flex items-center gap-3 text-sm font-medium">
+                            <button @click="$store.i18n.setLang('en')" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="transition hover:text-primary">EN</button>
+                            <span class="text-gray-300">|</span>
+                            <button @click="$store.i18n.setLang('fr')" :class="{ 'lang-active': $store.i18n.lang === 'fr' }" class="transition hover:text-primary">FR</button>
+                        </div>
+                        <a href="#pricing" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5da939] transition" x-text="$store.i18n.t('navGetStarted')"></a>
+                    </div>
+
+                    <div class="md:hidden">
+                        <button @click="isMenuOpen = !isMenuOpen" aria-label="Open Menu" :aria-expanded="isMenuOpen" aria-controls="mobile-menu">
+                            <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path x-show="!isMenuOpen" d="M4 6h16M4 12h16M4 18h16"></path><path x-show="isMenuOpen" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="mobile-menu" x-show="isMenuOpen" x-transition class="absolute w-full bg-white shadow-lg md:hidden" @click.away="isMenuOpen = false">
+                    <div class="flex flex-col px-4 pt-2 pb-4 space-y-4">
+                        <a href="#features" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
+                        <a href="#pricing" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
+                        <a href="#contact" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
+                        <a href="#pricing" @click="isMenuOpen = false" class="block w-full text-center bg-primary text-white px-4 py-2 mt-2 rounded-lg hover:bg-[#5da939] transition" x-text="$store.i18n.t('navGetStarted')"></a>
+                        <div class="flex items-center justify-center gap-4 pt-4 mt-4 border-t border-gray-100">
+                            <button @click="$store.i18n.setLang('en'); isMenuOpen = false" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="text-lg transition hover:text-primary">EN</button>
+                            <span class="text-gray-300">|</span>
+                            <button @click="$store.i18n.setLang('fr'); isMenuOpen = false" :class="{ 'lang-active': $store.i18n.lang === 'fr' }" class="text-lg transition hover:text-primary">FR</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="pt-24 bg-white">
+                <div class="max-w-5xl px-4 py-20 mx-auto">
+                    <div class="text-center">
+                        <img src="https://github.com/anas1412/Fido/raw/main/public/images/logo.png?raw=true" alt="FIDO Logo" class="w-32 mx-auto mb-6"/>
+                        <h1 class="mb-6 text-4xl font-bold text-gray-900 md:text-5xl" x-text="$store.i18n.t('heroTitle')"></h1>
+                        <p class="max-w-2xl mx-auto mb-8 text-xl text-gray-600" x-text="$store.i18n.t('heroSubtitle')"></p>
+                        <div class="flex flex-col justify-center gap-4 sm:flex-row mb-12">
+                            <a href="#pricing" class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-[#5da939] transition shadow-lg" x-text="$store.i18n.t('heroBtnStart')"></a>
+                            <a href="#" @click.prevent="isDemoModalOpen = true" class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50" x-text="$store.i18n.t('heroBtnRequestDemo')"></a>
+                        </div>
+                        <div class="flex flex-col md:flex-row justify-center gap-8">
+                            <a href="#" @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true'; lightboxOpen = true" class="max-w-2xl cursor-pointer"><img src="https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true" alt="FIDO Dashboard 1" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/></a>
+                            <a href="#" @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true'; lightboxOpen = true" class="max-w-2xl cursor-pointer"><img src="https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true" alt="FIDO Dashboard 2" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/></a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </nav>
 
-        <div class="pt-24 bg-white">
-            <div class="max-w-5xl px-4 py-20 mx-auto">
-                <div class="text-center">
-                    <img src="https://github.com/anas1412/Fido/raw/main/public/images/logo.png?raw=true" alt="FIDO Logo" class="w-32 mx-auto mb-6"/>
-                    <h1 class="mb-6 text-4xl font-bold text-gray-900 md:text-5xl" x-text="$store.i18n.t('heroTitle')"></h1>
-                    <p class="max-w-2xl mx-auto mb-8 text-xl text-gray-600" x-text="$store.i18n.t('heroSubtitle')"></p>
-                    <div class="flex flex-col justify-center gap-4 sm:flex-row mb-12">
-                        <a href="#pricing" class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-[#5da939] transition shadow-lg" x-text="$store.i18n.t('heroBtnStart')"></a>
-                        <a href="#" @click.prevent="isDemoModalOpen = true" class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50" x-text="$store.i18n.t('heroBtnRequestDemo')"></a>
-                    </div>
-                    <div class="flex flex-col md:flex-row justify-center gap-8">
-                        <a href="#" @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true'; lightboxOpen = true" class="max-w-2xl cursor-pointer"><img src="https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true" alt="FIDO Dashboard 1" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/></a>
-                        <a href="#" @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true'; lightboxOpen = true" class="max-w-2xl cursor-pointer"><img src="https://github.com/anas1412/Fido/raw/main/Demo2.png?raw=true" alt="FIDO Dashboard 2" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="features" class="max-w-6xl px-4 py-20 mx-auto">
-            <h2 class="mb-4 text-3xl font-bold text-center" x-text="$store.i18n.t('featuresTitle')"></h2>
-            <p class="max-w-2xl mx-auto mb-12 text-center text-gray-600" x-text="$store.i18n.t('featuresSubtitle')"></p>
-            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature1Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature1Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature2Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature2Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature3Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature3Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature4Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature4Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature5Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature5Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature6Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature6Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature7Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature7Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature8Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature8Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-blue-100 rounded-lg"><svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m16 0L8 12m8 0l-8 5"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature9Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature9Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature10Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature10Desc')"></p>
-                </div>
-                <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex items-center mb-4"><div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></div><h3 class="ml-4 text-xl font-bold" x-text="$store.i18n.t('feature11Title')"></h3></div><p class="text-gray-600" x-text="$store.i18n.t('feature11Desc')"></p>
-                </div>
-            </div>
-        </div>
-
-<!--         <div id="testimonials" class="py-16 bg-gray-50">
-            <div class="max-w-5xl px-4 mx-auto text-center">
-                <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('testimonialsTitle')"></h2>
-                <p class="max-w-2xl mx-auto mb-12 text-gray-600" x-text="$store.i18n.t('testimonialsSubtitle')"></p>
-                <div class="grid gap-8 md:grid-cols-2">
-                    <template x-for="testimonial in $store.i18n.translations.testimonials" :key="testimonial.author">
-                        <div class="p-8 bg-white rounded-lg shadow-md">
-                            <p class="mb-4 text-lg italic text-gray-600" x-text="testimonial.quote[$store.i18n.lang] || testimonial.quote.en"></p>
-                            <p class="font-bold text-primary" x-text="'- ' + testimonial.author"></p>
+            <div id="features" class="max-w-6xl px-4 py-20 mx-auto">
+                <h2 class="mb-4 text-3xl font-bold text-center" x-text="$store.i18n.t('featuresTitle')"></h2>
+                <p class="max-w-2xl mx-auto mb-12 text-center text-gray-600" x-text="$store.i18n.t('featuresSubtitle')"></p>
+                <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    <template x-for="(feature, index) in $store.i18n.translations.features" :key="index">
+                        <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
+                            <div class="flex items-center mb-4">
+                                <div x-html="feature.icon"></div>
+                                <h3 class="ml-4 text-xl font-bold" x-text="feature.title[$store.i18n.lang] || feature.title.en"></h3>
+                            </div>
+                            <p class="text-gray-600" x-text="feature.description[$store.i18n.lang] || feature.description.en"></p>
                         </div>
                     </template>
                 </div>
             </div>
-        </div> -->
 
-        <div id="pricing" class="py-16 bg-white">
-            <div class="max-w-5xl px-4 mx-auto">
-                <h2 class="mb-12 text-3xl font-bold text-center" x-text="$store.i18n.t('pricingTitle')"></h2>
-                <div class="grid gap-8 md:grid-cols-2">
-                    <!-- Self-Hosted Plan -->
-                    <div class="p-8 border border-gray-100 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-xl">
-                        <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan1Title')"></h3>
-                        <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan1Price')"></p>
-                        <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan1Subtitle')"></p>
-                        <ul class="mb-8 space-y-4">
-                            <template x-for="featureText in $store.i18n.getPlanFeatures('plan1Features')" :key="featureText">
-                                <li class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-                                    <span x-text="featureText"></span>
-                                </li>
-                            </template>
-                        </ul>
-                        <div class="text-center"><a href="https://github.com/anas1412/Fido" target="_blank" class="bg-gray-800 text-white px-8 py-3 rounded-lg inline-block hover:bg-gray-700 transition shadow-md" x-text="$store.i18n.t('plan1Button')"></a></div>
-                    </div>
-                    <!-- Managed Service Plan -->
-                    <div class="p-8 border border-green-100 shadow-lg bg-gradient-to-br from-green-50 to-white rounded-xl">
-                        <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan2Title')"></h3>
-                        <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan2Price')"></p>
-                        <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan2Subtitle')"></p>
-                        <ul class="mb-8 space-y-4">
-                            <template x-for="featureText in $store.i18n.getPlanFeatures('plan2Features')" :key="featureText">
-                                <li class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-                                    <span x-text="featureText"></span>
-                                </li>
-                            </template>
-                        </ul>
-                        <div class="text-center"><a href="#contact" class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md" x-text="$store.i18n.t('heroBtnStart')"></a></div>
+    <!--         <div id="testimonials" class="py-16 bg-gray-50">
+                <div class="max-w-5xl px-4 mx-auto text-center">
+                    <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('testimonialsTitle')"></h2>
+                    <p class="max-w-2xl mx-auto mb-12 text-gray-600" x-text="$store.i18n.t('testimonialsSubtitle')"></p>
+                    <div class="grid gap-8 md:grid-cols-2">
+                        <template x-for="testimonial in $store.i18n.translations.testimonials" :key="testimonial.author">
+                            <div class="p-8 bg-white rounded-lg shadow-md">
+                                <p class="mb-4 text-lg italic text-gray-600" x-text="testimonial.quote[$store.i18n.lang] || testimonial.quote.en"></p>
+                                <p class="font-bold text-primary" x-text="'- ' + testimonial.author"></p>
+                            </div>
+                        </template>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div> -->
 
-        <div id="contact" class="py-16 bg-gray-50">
-            <div class="max-w-5xl px-4 mx-auto text-center">
-                <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('contactTitle')"></h2>
-                <p class="max-w-2xl mx-auto mb-8 text-gray-600" x-text="$store.i18n.t('contactSubtitle')"></p>
-                <div class="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-8 lg:gap-12">
-                    <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><a href="mailto:anas.bassoumi@gmail.com" class="text-lg text-gray-700 hover:underline">anas.bassoumi@gmail.com</a></div>
-                    <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg><a href="tel:+21650377851" class="text-lg text-gray-700 hover:underline">+216 50 377 851</a></div>
-                    <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.447-4.433-9.886-9.888-9.886-5.448 0-9.886 4.434-9.889 9.885-.001 2.225.651 4.316 1.906 6.03l-.534 1.956 1.984-.52z"/></svg><a href="https://wa.me/21650377851" target="_blank" class="text-lg text-gray-700 hover:underline">+216 50 377 851</a></div>
-                </div>
-            </div>
-        </div>
-
-        <footer class="py-12 text-white bg-gray-800">
-            <div class="max-w-6xl px-4 mx-auto">
-                <div class="grid gap-8 mb-8 md:grid-cols-3">
-                    <div><h3 class="mb-4 text-lg font-bold">FIDO</h3><p class="text-sm text-gray-400" x-text="$store.i18n.t('footerSlogan')"></p></div>
-                    <div><h4 class="mb-4 font-bold" x-text="$store.i18n.t('footerLinksTitle')"></h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#features" class="transition hover:text-white" x-text="$store.i18n.t('navFeatures')"></a></li><li><a href="#pricing" class="transition hover:text-white" x-text="$store.i18n.t('navPricing')"></a></li><li><a href="#contact" class="transition hover:text-white" x-text="$store.i18n.t('navContact')"></a></li></ul></div>
-                    <div><h4 class="mb-4 font-bold" x-text="$store.i18n.t('footerSupportTitle')"></h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#contact" class="transition hover:text-white" x-text="$store.i18n.t('heroBtnContact')"></a></li><li><a href="https://github.com/anas1412/Fido" target="_blank" class="transition hover:text-white" x-text="$store.i18n.t('footerRepoLink')"></a></li></ul></div>
-                </div>
-                <div class="pt-8 text-sm text-center text-gray-400 border-t border-gray-700"><p x-html="$store.i18n.t('footerCopyright')"></p></div>
-            </div>
-        </footer>
-
-        <div x-show="lightboxOpen" x-transition @click="lightboxOpen = false" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80" style="display: none;">
-            <div @click.stop class="relative">
-                <button @click="lightboxOpen = false" class="absolute -top-2 -right-2 md:-top-4 md:-right-4 text-white bg-primary rounded-full p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-                <img :src="lightboxImage" alt="Enlarged screenshot" class="object-contain w-auto rounded-lg shadow-lg max-h-[90vh]">
-            </div>
-        </div>
-
-        <!-- Demo Request Modal -->
-        <div x-show="isDemoModalOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70" style="display: none;">
-            <div @click.away="isDemoModalOpen = false" class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full text-center">
-                <h3 class="text-2xl font-bold mb-4" x-text="$store.i18n.t('demoModalTitle')"></h3>
-                <p class="text-gray-600 mb-6" x-text="$store.i18n.t('demoModalInstructions')"></p>
-                <div class="space-y-4 text-left bg-gray-100 p-4 rounded-lg mb-6">
-                    <div>
-                        <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalEmail')"></label>
-                        <p class="text-lg text-gray-800">demo@fido.tn</p>
-                    </div>
-                    <div>
-                        <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalPassword')"></label>
-                        <p class="text-lg text-gray-800">password</p>
+            <div id="pricing" class="py-16 bg-white">
+                <div class="max-w-5xl px-4 mx-auto">
+                    <h2 class="mb-12 text-3xl font-bold text-center" x-text="$store.i18n.t('pricingTitle')"></h2>
+                    <div class="grid gap-8 md:grid-cols-2">
+                        <!-- Self-Hosted Plan -->
+                        <div class="p-8 border border-gray-100 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-xl">
+                            <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan1Title')"></h3>
+                            <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan1Price')"></p>
+                            <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan1Subtitle')"></p>
+                            <ul class="mb-8 space-y-4">
+                                <template x-for="featureText in $store.i18n.getPlanFeatures('plan1Features')" :key="featureText">
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                                        <span x-text="featureText"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                            <div class="text-center"><a href="https://github.com/anas1412/Fido" target="_blank" class="bg-gray-800 text-white px-8 py-3 rounded-lg inline-block hover:bg-gray-700 transition shadow-md" x-text="$store.i18n.t('plan1Button')"></a></div>
+                        </div>
+                        <!-- Managed Service Plan -->
+                        <div class="p-8 border border-green-100 shadow-lg bg-gradient-to-br from-green-50 to-white rounded-xl">
+                            <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan2Title')"></h3>
+                            <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan2Price')"></p>
+                            <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan2Subtitle')"></p>
+                            <ul class="mb-8 space-y-4">
+                                <template x-for="featureText in $store.i18n.getPlanFeatures('plan2Features')" :key="featureText">
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                                        <span x-text="featureText"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                            <div class="text-center"><a href="#contact" class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md" x-text="$store.i18n.t('heroBtnStart')"></a></div>
+                        </div>
                     </div>
                 </div>
-                <a href="https://github.com/anas1412/Fido/releases" target="_blank" class="w-full bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md mb-4" x-text="$store.i18n.t('demoModalDownload')"></a>
-                <p class="text-sm text-gray-500" x-text="$store.i18n.t('demoModalContact')"></p>
             </div>
-        </div>
-    </body>
-</html>
+
+            <div id="contact" class="py-16 bg-gray-50">
+                <div class="max-w-5xl px-4 mx-auto text-center">
+                    <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('contactTitle')"></h2>
+                    <p class="max-w-2xl mx-auto mb-8 text-gray-600" x-text="$store.i18n.t('contactSubtitle')"></p>
+                    <div class="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-8 lg:gap-12">
+                        <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><a href="mailto:anas.bassoumi@gmail.com" class="text-lg text-gray-700 hover:underline">anas.bassoumi@gmail.com</a></div>
+                        <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg><a href="tel:+21650377851" class="text-lg text-gray-700 hover:underline">+216 50 377 851</a></div>
+                        <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.447-4.433-9.886-9.888-9.886-5.448 0-9.886 4.434-9.889 9.885-.001 2.225.651 4.316 1.906 6.03l-.534 1.956 1.984-.52z"/></svg><a href="https://wa.me/21650377851" target="_blank" class="text-lg text-gray-700 hover:underline">+216 50 377 851</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="py-12 text-white bg-gray-800">
+                <div class="max-w-6xl px-4 mx-auto">
+                    <div class="grid gap-8 mb-8 md:grid-cols-3"><div><h3 class="mb-4 text-lg font-bold">FIDO</h3><p class="text-sm text-gray-400" x-text="$store.i18n.t('footerSlogan')"></p></div><div><h4 class="mb-4 font-bold" x-text="$store.i18n.t('footerLinksTitle')"></h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#features" class="transition hover:text-white" x-text="$store.i18n.t('navFeatures')"></a></li><li><a href="#pricing" class="transition hover:text-white" x-text="$store.i18n.t('navPricing')"></a></li><li><a href="#contact" class="transition hover:text-white" x-text="$store.i18n.t('navContact')"></a></li></ul></div><div><h4 class="mb-4 font-bold" x-text="$store.i18n.t('footerSupportTitle')"></h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#contact" class="transition hover:text-white" x-text="$store.i18n.t('heroBtnContact')"></a></li><li><a href="https://github.com/anas1412/Fido" target="_blank" class="transition hover:text-white" x-text="$store.i18n.t('footerRepoLink')"></a></li></ul></div>
+                    </div>
+                    <div class="pt-8 text-sm text-center text-gray-400 border-t border-gray-700"><p x-html="$store.i18n.t('footerCopyright')"></p></div>
+                </div>
+            </footer>
+
+            <div x-show="lightboxOpen" x-transition @click="lightboxOpen = false" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-80" style="display: none;">
+                <div @click.stop class="relative">
+                    <button @click="lightboxOpen = false" class="absolute -top-2 -right-2 md:-top-4 md:-right-4 text-white bg-primary rounded-full p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                    <img :src="lightboxImage" alt="Enlarged screenshot" class="object-contain w-auto rounded-lg shadow-lg max-h-[90vh]">
+                </div>
+            </div>
+
+            <!-- Demo Request Modal -->
+            <div x-show="isDemoModalOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70" style="display: none;">
+                <div @click.away="isDemoModalOpen = false" class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full text-center">
+                    <h3 class="text-2xl font-bold mb-4" x-text="$store.i18n.t('demoModalTitle')"></h3>
+                    <p class="text-gray-600 mb-6" x-text="$store.i18n.t('demoModalInstructions')"></p>
+                    <div class="space-y-4 text-left bg-gray-100 p-4 rounded-lg mb-6">
+                        <div>
+                            <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalEmail')"></label>
+                            <p class="text-lg text-gray-800">demo@fido.tn</p>
+                        </div>
+                        <div>
+                            <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalPassword')"></label>
+                            <p class="text-lg text-gray-800">password</p>
+                        </div>
+                    </div>
+                    <a href="https://github.com/anas1412/Fido/releases" target="_blank" class="w-full bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md mb-4" x-text="$store.i18n.t('demoModalDownload')"></a>
+                    <p class="text-sm text-gray-500" x-text="$store.i18n.t('demoModalContact')"></p>
+                </div>
+            </div>
+        </body>
+    </html>
