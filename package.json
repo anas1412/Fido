@@ -64,7 +64,8 @@
                     "!.git",
                     "!electron-builder.yml",
                     "!.idea",
-                    "!.vscode"
+                    "!.vscode",
+                    "!**/.env.demo"
                 ]
             }
         ]

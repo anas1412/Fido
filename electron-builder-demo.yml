@@ -28,6 +28,5 @@ extraResources:
       - "!.idea"
       - "!.vscode"
       - "!.env"
-      - "!database/seeders/DatabaseSeeder.php"
       - "database/seeders/DemoAppSeeder.php"
       - ".env.demo"

@@ -14,20 +14,19 @@ const axios = require('axios'); // Using axios for polling
 
 const isDev = !app.isPackaged;
 let currentEnvPath;
-let isDemoBuild = false; // Default to false
 
-// The path to the .env.demo file is determined differently in dev vs. packaged
-const demoEnvPath = isDev ? path.join(__dirname, '.env.demo') : path.join(process.resourcesPath, 'app', '.env.demo');
-
-// In a packaged app, we determine the build type by checking if .env.demo exists.
-if (!isDev && fs.existsSync(demoEnvPath)) {
-    isDemoBuild = true;
-    currentEnvPath = demoEnvPath;
+if (isDev) {
+    const isDemo = process.env.APP_DEMO_BUILD === 'true';
+    currentEnvPath = isDemo ? path.join(__dirname, '.env.demo') : path.join(__dirname, '.env');
 } else {
-    // In dev, we rely on the environment variable. In a packaged prod build, we just use the standard .env path.
-    isDemoBuild = isDev && process.env.APP_DEMO_BUILD === 'true';
-    currentEnvPath = isDemoBuild ? demoEnvPath : (isDev ? path.join(__dirname, '.env') : path.join(process.resourcesPath, 'app', '.env'));
+    const demoEnvInPackage = path.join(process.resourcesPath, 'app', '.env.demo');
+    if (fs.existsSync(demoEnvInPackage)) {
+        currentEnvPath = demoEnvInPackage;
+    } else {
+        currentEnvPath = path.join(process.resourcesPath, 'app', '.env');
+    }
 }
+const isDemoBuild = currentEnvPath.endsWith('.env.demo');
 
 require('dotenv').config({ path: currentEnvPath, override: true });
 
@@ -52,7 +51,7 @@ const phpExecutable = isDev ? path.join(__dirname, 'php', 'php.exe') : path.join
 const artisanScript = path.join(artisanCwd, 'artisan');
 
 const dbPath = process.env.DB_DATABASE;
-const storagePath = path.join(artisanCwd, 'storage'); // Base storage path
+let storagePath = path.join(artisanCwd, 'storage'); // Base storage path
 
 // =================================================================
 //  4. HELPER FUNCTIONS
@@ -60,7 +59,12 @@ const storagePath = path.join(artisanCwd, 'storage'); // Base storage path
 
 function getPhpEnvironment(dbPathToUse) {
     // Pass the absolute path of the database file to PHP's environment
-    return { ...process.env, APP_STORAGE_PATH: storagePath, DB_DATABASE: dbPathToUse };
+    // Also pass the correct APP_STORAGE_PATH for Laravel's storage
+    return {
+        ...process.env,
+        DB_DATABASE: dbPathToUse,
+        APP_STORAGE_PATH: storagePath // Use the globally re-assigned storagePath
+    };
 }
 
 function runArtisanCommand(args, dbPathToUse) { // Added dbPathToUse
@@ -97,7 +101,7 @@ function runArtisanCommand(args, dbPathToUse) { // Added dbPathToUse
     });
 }
 
-function startPhpServer() {
+function startPhpServer(dbPathToUseForServer) {
     return new Promise(async (resolve, reject) => {
         try {
             const port = await getPort({ port: 8000 });
@@ -106,7 +110,7 @@ function startPhpServer() {
             console.log(`Starting PHP server...`);
             phpServerProcess = spawn(phpExecutable, [artisanScript, 'serve', `--port=${port}`], {
                 cwd: artisanCwd,
-                env: getPhpEnvironment()
+                env: getPhpEnvironment(dbPathToUseForServer)
             });
             
             phpServerProcess.on('error', reject);
@@ -182,15 +186,44 @@ app.whenReady().then(async () => {
     try {
         getPort = (await import('get-port')).default;
 
-        // Ensure the base storage directory exists
+        // If this is a packaged demo build, create a temporary .env file for artisan to use
+        if (isDemoBuild && !isDev) {
+            const demoEnvFile = path.join(artisanCwd, '.env.demo');
+            const tempEnvFile = path.join(artisanCwd, '.env');
+            console.log(`Demo build detected. Copying ${demoEnvFile} to ${tempEnvFile} for setup...`);
+            fs.copyFileSync(demoEnvFile, tempEnvFile);
+
+            // The APP_STORAGE_PATH is now passed directly to the artisan command's environment.
+            // No need to append to the .env file here.
+        }
+
+        // Define writable paths for user data, storage, and the database
+        const userDataPath = app.getPath('userData');
+        storagePath = path.join(userDataPath, 'storage'); // Re-assign global storage path
+        const fullDbPath = path.join(userDataPath, dbPath);
+
+        // Ensure the base storage directory exists in the user data folder
         if (!fs.existsSync(storagePath)) {
             console.log(`Creating base storage directory: ${storagePath}`);
             fs.mkdirSync(storagePath, { recursive: true });
         }
 
-        const fullDbPath = path.join(artisanCwd, dbPath); // Calculate full path here
+        // Ensure Laravel's required storage subdirectories exist
+        const requiredStorageDirs = [
+            path.join(storagePath, 'framework', 'views'),
+            path.join(storagePath, 'framework', 'cache', 'data'),
+            path.join(storagePath, 'framework', 'sessions'),
+            path.join(storagePath, 'logs')
+        ];
 
-        // Ensure the database directory exists (e.g., storage/database)
+        requiredStorageDirs.forEach(dir => {
+            if (!fs.existsSync(dir)) {
+                console.log(`Creating required storage subdirectory: ${dir}`);
+                fs.mkdirSync(dir, { recursive: true });
+            }
+        });
+
+        // Ensure the database directory exists in the user data folder
         const dbDir = path.dirname(fullDbPath);
         if (!fs.existsSync(dbDir)) {
             console.log(`Creating database directory: ${dbDir}`);
@@ -238,7 +271,7 @@ app.whenReady().then(async () => {
             console.log('Database migrated.');
         }
 
-        const serverUrl = await startPhpServer();
+        const serverUrl = await startPhpServer(fullDbPath);
 
         // Poll the server to see when it's ready
         const pollServer = async () => {
