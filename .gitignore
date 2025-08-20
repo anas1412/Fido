@@ -21,3 +21,18 @@ composer.phar
 /dist/
 *.asarrr
 /storage/*.sqlite
+
+# Ignore Laravel Cache Files
+/bootstrap/cache/*
+# Ignore Laravel Logs
+/storage/logs/*
+# Ignore Laravel Sessions
+/storage/framework/sessions/*
+# Ignore Laravel Views
+/storage/framework/views/*
+# Ignore Laravel Compiled Files
+/storage/framework/cache/*
+# Ignore Laravel Queues
+/storage/queue/*
+# Ignore Laravel Config Cache
+/storage/framework/config/*
