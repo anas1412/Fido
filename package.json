@@ -33,7 +33,7 @@
         "get-port": "^7.1.0"
     },
     "build": {
-        "appId": "com.yourcompany.fido",
+        "appId": "tn.cyberia.fido",
         "productName": "Fido",
         "asar": true,
         "win": {

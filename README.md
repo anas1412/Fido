@@ -71,6 +71,16 @@ npm run dist
 
 This command uses `electron-builder` to create a production-ready build. The final executable and associated files will be located in the `dist` directory.
 
+### Building the Demo Version
+
+To package a special demo version of the application, which uses the `.env.demo` configuration and seeds the database with sample data, run the following command:
+
+```bash
+npm run dist:demo
+```
+
+This command is ideal for creating a distributable installer for trial or demonstration purposes. The final executable will also be located in the `dist` directory.
+
 ## Database Seeding
 
 After setting up the project and running migrations, you can seed your database with initial data.
@@ -109,6 +119,9 @@ php artisan seed:demo
 
 ### Current Features
 
+-   **Client & Invoice Management:** Track your clients and manage their invoices and fee notes (honoraires) all in one place.
+-   **Customizable Document Templates:** Tailor the design of your fee notes, invoices, and debit notes to match your professional brand.
+-   **One-Click PDF Downloads:** Generate and download PDF versions of all your reports and financial documents for easy printing, emailing, or archiving.
 -   **Employees Accounts Management:** Easily manage employees access on the dashboard.
 -   **Professional Fees Report:** Generate and export detailed professional fees reports.
 -   **Withholding Tax Statement:** Simplifies management of withholding tax obligations.

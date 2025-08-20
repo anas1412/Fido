@@ -1,5 +1,14 @@
-appId: com.yourcompany.fido.demo
+appId: tn.cyberia.fido.demo
 productName: Fido Demo
+asar: true
+win:
+  icon: public/images/favicon.ico
+  target: nsis
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: false
+  createDesktopShortcut: true
 files:
   - main.cjs
   - package.json
