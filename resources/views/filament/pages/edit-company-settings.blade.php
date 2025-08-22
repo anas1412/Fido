@@ -1,9 +1,10 @@
-<x-filament-panels::page>
-    <x-filament-panels::form wire:submit="save">
-        {{ $this->form }}
+<x-filament::page>
+    {{ $this->form }}
 
-        <x-filament-panels::form.actions
-            :actions="$this->getFormActions()"
-        />
-    </x-filament-panels::form>
-</x-filament-panels::page>
+    <!-- Actions -->
+    <div class="mt-6 flex justify-end gap-3">
+        <x-filament::button wire:click="save" type="button" color="primary">
+            Save
+        </x-filament::button>
+    </div>
+</x-filament::page>

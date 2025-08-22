@@ -1,5 +1,3 @@
-{{-- resources/views/filament/pages/edit-taxes.blade.php --}}
-
 <x-filament::page>
     <div class="grid grid-cols-1 gap-6 mb-8 md:grid-cols-3">
         <x-filament::card>
@@ -41,8 +39,10 @@
         <form wire:submit.prevent="save" class="space-y-6">
             {{ $this->form }}
 
-            <div class="flex justify-end">
-                <x-filament-actions::actions :actions="$this->getFormActions()" />
+            <div class="flex justify-end gap-3">
+                <x-filament::button wire:click="save" type="button" color="primary">
+                    Save
+                </x-filament::button>
             </div>
         </form>
     </x-filament::card>

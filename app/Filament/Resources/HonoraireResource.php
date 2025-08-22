@@ -218,7 +218,7 @@ class HonoraireResource extends Resource
                             TextInput::make('netapayer')
                                 ->label(__('Net to Pay')),
                         ]),
-                ]),
+                ])->columnSpanFull(),
             ])->columns(1);
     }
 
@@ -289,7 +289,8 @@ class HonoraireResource extends Resource
                             ->label('Matricule Fiscale')
                             ->icon('heroicon-o-identification'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
                 Section::make('Informations supplémentaires')
                     ->schema([
                         TextEntry::make('object')
@@ -301,7 +302,8 @@ class HonoraireResource extends Resource
                             ->label('Date de honoraire')
                             ->date(),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->columnSpanFull(),
                 Section::make('Informations sur exonération')
                     ->schema([
                         TextEntry::make('exonere_tf')
@@ -317,7 +319,8 @@ class HonoraireResource extends Resource
                             ->formatStateUsing(fn(bool $state): string => $state ? 'Oui' : 'Non')
                             ->color(fn(bool $state): string => $state ? 'success' : 'danger'),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->columnSpanFull(),
                 Section::make('Détails financiers')
                     ->schema([
                         Grid::make(2)
@@ -345,7 +348,7 @@ class HonoraireResource extends Resource
                                     ->color('success')
                                     ->weight('bold'),
                             ]),
-                    ]),
+                    ])->columnSpanFull(),
             ]);
     }
 

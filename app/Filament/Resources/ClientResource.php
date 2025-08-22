@@ -155,7 +155,8 @@ class ClientResource extends Resource
                             ->icon('heroicon-o-phone')
                             ->columnSpan(2),
                     ])
-                    ->columns(4),
+                    ->columns(4)
+                    ->columnSpanFull(),
             ]);
     }
 
