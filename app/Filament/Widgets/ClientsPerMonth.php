@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class ClientsPerMonth extends ChartWidget
 {
-    protected static ?string $heading = 'Clients par mois (année fiscale en cours)';
+    protected ?string $heading = 'Clients par mois (année fiscale en cours)';
     protected static ?int $sort = 3;
-    protected static ?string $pollingInterval = '15s';
+    protected ?string $pollingInterval = '15s';
     protected static bool $isLazy = true;
 
     protected function getData(): array

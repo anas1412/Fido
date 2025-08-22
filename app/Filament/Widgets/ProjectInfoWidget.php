@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 
 class ProjectInfoWidget extends Widget
 {
-    protected static string $view = 'filament.widgets.project-info-widget';
+    protected string $view = 'filament.widgets.project-info-widget';
 
     // Optional: Customize the position of the widget
     protected static ?int $sort = 1; // Adjust position in the dashboard

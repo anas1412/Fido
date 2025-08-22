@@ -2,9 +2,10 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
+use Exception;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
@@ -19,8 +20,8 @@ class ModifyFiscalYear extends Page implements HasForms
     protected static ?string $navigationLabel = null;
     protected static ?string $slug = 'modify-fiscal-year';
     protected static ?string $title = null;
-    protected static string $view = 'filament.pages.modify-fiscal-year';
-    protected static ?string $navigationGroup = null;
+    protected string $view = 'filament.pages.modify-fiscal-year';
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     public static function getNavigationLabel(): string
     {
@@ -60,10 +61,10 @@ class ModifyFiscalYear extends Page implements HasForms
         $this->year = $this->data['year'] ?? 0;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('year')
                     ->label(__('Fiscal Year'))
                     ->numeric()
@@ -93,7 +94,7 @@ class ModifyFiscalYear extends Page implements HasForms
             $fiscalYearSetting->save();
             Cache::forget('fiscal_year_setting');
             $this->year = $data['year'] ?? 0;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Notification::make()
                 ->title(__('Error'))
                 ->body(__('There was an error saving your changes.'))

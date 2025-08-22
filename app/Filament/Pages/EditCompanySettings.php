@@ -2,9 +2,10 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
+use Exception;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
@@ -17,7 +18,7 @@ class EditCompanySettings extends Page implements HasForms
 
     protected static ?string $navigationLabel = null;
 
-    protected static ?string $navigationGroup = null;
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     public function getTitle(): string
     {
@@ -39,7 +40,7 @@ class EditCompanySettings extends Page implements HasForms
         return 999;
     }
 
-    protected static string $view = 'filament.pages.edit-company-settings';
+    protected string $view = 'filament.pages.edit-company-settings';
 
     public ?array $data = [];
 
@@ -68,10 +69,10 @@ class EditCompanySettings extends Page implements HasForms
         $this->form->fill($companySetting->attributesToArray());
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('company_name')
                     ->label(__('Company Name'))
                     ->required()
@@ -127,7 +128,7 @@ class EditCompanySettings extends Page implements HasForms
             $data = $this->form->getState();
 
             CompanySetting::firstOrCreate([])->update($data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Notification::make()
                 ->title(__('Error'))
                 ->body(__('There was an error saving your changes.'))

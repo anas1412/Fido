@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\HonoraireReportResource\Pages;
 
+use App\Models\TaxSetting;
 use App\Filament\Resources\HonoraireReportResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -37,7 +38,7 @@ class ListHonoraireReports extends ListRecords
                     $startDateFormatted = date('d/m/Y', strtotime($data['start_date']));
                     $endDateFormatted = date('d/m/Y', strtotime($data['end_date']));
 
-                    $taxSettings = \App\Models\TaxSetting::first();
+                    $taxSettings = TaxSetting::first();
                     $tva = $taxSettings->tva * 100;
                     $rs = $taxSettings->rs * 100;
                     $tf = $taxSettings->tf * 100;
@@ -85,11 +86,11 @@ class ListHonoraireReports extends ListRecords
                     }, "rapport_des_honoraires_{$currentDate}.pdf");
                 })
 
-                ->form([
-                    Forms\Components\DatePicker::make('start_date')
+                ->schema([
+                    DatePicker::make('start_date')
                         ->label('Date de début')
                         ->required(),
-                    Forms\Components\DatePicker::make('end_date')
+                    DatePicker::make('end_date')
                         ->label('Date de fin')
                         ->required(),
                 ]),

@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use BezhanSalleh\FilamentLanguageSwitch\Enums\Placement;
+use BezhanSalleh\LanguageSwitch\Enums\Placement;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
+use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 
 class AppServiceProvider extends ServiceProvider
 {

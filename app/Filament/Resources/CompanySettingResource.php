@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\CompanySettingResource\Pages;
 use App\Filament\Resources\CompanySettingResource\RelationManagers;
 use App\Models\CompanySetting;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,39 +20,39 @@ class CompanySettingResource extends Resource
 
     protected static ?string $model = CompanySetting::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('company_name')
+        return $schema
+            ->components([
+                TextInput::make('company_name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('slogan')
+                TextInput::make('slogan')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('mf_number')
+                TextInput::make('mf_number')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('location')
+                TextInput::make('location')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('address_line1')
+                TextInput::make('address_line1')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('address_line2')
+                TextInput::make('address_line2')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('phone1')
+                TextInput::make('phone1')
                     ->tel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('phone2')
+                TextInput::make('phone2')
                     ->tel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('phone3')
+                TextInput::make('phone3')
                     ->tel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('fax')
+                TextInput::make('fax')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
+                TextInput::make('email')
                     ->email()
                     ->maxLength(255),
             ]);

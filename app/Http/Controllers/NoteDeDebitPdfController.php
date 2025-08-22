@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TaxSetting;
 use Illuminate\Http\Request;
 use App\Models\NoteDeDebit;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -37,7 +38,7 @@ class NoteDeDebitPdfController extends Controller
             ]
         );
 
-        $taxSettings = \App\Models\TaxSetting::first();
+        $taxSettings = TaxSetting::first();
         return Pdf::loadView('note-de-debit', [
             'record' => $noteDeDebit,
             'formattedDate' => $formattedDate,

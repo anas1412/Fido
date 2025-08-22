@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CompanySettingResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\CompanySettingResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
@@ -19,7 +20,7 @@ class EditCompanySetting extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

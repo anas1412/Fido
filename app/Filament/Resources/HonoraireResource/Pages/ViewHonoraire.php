@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\HonoraireResource\Pages;
 
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\HonoraireResource;
 use App\Models\Honoraire;
 use Filament\Actions;
@@ -15,14 +18,14 @@ class ViewHonoraire extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('pdf')
+            Action::make('pdf')
                 ->label('PDF')
                 ->color('success')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->url(fn(Honoraire $record) => route('pdf', $record)),
 
-            Actions\EditAction::make(),
-            Actions\DeleteAction::make(),
+            EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 

@@ -2,13 +2,26 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Schemas\Components\Section;
+use App\Filament\Resources\ClientResource\Pages\ListClients;
+use App\Filament\Resources\ClientResource\Pages\CreateClient;
+use App\Filament\Resources\ClientResource\Pages\ViewClient;
+use App\Filament\Resources\ClientResource\Pages\EditClient;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
 use App\Filament\Resources\ClientResource\RelationManagers\HonorairesRelationManager;
 use App\Filament\Resources\ClientResource\RelationManagers\NoteDeDebitsRelationManager;
 use App\Models\Client;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -17,8 +30,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\IconEntry;
 
@@ -27,9 +38,9 @@ class ClientResource extends Resource
 {
     protected static ?string $model = Client::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-building-storefront';
 
-    protected static ?string $navigationGroup = null;
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -66,21 +77,21 @@ class ClientResource extends Resource
 
 
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->label(__('Name'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('address')
+                TextInput::make('address')
                     ->label(__('Address'))
                     ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
+                TextInput::make('phone')
                     ->label(__('Phone'))
                     ->maxLength(15),
-                Forms\Components\TextInput::make('mf')
+                TextInput::make('mf')
                     ->label(__('Tax ID'))
                     ->maxLength(255),
             ]);
@@ -90,40 +101,40 @@ class ClientResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('Name'))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('address')
+                TextColumn::make('address')
                     ->label(__('Address')),
-                Tables\Columns\TextColumn::make('phone')
+                TextColumn::make('phone')
                     ->label(__('Phone'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('mf')
+                TextColumn::make('mf')
                     ->label(__('Tax ID'))
                     ->searchable(),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
                 ]),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Informations du client')
                     ->schema([
                         TextEntry::make('name')
@@ -151,8 +162,8 @@ class ClientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\HonorairesRelationManager::class,
-            RelationManagers\NoteDeDebitsRelationManager::class,
+            HonorairesRelationManager::class,
+            NoteDeDebitsRelationManager::class,
         ];
     }
 
@@ -160,10 +171,10 @@ class ClientResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClients::route('/'),
-            'create' => Pages\CreateClient::route('/create'),
-            'view' => Pages\ViewClient::route('/{record}'),
-            'edit' => Pages\EditClient::route('/{record}/edit'),
+            'index' => ListClients::route('/'),
+            'create' => CreateClient::route('/create'),
+            'view' => ViewClient::route('/{record}'),
+            'edit' => EditClient::route('/{record}/edit'),
         ];
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Forms\Components\DatePicker;
+use App\Filament\Resources\RetenueSourcResource\Pages\ListRetenueSourcs;
 use App\Filament\Resources\RetenueSourcResource\Pages;
 use App\Models\Honoraire;
 use Filament\Forms;
@@ -25,9 +27,9 @@ class RetenueSourcResource extends Resource
 {
     protected static ?string $model = Honoraire::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = null;
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -59,19 +61,19 @@ class RetenueSourcResource extends Resource
                     ->label('Nom du client')
                     ->sortable()
                     ->searchable(), */
-                Tables\Columns\TextColumn::make('note')
+                TextColumn::make('note')
                     ->label('Note')
                     ->getStateUsing(function ($record) {
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     }),
-                Tables\Columns\TextColumn::make('date')
+                TextColumn::make('date')
                     ->label("Date d'honoraire")
                     ->date(),
-                Tables\Columns\TextColumn::make('montantTTC')
+                TextColumn::make('montantTTC')
                     ->label('Montant TTC')
                     ->summarize(Sum::make()->label('')->money('TND'))
                     ->money('tnd'),
-                Tables\Columns\TextColumn::make('rs')
+                TextColumn::make('rs')
                     ->label('Retenue à la source')
                     ->summarize(Sum::make()->label('')->money('TND'))
                     ->money('tnd'),
@@ -86,10 +88,10 @@ class RetenueSourcResource extends Resource
                     ->searchable()
                     ->label('Nom du client'),
                 Filter::make('date_range')
-                    ->form([
-                        Forms\Components\DatePicker::make('start_date')
+                    ->schema([
+                        DatePicker::make('start_date')
                             ->label('Date de début'),
-                        Forms\Components\DatePicker::make('end_date')
+                        DatePicker::make('end_date')
                             ->label('Date de fin'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -105,9 +107,9 @@ class RetenueSourcResource extends Resource
                     ->button()
                     ->label('Choisir un client et les dates')
             ) */
-            ->actions([
+            ->recordActions([
                 /* Tables\Actions\ViewAction::make(), */])
-            ->bulkActions([
+            ->toolbarActions([
                 // You can add bulk actions if needed
             ]);
     }
@@ -122,7 +124,7 @@ class RetenueSourcResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRetenueSourcs::route('/'),
+            'index' => ListRetenueSourcs::route('/'),
         ];
     }
 }

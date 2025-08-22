@@ -2,10 +2,18 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\UserResource\Pages\ListUsers;
+use App\Filament\Resources\UserResource\Pages\CreateUser;
+use App\Filament\Resources\UserResource\Pages\ViewUser;
+use App\Filament\Resources\UserResource\Pages\EditUser;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
-use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Toggle;
@@ -22,9 +30,9 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = null;
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -71,31 +79,31 @@ class UserResource extends Resource
         return !auth()->user()?->is_demo;
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->label(__('Name'))
                     ->required()
                     ->minLength(3)
                     ->maxLength(30),
-                Forms\Components\TextInput::make('password')
+                TextInput::make('password')
                     ->label(__('Password'))
                     ->required()
                     ->minLength(8)
                     ->maxLength(30)
                     ->revealable()
                     ->password(),
-                Forms\Components\TextInput::make('email')
+                TextInput::make('email')
                     ->label(__('Email'))
                     ->required()
                     ->email()
                     ->maxLength(50),
-                Forms\Components\Toggle::make('is_admin')
+                Toggle::make('is_admin')
                     ->label(__('Admin'))
                     ->required(),
-                Forms\Components\Toggle::make('is_demo')
+                Toggle::make('is_demo')
                     ->label(__('Demo User'))
                     ->disabled(fn (?Model $record) => $record !== null),
             ]);
@@ -105,24 +113,24 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('Name'))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->label(__('Email'))
                     ->toggleable()
                     ->searchable(),
-                Tables\Columns\ToggleColumn::make('is_admin')
+                ToggleColumn::make('is_admin')
                     ->label(__('Admin'))
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\ToggleColumn::make('is_demo')
+                ToggleColumn::make('is_demo')
                     ->label(__('Demo User'))
                     ->toggleable()
                     ->sortable()
                     ->disabled(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('Created at'))
                     ->sortable()
                     ->datetime(),
@@ -130,13 +138,13 @@ class UserResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ])->recordUrl(
                 #This makes the rows unclickable
@@ -154,10 +162,10 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => ListUsers::route('/'),
+            'create' => CreateUser::route('/create'),
+            'view' => ViewUser::route('/{record}'),
+            'edit' => EditUser::route('/{record}/edit'),
         ];
     }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
+use Exception;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
@@ -18,8 +19,8 @@ class EditTaxes extends Page implements HasForms
     protected static ?string $navigationLabel = null;
     protected static ?string $slug = 'edit-taxes';
     protected static ?string $title = null;
-    protected static string $view = 'filament.pages.edit-taxes';
-    protected static ?string $navigationGroup = null;
+    protected string $view = 'filament.pages.edit-taxes';
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     public static function getNavigationLabel(): string
     {
@@ -67,10 +68,10 @@ class EditTaxes extends Page implements HasForms
         $this->tf = $this->data['tf'] ?? 0;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('tva')
                     ->label(__('TVA Value (decimal)'))
                     ->numeric()
@@ -105,7 +106,7 @@ class EditTaxes extends Page implements HasForms
             $this->tva = $data['tva'] ?? 0;
             $this->rs = $data['rs'] ?? 0;
             $this->tf = $data['tf'] ?? 0;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Notification::make()
                 ->title(__('Error'))
                 ->body(__('There was an error saving your changes.'))

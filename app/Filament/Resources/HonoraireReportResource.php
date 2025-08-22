@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\DatePicker;
+use App\Filament\Resources\HonoraireReportResource\Pages\ListHonoraireReports;
 use App\Filament\Resources\HonoraireReportResource\Pages;
 use App\Filament\Resources\HonoraireReportResource\RelationManagers;
 use App\Models\Honoraire;
@@ -24,9 +27,9 @@ class HonoraireReportResource extends Resource
 {
     protected static ?string $model = Honoraire::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document';
 
-        protected static ?string $navigationGroup = null;
+        protected static string | \UnitEnum | null $navigationGroup = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -51,39 +54,39 @@ class HonoraireReportResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('note')
+                TextColumn::make('note')
                     ->label('Réf')
                     ->sortable()
                     ->getStateUsing(function ($record) {
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     }),
-                Tables\Columns\TextColumn::make('date')
+                TextColumn::make('date')
                     ->label("Date")
                     ->date(),
-                Tables\Columns\TextColumn::make('client.name')
+                TextColumn::make('client.name')
                     ->label('Client')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('client.mf')
+                TextColumn::make('client.mf')
                     ->label('M.F')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('montantHT')
+                TextColumn::make('montantHT')
                     ->label('Montant HT')
                     ->summarize(Sum::make()->label('')),
-                Tables\Columns\TextColumn::make('tva')
+                TextColumn::make('tva')
                     ->label('TVA')
                     ->summarize(Sum::make()->label('')),
-                Tables\Columns\TextColumn::make('rs')
+                TextColumn::make('rs')
                     ->label('R.S')
                     ->summarize(Sum::make()->label('')),
-                Tables\Columns\TextColumn::make('montantTTC')
+                TextColumn::make('montantTTC')
                     ->label('Montant TTC')
                     ->summarize(Sum::make()->label('')),
-                Tables\Columns\TextColumn::make('tf')
+                TextColumn::make('tf')
                     ->label('Timbre')
                     ->summarize(Sum::make()->label('')),
-                Tables\Columns\TextColumn::make('netapayer')
+                TextColumn::make('netapayer')
                     ->label('Net à payer')
                     ->summarize(Sum::make()->label('')),
 
@@ -94,10 +97,10 @@ class HonoraireReportResource extends Resource
                     ->searchable()
                     ->label('Nom du client'), */
                 Filter::make('date_range')
-                    ->form([
-                        Forms\Components\DatePicker::make('start_date')
+                    ->schema([
+                        DatePicker::make('start_date')
                             ->label('Date de début'),
-                        Forms\Components\DatePicker::make('end_date')
+                        DatePicker::make('end_date')
                             ->label('Date de fin'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -113,8 +116,8 @@ class HonoraireReportResource extends Resource
                     ->button()
                     ->label('Choisir un client et les dates')
             ) */
-            ->actions([])
-            ->bulkActions([]);
+            ->recordActions([])
+            ->toolbarActions([]);
     }
 
     public static function getRelations(): array
@@ -127,7 +130,7 @@ class HonoraireReportResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListHonoraireReports::route('/'),
+            'index' => ListHonoraireReports::route('/'),
             /* 'create' => Pages\CreateHonoraireReport::route('/create'),
             'edit' => Pages\EditHonoraireReport::route('/{record}/edit'), */
         ];

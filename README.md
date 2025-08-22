@@ -13,7 +13,7 @@ Fido is a freelancing project dashboard platform tailored to meet the unique nee
 -   **[Laravel](https://laravel.com/):** Scalable PHP framework.
 -   **[Livewire](https://livewire.com/):** Real-time web development.
 -   **[TailwindCSS](https://tailwindcss.com/)::** Utility-first CSS for rapid design.
--   **[FilamentPHP](https://filamentphp.com/):** Elegant admin panel.
+-   **[FilamentPHP](https://filamentphp.com/):** Elegant admin panel (v4).
 -   **[SQLite](https://www.sqlite.org/):** Lightweight, serverless database.
 
 ## Quick Start Guide (for Windows)

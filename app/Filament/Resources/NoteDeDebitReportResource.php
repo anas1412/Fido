@@ -2,6 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\DatePicker;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\NoteDeDebitReportResource\Pages\ListNoteDeDebitReports;
 use App\Filament\Resources\NoteDeDebitReportResource\Pages;
 use App\Filament\Resources\NoteDeDebitReportResource\RelationManagers;
 use App\Models\NoteDeDebit;
@@ -24,9 +30,9 @@ class NoteDeDebitReportResource extends Resource
 {
     protected static ?string $model = NoteDeDebit::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-duplicate';
 
-    protected static ?string $navigationGroup = null;
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -52,15 +58,15 @@ class NoteDeDebitReportResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('note')
+                TextColumn::make('note')
                     ->label('Référence')
                     ->getStateUsing(function ($record) {
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     }),
-                Tables\Columns\TextColumn::make('date')
+                TextColumn::make('date')
                     ->label("Date de debit")
                     ->date(),
-                Tables\Columns\TextColumn::make('amount')
+                TextColumn::make('amount')
                     ->label('Montant de debit')
                     ->summarize(Sum::make()->label('')->money('TND'))
                     ->money('tnd'),
@@ -75,10 +81,10 @@ class NoteDeDebitReportResource extends Resource
                     ->searchable()
                     ->label('Nom du client'),
                 Filter::make('date_range')
-                    ->form([
-                        Forms\Components\DatePicker::make('start_date')
+                    ->schema([
+                        DatePicker::make('start_date')
                             ->label('Date de début'),
-                        Forms\Components\DatePicker::make('end_date')
+                        DatePicker::make('end_date')
                             ->label('Date de fin'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
@@ -89,12 +95,12 @@ class NoteDeDebitReportResource extends Resource
                             );
                     }),
             ], layout: FiltersLayout::AboveContent)->filtersFormColumns(2)
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -109,7 +115,7 @@ class NoteDeDebitReportResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNoteDeDebitReports::route('/'),
+            'index' => ListNoteDeDebitReports::route('/'),
         ];
     }
 

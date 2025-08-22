@@ -2,19 +2,18 @@
 
 namespace App\Filament\Auth;
 
-use Filament\Forms\Form;
-use Filament\Pages\Auth\Login as BaseLogin;
+use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Facades\Config;
 
-class Login extends BaseLogin
+class Login extends \Filament\Auth\Pages\Login
 {
-    protected function form(Form $form): Form
+    protected function form(Schema $schema): Schema
     {
-        $form = parent::form($form);
+        $schema = parent::form($schema);
 
         
 
-        return $form;
+        return $schema;
     }
 }

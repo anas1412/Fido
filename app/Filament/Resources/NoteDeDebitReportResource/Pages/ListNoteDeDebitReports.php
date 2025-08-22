@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\NoteDeDebitReportResource\Pages;
 
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\NoteDeDebitReportResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -51,16 +53,16 @@ class ListNoteDeDebitReports extends ListRecords
                     }, "rapport_note_de_debit_{$client->name}_{$currentDate}.pdf");
                 })
 
-                ->form([
-                    Forms\Components\Select::make('client_id')
+                ->schema([
+                    Select::make('client_id')
                         ->label('Client')
                         ->options(Client::pluck('name', 'id'))
                         ->searchable()
                         ->required(),
-                    Forms\Components\DatePicker::make('start_date')
+                    DatePicker::make('start_date')
                         ->label('Date de début')
                         ->required(),
-                    Forms\Components\DatePicker::make('end_date')
+                    DatePicker::make('end_date')
                         ->label('Date de fin')
                         ->required(),
                 ]),
@@ -108,11 +110,11 @@ class ListNoteDeDebitReports extends ListRecords
                     }, "rapport_note_debit_tous_clients_{$currentDate}.pdf");
                 })
 
-                ->form([
-                    Forms\Components\DatePicker::make('start_date')
+                ->schema([
+                    DatePicker::make('start_date')
                         ->label('Date de début')
                         ->required(),
-                    Forms\Components\DatePicker::make('end_date')
+                    DatePicker::make('end_date')
                         ->label('Date de fin')
                         ->required(),
                 ]),

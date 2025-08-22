@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TaxSetting;
 use Illuminate\Http\Request;
 use App\Models\Honoraire;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -38,7 +39,7 @@ class PdfController extends Controller
             ]
         );
 
-        $taxSettings = \App\Models\TaxSetting::first();
+        $taxSettings = TaxSetting::first();
         return Pdf::loadView('pdf', [
             'record' => $honoraire,
             'formattedDate' => $formattedDate,

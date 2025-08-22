@@ -7,16 +7,16 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^2.2",
-        "bezhansalleh/filament-language-switch": "^3.1",
+        "bezhansalleh/filament-language-switch": "4.0",
         "fakerphp/faker": "^1.23",
-        "filament/filament": "^3.2",
+        "filament/filament": "4.0",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.4",
         "livewire/volt": "^1.0"
-        
     },
     "require-dev": {
+        "filament/upgrade": "4.0",
         "laravel/breeze": "^2.0",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",

@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\RetenueSourcResource\Pages;
 
+use App\Models\TaxSetting;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\RetenueSourcResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -48,7 +51,7 @@ class ListRetenueSourcs extends ListRecords
                         'totalRS' => $totalRS,
                         'totalTTC' => $totalTTC,
                         'totalNET' => $totalNET,
-                        'rs' => \App\Models\TaxSetting::first()->rs * 100,
+                        'rs' => TaxSetting::first()->rs * 100,
                     ]);
 
                     $currentDate = now()->format('d-m-Y');
@@ -57,16 +60,16 @@ class ListRetenueSourcs extends ListRecords
                     }, "rapport_retenue_source_{$client->name}_{$currentDate}.pdf");
                 })
 
-                ->form([
-                    Forms\Components\Select::make('client_id')
+                ->schema([
+                    Select::make('client_id')
                         ->label('Client')
                         ->options(Client::pluck('name', 'id'))
                         ->searchable()
                         ->required(),
-                    Forms\Components\DatePicker::make('start_date')
+                    DatePicker::make('start_date')
                         ->label('Date de début')
                         ->required(),
-                    Forms\Components\DatePicker::make('end_date')
+                    DatePicker::make('end_date')
                         ->label('Date de fin')
                         ->required(),
                 ]),
@@ -100,7 +103,7 @@ class ListRetenueSourcs extends ListRecords
                     }
 
                     $fiscalYear = config('fiscal_year.current_year');
-                    $taxSettings = \App\Models\TaxSetting::first();
+                    $taxSettings = TaxSetting::first();
                     $rs = $taxSettings->rs * 100;
 
                     // Generate PDF
@@ -121,11 +124,11 @@ class ListRetenueSourcs extends ListRecords
                     }, "rapport_retenue_source_tous_clients_{$currentDate}.pdf");
                 })
 
-                ->form([
-                    Forms\Components\DatePicker::make('start_date')
+                ->schema([
+                    DatePicker::make('start_date')
                         ->label('Date de début')
                         ->required(),
-                    Forms\Components\DatePicker::make('end_date')
+                    DatePicker::make('end_date')
                         ->label('Date de fin')
                         ->required(),
                 ]),

@@ -2,9 +2,26 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
+use App\Models\TaxSetting;
+use Filament\Forms\Components\DatePicker;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
+use App\Filament\Resources\HonoraireResource\Pages\ListHonoraires;
+use App\Filament\Resources\HonoraireResource\Pages\CreateHonoraire;
+use App\Filament\Resources\HonoraireResource\Pages\ViewHonoraire;
+use App\Filament\Resources\HonoraireResource\Pages\EditHonoraire;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Forms\Form;
 use App\Models\Honoraire;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -17,13 +34,9 @@ use App\Filament\Resources\HonoraireResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\HonoraireResource\RelationManagers;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Blade;
-
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\Grid;
 use Filament\Forms\Components\Toggle;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,9 +44,9 @@ class HonoraireResource extends Resource
 {
     protected static ?string $model = Honoraire::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationGroup = null;
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -61,18 +74,18 @@ class HonoraireResource extends Resource
  */
 
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
         $currentYear = date('Y');
         $count = Honoraire::count();
         $newNote = str_pad($count + 1, 4, '0', STR_PAD_LEFT) . '/' . $currentYear;
 
-        return $form
-            ->schema([
-                Forms\Components\Wizard::make([
-                    Forms\Components\Wizard\Step::make(__('Client Information'))
+        return $schema
+            ->components([
+                Wizard::make([
+                    Step::make(__('Client Information'))
                         ->schema([
-                            Forms\Components\Select::make('client_id')
+                            Select::make('client_id')
                                 ->label(__('Client'))
                                 ->relationship('client', 'name')
                                 ->searchable()
@@ -80,32 +93,32 @@ class HonoraireResource extends Resource
                                 ->reactive()
                                 ->disabledOn('edit')
                                 ->createOptionForm([
-                                    Forms\Components\TextInput::make('name')
+                                    TextInput::make('name')
                                         ->label(__('Name'))
                                         ->required()
                                         ->maxLength(255),
-                                    Forms\Components\TextInput::make('address')
+                                    TextInput::make('address')
                                         ->label(__('Address'))
                                         ->maxLength(255),
-                                    Forms\Components\TextInput::make('phone')
+                                    TextInput::make('phone')
                                         ->label(__('Phone'))
                                         ->maxLength(15),
-                                    Forms\Components\TextInput::make('mf')
+                                    TextInput::make('mf')
                                         ->label(__('Tax ID'))
                                         ->maxLength(255),
                                 ])
                                 ->editOptionForm([
-                                    Forms\Components\TextInput::make('name')
+                                    TextInput::make('name')
                                         ->label(__('Name'))
                                         ->required()
                                         ->maxLength(255),
-                                    Forms\Components\TextInput::make('address')
+                                    TextInput::make('address')
                                         ->label(__('Address'))
                                         ->maxLength(255),
-                                    Forms\Components\TextInput::make('phone')
+                                    TextInput::make('phone')
                                         ->label(__('Phone'))
                                         ->maxLength(15),
-                                    Forms\Components\TextInput::make('mf')
+                                    TextInput::make('mf')
                                         ->label(__('Tax ID'))
                                         ->maxLength(255),
                                 ])
@@ -129,13 +142,13 @@ class HonoraireResource extends Resource
                                         $set('object', $newObject);
                                     }
                                 }),
-                            Forms\Components\TextInput::make('montantHT')
+                            TextInput::make('montantHT')
                                 ->label(__('Amount HT'))
                                 ->live(onBlur: true)
                                 ->required()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                     if ($state) {
-                                        $taxSettings = \App\Models\TaxSetting::first();
+                                        $taxSettings = TaxSetting::first();
                                         $newTva = $get('exonere_tva') ? 0 : ($get('montantHT') * $taxSettings->tva);
                                         $newMontantTTC = $get('montantHT') + $newTva;
                                         $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * $taxSettings->rs);
@@ -153,7 +166,7 @@ class HonoraireResource extends Resource
                                 ->label(__('TF Exemption'))
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
-                                    $taxSettings = \App\Models\TaxSetting::first();
+                                    $taxSettings = TaxSetting::first();
                                 $newTf = $state ? 0 : $taxSettings->tf;
                                     $set('tf', $newTf);
                                     $set('netapayer', $get('montantTTC') - $get('rs') + $newTf);
@@ -162,7 +175,7 @@ class HonoraireResource extends Resource
                                 ->label(__('RS Exemption'))
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
-                                    $taxSettings = \App\Models\TaxSetting::first();
+                                    $taxSettings = TaxSetting::first();
                                 $newRs = $state ? 0 : ($get('montantTTC') * $taxSettings->rs);
                                     $set('rs', $newRs);
                                     $set('netapayer', $get('montantTTC') - $newRs + $get('tf'));
@@ -171,7 +184,7 @@ class HonoraireResource extends Resource
                                 ->label(__('TVA Exemption'))
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
-                                    $taxSettings = \App\Models\TaxSetting::first();
+                                    $taxSettings = TaxSetting::first();
                                     $newTva = $state ? 0 : ($get('montantHT') * $taxSettings->tva);
                                     $newMontantTTC = $get('montantHT') + $newTva;
                                     $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * $taxSettings->rs);
@@ -181,28 +194,28 @@ class HonoraireResource extends Resource
                                     $set('netapayer', $newMontantTTC - $newRs + $get('tf'));
                                 }),
                         ]),
-                    Forms\Components\Wizard\Step::make(__('Fee Information'))
+                    Step::make(__('Fee Information'))
                         ->schema([
-                            Forms\Components\TextInput::make('note')
+                            TextInput::make('note')
                                 ->label(__('Fee Note'))
                                 ->disabled(),
-                            Forms\Components\TextInput::make('object')
+                            TextInput::make('object')
                                 ->label(__('Fee Object')),
-                            Forms\Components\DatePicker::make('date')
+                            DatePicker::make('date')
                                 ->label(__('Fee Date'))
                                 ->default(now()->toDateString()),
                         ]),
-                    Forms\Components\Wizard\Step::make(__('Other Information'))
+                    Step::make(__('Other Information'))
                         ->schema([
-                            Forms\Components\TextInput::make('tva')
+                            TextInput::make('tva')
                                 ->label(__('T.V.A')),
-                            Forms\Components\TextInput::make('montantTTC')
+                            TextInput::make('montantTTC')
                                 ->label(__('Amount TTC')),
-                            Forms\Components\TextInput::make('rs')
+                            TextInput::make('rs')
                                 ->label(__('R/S')),
-                            Forms\Components\TextInput::make('tf')
+                            TextInput::make('tf')
                                 ->label(__('Fiscal Stamp')),
-                            Forms\Components\TextInput::make('netapayer')
+                            TextInput::make('netapayer')
                                 ->label(__('Net to Pay')),
                         ]),
                 ]),
@@ -213,7 +226,7 @@ class HonoraireResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('note')
+                TextColumn::make('note')
                     ->sortable()
                     ->label("Note d'honoraire")
                     ->getStateUsing(function ($record) {
@@ -224,16 +237,16 @@ class HonoraireResource extends Resource
                         $paddedSearch = str_pad($search, 8, '0', STR_PAD_LEFT);
                         $query->where('note', 'like', "%{$paddedSearch}%");
                     }),
-                Tables\Columns\TextColumn::make('object')
+                TextColumn::make('object')
                     ->label("Objet d'honoraire"),
-                Tables\Columns\TextColumn::make('client.name')
+                TextColumn::make('client.name')
                     ->label('Nom de client')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('client.mf')
+                TextColumn::make('client.mf')
                     ->label('Matricule Fiscale')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('date')
+                TextColumn::make('date')
                     ->label("Date d'honoraire")
                     ->date()
                     ->sortable(),
@@ -241,31 +254,31 @@ class HonoraireResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\Action::make('pdf')
+            ->recordActions([
+                ActionGroup::make([
+                    ViewAction::make(),
+                    Action::make('pdf')
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->url(fn(Honoraire $record) => route('pdf', $record)),
                         
 
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
                 ]),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Informations du client')
                     ->schema([
                         TextEntry::make('client.name')
@@ -346,10 +359,10 @@ class HonoraireResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListHonoraires::route('/'),
-            'create' => Pages\CreateHonoraire::route('/create'),
-            'view' => Pages\ViewHonoraire::route('/{record}'),
-            'edit' => Pages\EditHonoraire::route('/{record}/edit'),
+            'index' => ListHonoraires::route('/'),
+            'create' => CreateHonoraire::route('/create'),
+            'view' => ViewHonoraire::route('/{record}'),
+            'edit' => EditHonoraire::route('/{record}/edit'),
         ];
     }
 

@@ -22,7 +22,7 @@
   array (
     'providers' => 
     array (
-      0 => 'BezhanSalleh\\FilamentLanguageSwitch\\FilamentLanguageSwitchServiceProvider',
+      0 => 'BezhanSalleh\\LanguageSwitch\\LanguageSwitchServiceProvider',
     ),
   ),
   'blade-ui-kit/blade-heroicons' => 
@@ -74,6 +74,13 @@
       0 => 'Filament\\Notifications\\NotificationsServiceProvider',
     ),
   ),
+  'filament/schemas' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Filament\\Schemas\\SchemasServiceProvider',
+    ),
+  ),
   'filament/support' => 
   array (
     'providers' => 
@@ -88,6 +95,13 @@
       0 => 'Filament\\Tables\\TablesServiceProvider',
     ),
   ),
+  'filament/upgrade' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Filament\\Upgrade\\UpgradeServiceProvider',
+    ),
+  ),
   'filament/widgets' => 
   array (
     'providers' => 
@@ -100,6 +114,20 @@
     'providers' => 
     array (
       0 => 'Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider',
+    ),
+  ),
+  'laravel/breeze' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Breeze\\BreezeServiceProvider',
+    ),
+  ),
+  'laravel/sail' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Sail\\SailServiceProvider',
     ),
   ),
   'laravel/tinker' => 
@@ -134,11 +162,25 @@
       0 => 'Carbon\\Laravel\\ServiceProvider',
     ),
   ),
+  'nunomaduro/collision' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    ),
+  ),
   'nunomaduro/termwind' => 
   array (
     'providers' => 
     array (
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    ),
+  ),
+  'pestphp/pest-plugin-laravel' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Pest\\Laravel\\PestServiceProvider',
     ),
   ),
   'ryangjchandler/blade-capture-directive' => 
@@ -150,6 +192,17 @@
     'providers' => 
     array (
       0 => 'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider',
+    ),
+  ),
+  'spatie/laravel-ignition' => 
+  array (
+    'aliases' => 
+    array (
+      'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
+    ),
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
     ),
   ),
 );

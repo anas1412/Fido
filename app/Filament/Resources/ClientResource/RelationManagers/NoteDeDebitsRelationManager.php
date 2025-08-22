@@ -2,9 +2,20 @@
 
 namespace App\Filament\Resources\ClientResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use App\Models\NoteDeDebit;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,17 +31,17 @@ class NoteDeDebitsRelationManager extends RelationManager
         return false;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('note')
+        return $schema
+            ->components([
+                TextInput::make('note')
                     ->label("Référence")
                     ->required()
                     ->disabled(),
-                Forms\Components\DatePicker::make('date') // Add date picker
+                DatePicker::make('date') // Add date picker
                     ->label('Date d\'émission'),
-                Forms\Components\TextInput::make('amount')
+                TextInput::make('amount')
                     ->label('Montant')
                     ->numeric()
                     ->reactive()
@@ -49,7 +60,7 @@ class NoteDeDebitsRelationManager extends RelationManager
                             $set('note', $newNote);
                         }
                     }),
-                Forms\Components\TextInput::make('description')
+                TextInput::make('description')
                     ->required()
                     ->label('Description'),
             ]);
@@ -61,16 +72,16 @@ class NoteDeDebitsRelationManager extends RelationManager
             ->modifyQueryUsing(fn(Builder $query) => $query->whereYear('date', config('fiscal_year.current_year')))
             ->recordTitleAttribute('note')
             ->columns([
-                Tables\Columns\TextColumn::make('note')
+                TextColumn::make('note')
                     ->sortable()
                     ->label("Référence")
                     ->getStateUsing(function ($record) {
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     })
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->label("Description"),
-                Tables\Columns\TextColumn::make('date')
+                TextColumn::make('date')
                     ->label("Date de debit")
                     ->date()
                     ->sortable(),
@@ -79,24 +90,24 @@ class NoteDeDebitsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                CreateAction::make(),
             ])
-            ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\Action::make('pdf')
+            ->recordActions([
+                ActionGroup::make([
+                    ViewAction::make(),
+                    Action::make('pdf')
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
                         
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
                 ]),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

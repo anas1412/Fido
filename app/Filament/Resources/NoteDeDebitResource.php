@@ -2,18 +2,33 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use App\Models\TaxSetting;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Schemas\Components\Section;
+use App\Filament\Resources\NoteDeDebitResource\Pages\ListNoteDeDebits;
+use App\Filament\Resources\NoteDeDebitResource\Pages\CreateNoteDeDebit;
+use App\Filament\Resources\NoteDeDebitResource\Pages\ViewNoteDeDebit;
+use App\Filament\Resources\NoteDeDebitResource\Pages\EditNoteDeDebit;
 use App\Filament\Resources\NoteDeDebitResource\Pages;
 use App\Filament\Resources\NoteDeDebitResource\RelationManagers;
 use App\Models\NoteDeDebit;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Forms\Components\Toggle;
@@ -23,9 +38,9 @@ class NoteDeDebitResource extends Resource
 {
     protected static ?string $model = NoteDeDebit::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document';
 
-    protected static ?string $navigationGroup = null;
+    protected static string | \UnitEnum | null $navigationGroup = null;
 
     protected static ?string $navigationLabel = null;
 
@@ -45,16 +60,16 @@ class NoteDeDebitResource extends Resource
         return parent::getEloquentQuery()->with('client')->whereYear('date', $fiscalYear);
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('note')
+        return $schema
+            ->components([
+                TextInput::make('note')
                     ->label(__('Reference'))
                     ->disabled(),
-                Forms\Components\DatePicker::make('date') // Add date picker
+                DatePicker::make('date') // Add date picker
                     ->label(__('Issue Date')),
-                Forms\Components\Select::make('client_id')
+                Select::make('client_id')
                     ->label(__('Client'))
                     ->relationship('client', 'name')
                     ->searchable()
@@ -75,14 +90,14 @@ class NoteDeDebitResource extends Resource
                             $set('note', $newNote);
                         }
                     }),
-                Forms\Components\TextInput::make('amount')
+                TextInput::make('amount')
                     ->label(__('Amount'))
                     ->numeric()
                     ->required()
                     ->live(onBlur: true)
                     ->afterStateUpdated(function ($state, callable $set, $get) {
                         if ($state) {
-                            $taxSettings = \App\Models\TaxSetting::first();
+                            $taxSettings = TaxSetting::first();
                             $newTva = $get('exonere_tva') ? 0 : ($get('montantHT') * $taxSettings->tva);
                             $newMontantTTC = $get('montantHT') + $newTva;
                             $newRs = $get('exonere_rs') ? 0 : ($newMontantTTC * $taxSettings->rs);
@@ -96,7 +111,7 @@ class NoteDeDebitResource extends Resource
                             $set('netapayer', $newNetapayer);
                         }
                     }),
-                Forms\Components\TextInput::make('description')
+                TextInput::make('description')
                     ->required()
                     ->label(__('Description'))->columnSpanFull(),
             ]);
@@ -106,7 +121,7 @@ class NoteDeDebitResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('note')
+                TextColumn::make('note')
                     ->sortable()
                     ->label(__('Reference'))
                     ->getStateUsing(function ($record) {
@@ -116,45 +131,45 @@ class NoteDeDebitResource extends Resource
                         $paddedSearch = str_pad($search, 8, '0', STR_PAD_LEFT);
                         $query->where('note', 'like', "%{$paddedSearch}%");
                     }),
-                Tables\Columns\TextColumn::make('client.name')
+                TextColumn::make('client.name')
                     ->label(__('Client')),
-                Tables\Columns\TextColumn::make('amount')
+                TextColumn::make('amount')
                     ->label(__('Amount'))
                     ->money('TND'),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->label(__('Description')),
-                Tables\Columns\TextColumn::make('date')
+                TextColumn::make('date')
                     ->label(__('Issue Date'))
                     ->date(),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\Action::make('pdf')
+            ->recordActions([
+                ActionGroup::make([
+                    ViewAction::make(),
+                    Action::make('pdf')
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
                         
 
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
                 ]),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Informations du client')
                     ->schema([
                         TextEntry::make('client.name')
@@ -195,10 +210,10 @@ class NoteDeDebitResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNoteDeDebits::route('/'),
-            'create' => Pages\CreateNoteDeDebit::route('/create'),
-            'view' => Pages\ViewNoteDeDebit::route('/{record}'),
-            'edit' => Pages\EditNoteDeDebit::route('/{record}/edit'),
+            'index' => ListNoteDeDebits::route('/'),
+            'create' => CreateNoteDeDebit::route('/create'),
+            'view' => ViewNoteDeDebit::route('/{record}'),
+            'edit' => EditNoteDeDebit::route('/{record}/edit'),
         ];
     }
 

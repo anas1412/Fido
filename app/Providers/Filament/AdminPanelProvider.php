@@ -2,6 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use Filament\Pages\Dashboard;
+use App\Filament\Pages\EditCompanySettings;
+use App\Filament\Widgets\StatsOverview;
+use App\Filament\Widgets\StatsOverviewPart2;
+use Filament\Widgets\AccountWidget;
 use App\Models\User;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -50,14 +55,14 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
-                \App\Filament\Pages\EditCompanySettings::class,
+                Dashboard::class,
+                EditCompanySettings::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                \App\Filament\Widgets\StatsOverview::class,
-                \App\Filament\Widgets\StatsOverviewPart2::class,
-                Widgets\AccountWidget::class,
+                StatsOverview::class,
+                StatsOverviewPart2::class,
+                AccountWidget::class,
                 /* Widgets\FilamentInfoWidget::class, */
             ])
             ->middleware([

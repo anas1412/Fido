@@ -11,13 +11,13 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class StatsOverviewPart2 extends BaseWidget
 {
 
-    protected static ?string $pollingInterval = '15s';
+    protected ?string $pollingInterval = '15s';
 
     protected static ?int $sort = 2; // Sort after the first StatsOverview
 
     protected static bool $isLazy = true;
 
-    protected int | string | array $columns = 4;
+    protected int|array|null $columns = 4;
 
     protected function getStats(): array
     {

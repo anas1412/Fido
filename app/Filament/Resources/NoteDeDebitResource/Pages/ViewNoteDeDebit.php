@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\NoteDeDebitResource\Pages;
 
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\NoteDeDebitResource;
 use App\Models\NoteDeDebit;
 use Filament\Actions;
@@ -15,14 +18,14 @@ class ViewNoteDeDebit extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('pdf')
+            Action::make('pdf')
                 ->label('PDF')
                 ->color('success')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
 
-            Actions\EditAction::make(),
-            Actions\DeleteAction::make(),
+            EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 

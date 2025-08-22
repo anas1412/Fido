@@ -16,7 +16,7 @@ The project, named "Fido," is a web application built using the Laravel framewor
 | Laravel | ^11.0 | The underlying web application framework. |
 | Livewire | ^3.4 | A full-stack framework for building dynamic interfaces. |
 | Volt | ^1.0 | A functional, class-based API for Livewire. |
-| Filament | ^3.2 | A framework for building admin panels. |
+| Filament | ^4.0 | A framework for building admin panels. |
 | Barryvdh Laravel Dompdf | ^2.2 | A library for generating PDF documents. |
 | Pest | ^2.0 | A testing framework for PHP. |
 
