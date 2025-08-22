@@ -123,19 +123,4 @@ class NoteDeDebitReportResource extends Resource
     {
         return !auth()->user()?->is_demo;
     }
-
-    public static function canEdit(Model $record): bool
-    {
-        return !auth()->user()?->is_demo;
-    }
-
-    public static function canDelete(Model $record): bool
-    {
-        return !auth()->user()?->is_demo;
-    }
-
-    public static function canDeleteAny(): bool
-    {
-        return !auth()->user()?->is_demo;
-    }
 }

@@ -11,10 +11,12 @@ class ListNoteDeDebits extends ListRecords
 {
     protected static string $resource = NoteDeDebitResource::class;
 
-    protected function getHeaderActions(): array
+      protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->disabled(auth()->user()?->is_demo)
+                ->tooltip(auth()->user()?->is_demo ? __('Disabled in demo mode') : null),
         ];
     }
 

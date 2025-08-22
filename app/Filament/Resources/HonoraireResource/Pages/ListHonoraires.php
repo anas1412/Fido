@@ -11,12 +11,14 @@ class ListHonoraires extends ListRecords
 {
     protected static string $resource = HonoraireResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            CreateAction::make(),
-        ];
-    }
+        protected function getHeaderActions(): array
+        {
+            return [
+                CreateAction::make()
+                    ->disabled(auth()->user()?->is_demo)
+                    ->tooltip(auth()->user()?->is_demo ? __('Disabled in demo mode') : null),
+            ];
+        }
 
     public function getTitle(): string
     {

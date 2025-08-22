@@ -15,9 +15,9 @@ class TaxSettingSeeder extends Seeder
         // Create a default tax setting if none exists
         if (TaxSetting::count() === 0) {
             TaxSetting::create([
-                'tva' => 0.19,
-                'rs' => 0.0,
-                'tf' => 0.0,
+                'tva' => env('DEFAULT_TVA', 0.19),
+                'rs' => env('DEFAULT_RS', 0.03),
+                'tf' => env('DEFAULT_TF', 1.00),
             ]);
         }
     }
