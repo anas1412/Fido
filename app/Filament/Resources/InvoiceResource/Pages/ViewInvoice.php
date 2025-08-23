@@ -22,7 +22,7 @@ class ViewInvoice extends ViewRecord
                 ->label('PDF')
                 ->color('success')
                 ->icon('heroicon-o-arrow-down-tray')
-                ->url(fn(Invoice $record) => route('pdf', $record)),
+                ->url(fn(Invoice $record) => route('pdf.invoice', ['invoice' => $record->id])),
 
             EditAction::make()->visible(!auth()->user()?->is_demo),
             DeleteAction::make()->visible(!auth()->user()?->is_demo),
