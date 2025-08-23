@@ -171,7 +171,7 @@ class HonorairesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                CreateAction::make(),
+                CreateAction::make()->visible(!auth()->user()?->is_demo),
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -181,14 +181,14 @@ class HonorairesRelationManager extends RelationManager
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->url(fn(Honoraire $record) => route('pdf', $record)),
-                        
-                    EditAction::make(),
-                    DeleteAction::make(),
+
+                    EditAction::make()->visible(!auth()->user()?->is_demo),
+                    DeleteAction::make()->visible(!auth()->user()?->is_demo),
                 ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(!auth()->user()?->is_demo),
                 ]),
             ]);
     }

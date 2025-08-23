@@ -120,13 +120,13 @@ class ClientResource extends Resource
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    EditAction::make(),
-                    DeleteAction::make(),
+                    EditAction::make()->visible(!auth()->user()?->is_demo),
+                    DeleteAction::make()->visible(!auth()->user()?->is_demo),
                 ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(!auth()->user()?->is_demo),
                 ]),
             ]);
     }

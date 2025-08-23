@@ -24,8 +24,8 @@ class ViewNoteDeDebit extends ViewRecord
                 ->icon('heroicon-o-arrow-down-tray')
                 ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
 
-            EditAction::make(),
-            DeleteAction::make(),
+            EditAction::make()->visible(!auth()->user()?->is_demo),
+            DeleteAction::make()->visible(!auth()->user()?->is_demo),
         ];
     }
 

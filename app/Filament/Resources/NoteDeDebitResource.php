@@ -153,15 +153,14 @@ class NoteDeDebitResource extends Resource
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
-                        
 
-                    EditAction::make(),
-                    DeleteAction::make(),
+                    EditAction::make()->visible(!auth()->user()?->is_demo),
+                    DeleteAction::make()->visible(!auth()->user()?->is_demo),
                 ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(!auth()->user()?->is_demo),
                 ]),
             ]);
     }

@@ -96,5 +96,5 @@
     "Edit Fiscal Year": "تعديل السنة المالية",
     "Fiscal Year": "السنة المالية",
     "Fiscal Year updated successfully!": "تم تحديث السنة المالية بنجاح!",
-    "You are in Demo Mode. Adding is disabled.": "أنت في الوضع التجريبي. الإضافة معطلة."
+    "You are in Demo Mode. Adding, editing and removing are disabled.": "أنت في الوضع التجريبي. الإضافة والتعديل والحذف معطلة."
 }

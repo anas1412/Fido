@@ -15,8 +15,8 @@ class ViewClient extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
-            DeleteAction::make(),
+            EditAction::make()->visible(!auth()->user()?->is_demo),
+            DeleteAction::make()->visible(!auth()->user()?->is_demo),
         ];
     }
 
