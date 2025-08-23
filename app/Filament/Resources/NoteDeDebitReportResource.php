@@ -58,11 +58,6 @@ class NoteDeDebitReportResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    public static function getEloquentQuery(): Builder
-    {
-        $fiscalYear = config('fiscal_year.current_year');
-        return parent::getEloquentQuery()->with('client')->whereYear('date', $fiscalYear);
-    }
 
     public static function table(Table $table): Table
     {

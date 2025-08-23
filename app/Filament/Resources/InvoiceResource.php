@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Actions\ViewAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Infolists;
 use Filament\Infolists\Components\TextEntry;
@@ -29,6 +30,8 @@ class InvoiceResource extends Resource
     protected static ?string $model = Invoice::class;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
+
+    protected static ?int $navigationSort = 1;
 
     protected static string | \UnitEnum | null $navigationGroup = null;
 
