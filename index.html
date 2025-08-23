@@ -117,30 +117,35 @@
                                 }
                             ],
                             
-                            // Plan 1
-                            plan1Title: { en: 'Self-Hosted (Open Source)', fr: 'Auto-Hébergé (Open Source)' },
-                            plan1Price: { en: 'Free', fr: 'Gratuit' },
-                            plan1Subtitle: { en: 'Take full control and host it yourself', fr: 'Prenez le contrôle total et hébergez-le vous-même' },
-                            plan1Button: { en: 'View on GitHub', fr: 'Voir sur GitHub' },
-                            plan1Features: [
-                                { en: 'Full Source Code Access', fr: 'Accès Complet au Code Source' },
-                                { en: 'Automatic Updates', fr: 'Mises à Jour Automatiques' },
-                                { en: 'Unlimited Customization', fr: 'Personnalisation Illimitée' },
-                                { en: 'Full Data Privacy', fr: 'Confidentialité totale des données' },
-                                { en: 'Ideal for Developers & Tech-Savvy Users', fr: 'Idéal pour les Développeurs et Utilisateurs Expérimentés' }
-                            ],
+                            
 
                             // Plan 2
-                            plan2Title: { en: 'Managed Service', fr: 'Service Géré' },
+                            plan2Title: { en: 'Fixed Price Pack', fr: 'Pack Prix Fixe' },
                             plan2Price: { en: 'Starting from 300 TND', fr: 'À partir de 300 TND' },
-                            plan2Subtitle: { en: 'Locally installed solution with dedicated support.', fr: 'Solution installée localement avec support dédié.' },
-                                                    plan2Features: [
+                            plan2Subtitle: { en: 'A fixed set of features with dedicated support.', fr: 'Un ensemble fixe de fonctionnalités avec support dédié.' },
+                                                                                                            plan2Features: [
                                 { en: 'Base website setup (300 TND)', fr: 'Site de base (300 TND)' },
-                                { en: 'Optional Modules (100 TND each): Fee Notes, Client Invoices, Withholding Tax, Debit Notes, Reporting, etc.', fr: 'Modules Optionnels (100 TND chacun) : Honoraires, Factures Client, Retenue à la Source, Notes de Débit, Rapports, etc.' },
+                                { en: 'Optional Modules (100 TND each): Fee Notes, Client Invoices, Withholding Tax, Debit Notes, Rapports, etc.', fr: 'Modules Optionnels (100 TND chacun) : Honoraires, Factures Client, Retenue à la Source, Notes de Débit, Rapports, etc.' },
                                 { en: 'Enhanced Privacy & Security', fr: 'Confidentialité et Sécurité Améliorées' },
                                 { en: 'Technical support (from 20 to 50 TND)', fr: 'Support technique (de 20 à 50 TND)' },
-                                { en: 'Delivered as a local .exe installer', fr: 'Livré sous forme d\'installateur .exe local' },
+                                { en: 'Custom Report Generation', fr: 'Génération de Rapports Personnalisés' },
+                                { en: 'Delivered as a local .exe installer', fr: 'Livré sous forme \'installateur .exe local' },
                                 { en: 'Ideal for professionals who want a ready-to-use solution', fr: 'Idéal pour les professionnels souhaitant une solution clé en main' }
+                            ],
+
+                            // Plan 3
+                            plan3Title: { en: 'Full Pack for Business', fr: 'Pack Complet Entreprise' },
+                            plan3Price: { en: '100 DNT monthly', fr: '100 DNT par mois' },
+                            plan3Subtitle: { en: 'All features included with premium support and tailored solutions.', fr: 'Toutes les fonctionnalités incluses avec un support premium et des solutions personnalisées.' },
+                            plan3Features: [
+                                { en: 'All Features from Fixed Price Pack', fr: 'Toutes les fonctionnalités du Pack Prix Fixe' },
+                                { en: 'Priority Technical Support', fr: 'Support Technique Prioritaire' },
+                                { en: 'On-site Training', fr: 'Formation sur Site' },
+                                { en: 'Cloud Automated Backups', fr: 'Sauvegardes Automatisées Cloud' },
+                                { en: 'Monthly Updates', fr: 'Mises à Jour Mensuelles' },
+                                { en: 'Ideal for large enterprises and custom solutions', fr: 'Idéal pour les grandes entreprises et les solutions personnalisées' },
+                                { en: 'Dedicated Account Manager', fr: 'Gestionnaire de Compte Dédié' },
+                                { en: 'Custom Development & Integration', fr: 'Développement et Intégration Personnalisés' }
                             ],
 
                             // Contact & Footer
@@ -154,6 +159,7 @@
                                 en: `© ${new Date().getFullYear()} Fido. All rights reserved.`, 
                                 fr: `© ${new Date().getFullYear()} Fido. Tous droits réservés.` 
                             },
+                            comingSoon: { en: 'Coming Soon', fr: 'Bientôt Disponible' },
                         },
 
                         t(key) {
@@ -285,21 +291,7 @@
                 <div class="max-w-5xl px-4 mx-auto">
                     <h2 class="mb-12 text-3xl font-bold text-center" x-text="$store.i18n.t('pricingTitle')"></h2>
                     <div class="grid gap-8 md:grid-cols-2">
-                        <!-- Self-Hosted Plan -->
-                        <div class="p-8 border border-gray-100 shadow-lg bg-gradient-to-br from-gray-50 to-white rounded-xl">
-                            <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan1Title')"></h3>
-                            <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan1Price')"></p>
-                            <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan1Subtitle')"></p>
-                            <ul class="mb-8 space-y-4">
-                                <template x-for="featureText in $store.i18n.getPlanFeatures('plan1Features')" :key="featureText">
-                                    <li class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
-                                        <span x-text="featureText"></span>
-                                    </li>
-                                </template>
-                            </ul>
-                            <div class="text-center"><a href="https://github.com/anas1412/Fido" target="_blank" class="bg-gray-800 text-white px-8 py-3 rounded-lg inline-block hover:bg-gray-700 transition shadow-md" x-text="$store.i18n.t('plan1Button')"></a></div>
-                        </div>
+                        
                         <!-- Managed Service Plan -->
                         <div class="p-8 border border-green-100 shadow-lg bg-gradient-to-br from-green-50 to-white rounded-xl">
                             <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan2Title')"></h3>
@@ -314,6 +306,21 @@
                                 </template>
                             </ul>
                             <div class="text-center"><a href="#contact" class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md" x-text="$store.i18n.t('heroBtnStart')"></a></div>
+                        </div>
+                        <!-- Full Pack Plan -->
+                        <div class="p-8 border border-blue-100 shadow-lg bg-gradient-to-br from-blue-50 to-white rounded-xl">
+                            <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan3Title')"></h3>
+                            <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan3Price')"></p>
+                            <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan3Subtitle')"></p>
+                            <ul class="mb-8 space-y-4">
+                                <template x-for="featureText in $store.i18n.getPlanFeatures('plan3Features')" :key="featureText">
+                                    <li class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                                        <span x-text="featureText"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                            <div class="text-center"><button disabled class="bg-gray-400 text-white px-8 py-3 rounded-lg inline-block cursor-not-allowed shadow-md" x-text="$store.i18n.t('comingSoon')"></button></div>
                         </div>
                     </div>
                 </div>
