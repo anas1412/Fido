@@ -27,6 +27,11 @@ class Client extends Model
         return $this->hasMany(NoteDeDebit::class);
     }
 
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function honorairesWithRS(): HasMany
     {
         return $this->hasMany(Honoraire::class)->whereNotNull('rs')->where('rs', '>', 0);

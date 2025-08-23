@@ -18,6 +18,7 @@ use App\Filament\Resources\ClientResource\Pages\ViewClient;
 use App\Filament\Resources\ClientResource\Pages\EditClient;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
+use App\Filament\Resources\ClientResource\RelationManagers\InvoicesRelationManager;
 use App\Filament\Resources\ClientResource\RelationManagers\HonorairesRelationManager;
 use App\Filament\Resources\ClientResource\RelationManagers\NoteDeDebitsRelationManager;
 use App\Models\Client;
@@ -165,6 +166,7 @@ class ClientResource extends Resource
         return [
             HonorairesRelationManager::class,
             NoteDeDebitsRelationManager::class,
+            InvoicesRelationManager::class,
         ];
     }
 

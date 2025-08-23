@@ -48,7 +48,6 @@ class RetenueSourcResource extends Resource
         $fiscalYear = config('fiscal_year.current_year');
         return parent::getEloquentQuery()
             ->with('client')
-            ->whereYear('date', $fiscalYear)
             ->whereNotNull('rs')
             ->where('rs', '>', 0);
     }

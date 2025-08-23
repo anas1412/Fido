@@ -15,7 +15,7 @@ Two new tables will be created in the database:
 This table will store the main invoice information.
 
 | Column | Type | Description |
-|---|---|---|
+|---:|:---|:---|
 | `id` | `bigint`, unsigned, auto-increment | Primary key |
 | `client_id` | `bigint`, unsigned | Foreign key to the `clients` table |
 | `client_name` | `varchar` | The name of the client's client |
@@ -36,7 +36,7 @@ This table will store the main invoice information.
 This table will store the individual line items for each invoice.
 
 | Column | Type | Description |
-|---|---|---|
+|---:|:---|:---|
 | `id` | `bigint`, unsigned, auto-increment | Primary key |
 | `invoice_id` | `bigint`, unsigned | Foreign key to the `invoices` table |
 | `object` | `varchar` | Description of the line item |
@@ -131,3 +131,27 @@ public static function getRelations(): array
     ];
 }
 ```
+
+## 9. Implementation Status
+
+**Completed:**
+
+*   **Database Schema:** The `invoices` and `invoice_items` tables have been created.
+*   **Models:** The `Invoice` and `InvoiceItem` models have been created with the correct relationships.
+*   **Filament Resource:** The `InvoiceResource` has been created with:
+    *   A wizard-based form structure for creating and editing invoices.
+    *   Automatic generation of unique, sequential invoice numbers.
+    *   Real-time calculation of `total_price` for each invoice item.
+    *   Automatic calculation of `total_hors_taxe`, `tva`, `montant_ttc`, `timbre_fiscal`, and `net_a_payer`.
+    *   Improved UI/UX for repeater fields using a grid layout.
+*   **Client Resource Integration:** The `InvoicesRelationManager` has been created and added to the `ClientResource`, and its form has been converted to a wizard with similar automatic calculation and UI/UX improvements.
+*   **Sequential Invoice Numbering:** The system for generating unique, sequential invoice numbers has been implemented in the forms.
+
+**Pending:**
+
+*   **PDF Generation:** The PDF download functionality has not been implemented.
+*   **Dashboard Integration:** The dashboard widget for displaying invoice metrics has not been implemented.
+
+## 10. Localization/Translation
+
+All new user-facing strings introduced by the invoice management feature (e.g., field labels, button texts, messages) have been implemented using Laravel's localization features, ensuring they are translatable into supported languages (Arabic and French).

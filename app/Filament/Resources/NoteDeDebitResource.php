@@ -54,11 +54,6 @@ class NoteDeDebitResource extends Resource
         return __('Note de Débit');
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        $fiscalYear = config('fiscal_year.current_year');
-        return parent::getEloquentQuery()->with('client')->whereYear('date', $fiscalYear);
-    }
 
     public static function form(Schema $schema): Schema
     {
