@@ -22,21 +22,7 @@ class NoteDeDebitPdfController extends Controller
 
         $fileName = "NoteDeDebit_{$paddedNote}_{$currentDate}.pdf";
 
-        $companySetting = CompanySetting::firstOrCreate(
-            [],
-            [
-                'company_name' => 'Cabinet Ezzeddine Haouel',
-                'slogan' => 'Comptable Commissaire aux comptes Membre de la compagnie des comptables de Tunisie',
-                'mf_number' => '0729831E-A-P-000',
-                'location' => 'Hammamet',
-                'address_line1' => 'Av. Mohamed Ali Hammi',
-                'address_line2' => '8050 Hammamet',
-                'phone1' => '72 26 38 83',
-                'phone2' => '26 43 69 22 - 27 43 69 22 - 28 43 69 22',
-                'fax' => '72 26 38 79',
-                'email' => 'ezzeddine.haouel@yahoo.fr',
-            ]
-        );
+        $companySetting = CompanySetting::first();
 
         $taxSettings = TaxSetting::first();
         return Pdf::loadView('note-de-debit', [

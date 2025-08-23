@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FiscalHelper;
 use App\Models\TaxSetting;
 use Illuminate\Http\Request;
 use App\Models\Honoraire;
@@ -23,21 +24,21 @@ class PdfController extends Controller
         $fileName = "Honoraire_{$paddedNote}_{$currentDate}.pdf";
 
 
-        $companySetting = CompanySetting::firstOrCreate(
-            [],
-            [
-                'company_name' => 'Cabinet Ezzeddine Haouel',
-                'slogan' => 'Comptable Commissaire aux comptes Membre de la compagnie des comptables de Tunisie',
-                'mf_number' => '0729831E-A-P-000',
-                'location' => 'Hammamet',
-                'address_line1' => 'Av. Mohamed Ali Hammi',
-                'address_line2' => '8050 Hammamet',
-                'phone1' => '72 26 38 83',
-                'phone2' => '26 43 69 22 - 27 43 69 22 - 28 43 69 22',
-                'fax' => '72 26 38 79',
-                'email' => 'ezzeddine.haouel@yahoo.fr',
-            ]
-        );
+        $companySetting = CompanySetting::first();
+        if (!$companySetting) {
+            $companySetting = new CompanySetting([
+                'company_name' => env('COMPANY_NAME', 'Default Company Name'),
+                'slogan' => env('COMPANY_SLOGAN', 'Default Slogan'),
+                'mf_number' => env('COMPANY_MF_NUMBER', 'Default MF Number'),
+                'location' => env('COMPANY_LOCATION', 'Default Location'),
+                'address_line1' => env('COMPANY_ADDRESS_LINE1', 'Default Address Line 1'),
+                'address_line2' => env('COMPANY_ADDRESS_LINE2', 'Default Address Line 2'),
+                'phone1' => env('COMPANY_PHONE1', 'Default Phone 1'),
+                'phone2' => env('COMPANY_PHONE2', 'Default Phone 2'),
+                'fax' => env('COMPANY_FAX', 'Default Fax'),
+                'email' => env('COMPANY_EMAIL', 'default@example.com'),
+            ]);
+        }
 
         $taxSettings = TaxSetting::first();
         return Pdf::loadView('pdf', [
@@ -49,5 +50,55 @@ class PdfController extends Controller
         ])
             ->setPaper('A4', 'portrait')
             ->download($fileName);
+    }
+
+    public function generateRetenueSourcReport(Request $request)
+    {
+        $currentDate = Carbon::now()->format('d/m/Y');
+
+        $companySetting = CompanySetting::first();
+        if (!$companySetting) {
+            $companySetting = new CompanySetting([
+                'company_name' => env('COMPANY_NAME', 'Default Company Name'),
+                'slogan' => env('COMPANY_SLOGAN', 'Default Slogan'),
+                'mf_number' => env('COMPANY_MF_NUMBER', 'Default MF Number'),
+                'location' => env('COMPANY_LOCATION', 'Default Location'),
+                'address_line1' => env('COMPANY_ADDRESS_LINE1', 'Default Address Line 1'),
+                'address_line2' => env('COMPANY_ADDRESS_LINE2', 'Default Address Line 2'),
+                'phone1' => env('COMPANY_PHONE1', 'Default Phone 1'),
+                'phone2' => env('COMPANY_PHONE2', 'Default Phone 2'),
+                'fax' => env('COMPANY_FAX', 'Default Fax'),
+                'email' => env('COMPANY_EMAIL', 'default@example.com'),
+            ]);
+        }
+
+        // Assuming 'honoraires' are passed or fetched based on some criteria
+        // For now, fetching all honoraires. This might need to be refined based on actual POST data.
+        $honoraires = Honoraire::all();
+
+        // Calculate totals
+        $totalTTC = $honoraires->sum('montantTTC');
+        $TotalRS = $honoraires->sum('rs');
+        $totalNET = $honoraires->sum('netapayer');
+
+        
+
+        return Pdf::loadView('retenue-source', [
+            'currentDate' => $currentDate,
+            'companySetting' => $companySetting,
+            'honoraires' => $honoraires,
+            'totalTTC' => $totalTTC,
+            'TotalRS' => $TotalRS,
+            'totalNET' => $totalNET,
+            'nom_beneficiaire' => $companySetting->company_name,
+            'adresse_beneficiaire' => $companySetting->address_line1 . ' ' . $companySetting->address_line2,
+            // Parse MF number using helper
+            'matricule_fiscal_beneficiaire' => FiscalHelper::parseMfNumber($companySetting->mf_number)['matricule_fiscal'],
+            'code_tva_beneficiaire' => FiscalHelper::parseMfNumber($companySetting->mf_number)['code_tva'],
+            'code_categorie_beneficiaire' => FiscalHelper::parseMfNumber($companySetting->mf_number)['code_categorie'],
+            'no_et_secondaire_beneficiaire' => FiscalHelper::parseMfNumber($companySetting->mf_number)['no_et_secondaire'],
+        ])
+            ->setPaper('A4', 'portrait')
+            ->download('Certificat_Retenue_Source_' . $currentDate . '.pdf');
     }
 }

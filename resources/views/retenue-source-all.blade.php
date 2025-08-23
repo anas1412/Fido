@@ -23,6 +23,8 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            position: relative;
+            min-height: 100%;
         }
 
         .header {
@@ -38,6 +40,10 @@
         .header p {
             margin: 0;
             font-size: 20px;
+        }
+
+        .header > div:first-child {
+            margin-right: 150px; /* Adjust this value as needed to prevent overlap */
         }
 
         .logo-container {
@@ -139,7 +145,7 @@
             font-size: 12px;
             border-top: 1px solid #000;
             padding-top: 3px;
-            position: fixed;
+            position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
@@ -161,9 +167,8 @@
 <body>
     <div class="header">
         <div>
-            <h1>Cabinet Ezzeddine Haouel</h1>
-            <p>Comptable Commissaire aux comptes Membre de la</p>
-            <p>compagnie des comptables de Tunisie</p>
+            <h1>{{ $companySetting->company_name }}</h1>
+            <p>{{ $companySetting->slogan }}</p>
         </div>
         {{-- <div class="invoice-purpose">
             <p><strong>Période: </strong>{{ $startDate }} à {{ $endDate }}</p>
@@ -175,7 +180,7 @@
             </div>
         </div>
         <br>
-        <div class="mf-number">M.F. : 0729831E-A-P-000</div>
+        <div class="mf-number">M.F. : {{ $companySetting->mf_number }}</div>
 
         <div class="header-line"></div>
     </div>
@@ -211,14 +216,14 @@
     <div class="footer">
         <table class="footer-table">
             <tr>
-                <td>Av. Mohamed Ali Hammi</td>
-                <td>Tél : 72 26 38 83</td>
-                <td>GSM : 26 43 69 22 - 27 43 69 22 - 28 43 69 22 </td>
+                <td>{{ $companySetting->address_line1 }}</td>
+                <td>Tél : {{ $companySetting->phone1 }}</td>
+                <td>GSM : {{ $companySetting->phone2 }} </td>
             </tr>
             <tr>
-                <td>8050 Hammamet</td>
-                <td>Fax : 72 26 38 79</td>
-                <td>Email : ezzeddine.haouel@yahoo.fr</td>
+                <td>{{ $companySetting->address_line2 }}</td>
+                <td>Fax : {{ $companySetting->fax }}</td>
+                <td>Email : {{ $companySetting->email }}</td>
             </tr>
         </table>
     </div>

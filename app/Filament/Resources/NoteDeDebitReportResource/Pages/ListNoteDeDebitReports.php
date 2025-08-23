@@ -24,6 +24,8 @@ class ListNoteDeDebitReports extends ListRecords
         return [
             Action::make('generateReport')
                 ->label("Générer Rapport d'un client")
+                ->disabled()
+                ->tooltip(__('Work in progress'))
                 ->action(function (array $data) {
                     $client = Client::findOrFail($data['client_id']);
                     $startDate = $data['start_date'];
@@ -68,6 +70,8 @@ class ListNoteDeDebitReports extends ListRecords
                 ]),
             Action::make('generateReportAll')
                 ->label("Générer Rapport de tous les clients")
+                ->disabled()
+                ->tooltip(__('Work in progress'))
                 ->action(function (array $data) {
                     $startDate = $data['start_date'];
                     $endDate = $data['end_date'];

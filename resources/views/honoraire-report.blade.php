@@ -23,6 +23,8 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            position: relative;
+            min-height: 100%;
         }
 
         .header {
@@ -180,7 +182,7 @@
             font-size: 12px;
             border-top: 1px solid #000;
             padding-top: 3px;
-            position: fixed;
+            position: absolute;
             bottom: 0;
             left: 0;
             right: 0;

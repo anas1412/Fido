@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\RetenueSourcResource\Pages;
 
+use App\Models\CompanySetting;
+use App\Helpers\FiscalHelper;
 use App\Models\TaxSetting;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
@@ -36,12 +38,15 @@ class ListRetenueSourcs extends ListRecords
 
                     $honoraires = Honoraire::where('client_id', $client->id)
                         ->whereBetween('date', [$startDate, $endDate])
+                        ->where('rs', '>', 0)
                         ->get();
 
                     $totalRS = $honoraires->sum('rs');
                     $totalTTC = $honoraires->sum('montantTTC');
                     $totalNET = $honoraires->sum('netapayer');
 
+                    $companySetting = CompanySetting::first();
+                    $parsedMf = FiscalHelper::parseMfNumber($companySetting->mf_number);
                     $pdf = Pdf::loadView('retenue-source', [
                         'client' => $client,
                         'honoraires' => $honoraires,
@@ -52,6 +57,11 @@ class ListRetenueSourcs extends ListRecords
                         'totalTTC' => $totalTTC,
                         'totalNET' => $totalNET,
                         'rs' => TaxSetting::first()->rs * 100,
+                        'companySetting' => $companySetting,
+                        'matricule_fiscal_beneficiaire' => $parsedMf['matricule_fiscal'],
+                        'code_tva_beneficiaire' => $parsedMf['code_tva'],
+                        'code_categorie_beneficiaire' => $parsedMf['code_categorie'],
+                        'no_et_secondaire_beneficiaire' => $parsedMf['no_et_secondaire'],
                     ]);
 
                     $currentDate = now()->format('d-m-Y');
@@ -91,6 +101,7 @@ class ListRetenueSourcs extends ListRecords
                         // Get honoraires for the client within the specified date range
                         $honoraires = $client->honoraires()
                             ->whereBetween('date', [$startDate, $endDate])
+                            ->where('rs', '>', 0)
                             ->get();
 
                         // Sum TTC and RS for this client
@@ -102,10 +113,17 @@ class ListRetenueSourcs extends ListRecords
                         $totalRS += $client->totalClientRS;
                     }
 
+                    // Filter clients to only include those with totalClientRS > 0
+                    $clients = $clients->filter(function ($client) {
+                        return $client->totalClientRS > 0;
+                    });
+
                     $fiscalYear = config('fiscal_year.current_year');
                     $taxSettings = TaxSetting::first();
                     $rs = $taxSettings->rs * 100;
 
+                    $companySetting = CompanySetting::first();
+                    $parsedMf = FiscalHelper::parseMfNumber($companySetting->mf_number);
                     // Generate PDF
                     $pdf = Pdf::loadView('retenue-source-all', [
                         'fiscalYear' => $fiscalYear,
@@ -116,6 +134,11 @@ class ListRetenueSourcs extends ListRecords
                         'rs' => $rs,
                         'totalTTC' => $totalTTC,
                         'totalRS' => $totalRS,
+                        'companySetting' => $companySetting,
+                        'matricule_fiscal_beneficiaire' => $parsedMf['matricule_fiscal'],
+                        'code_tva_beneficiaire' => $parsedMf['code_tva'],
+                        'code_categorie_beneficiaire' => $parsedMf['code_categorie'],
+                        'no_et_secondaire_beneficiaire' => $parsedMf['no_et_secondaire'],
                     ]);
 
                     $currentDate = now()->format('d-m-Y');

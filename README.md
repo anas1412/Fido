@@ -125,12 +125,12 @@ php artisan seed:demo
 -   **Employees Accounts Management:** Easily manage employees access on the dashboard.
 -   **Professional Fees Report:** Generate and export detailed professional fees reports.
 -   **Withholding Tax Statement:** Simplifies management of withholding tax obligations.
--   **Debit Note Statement:** Manage and record debit transactions efficiently.
+-   **Debit Note Statement:** Manage and record debit transactions efficiently. (Report generation is Work in Progress)
 -   **Basic Reports:** Generate and export essential accounting reports.
 
 ### Todo Features
 
--   **Advanced Invoicing and Reports:** Generate and export customized accounting reports and invoices.
+-   **Advanced Invoicing and Reports:** Generate and export customized accounting reports and invoices. (Some parts are Work in Progress)
 -   **Clients and Projects Management:** Easily track clients and engagements.
 -   **Custom Reports and Advanced Analytics:** Enhanced data insights for better decision-making.
 -   **ERP and CRM Integrations:** Connect with ERP & CRM systems for seamless data sharing and 24/7 support.

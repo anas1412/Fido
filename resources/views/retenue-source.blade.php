@@ -300,8 +300,8 @@
     </table>
 
     <div class="info-box-c">
-        <strong>Nom, Prénom, ou raison social: {{ $nom_beneficiaire ?? 'Cabinet Ezzeddine Haouel' }}<br></strong>
-        <strong>Adresse Professionnelle : {{ $adresse_beneficiaire ?? 'Av. Mohamed Ali Hammi 8050 Hammamet' }}</strong> 
+        <strong>Nom, Prénom, ou raison social: {{ $companySetting->company_name }}<br></strong>
+        <strong>Adresse Professionnelle : {{ $companySetting->address_line1 }} {{ $companySetting->address_line2 }}</strong> 
     </div>
 
 

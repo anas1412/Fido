@@ -12,9 +12,9 @@ class CompanySettingSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a default company setting if none exists
-        if (CompanySetting::count() === 0) {
-            CompanySetting::create([
+        CompanySetting::updateOrCreate(
+            ['id' => 1], // Assuming a single company setting record with ID 1
+            [
                 'company_name' => env('COMPANY_NAME', 'Default Company Name'),
                 'slogan' => env('COMPANY_SLOGAN', 'Default Slogan'),
                 'mf_number' => env('COMPANY_MF_NUMBER', 'Default MF Number'),
@@ -25,7 +25,7 @@ class CompanySettingSeeder extends Seeder
                 'phone2' => env('COMPANY_PHONE2', 'Default Phone 2'),
                 'fax' => env('COMPANY_FAX', 'Default Fax'),
                 'email' => env('COMPANY_EMAIL', 'default@example.com'),
-            ]);
-        }
+            ]
+        );
     }
 }
