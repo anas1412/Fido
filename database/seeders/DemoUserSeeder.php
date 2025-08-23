@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Honoraire;
+use App\Models\Invoice;
 use App\Models\NoteDeDebit;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -30,6 +31,7 @@ class DemoUserSeeder extends Seeder
         Client::factory(10)->create()->each(function ($client) {
             Honoraire::factory(5)->create(['client_id' => $client->id]);
             NoteDeDebit::factory(2)->create(['client_id' => $client->id]);
+            Invoice::factory(2)->create(['client_id' => $client->id]);
         });
     }
 }

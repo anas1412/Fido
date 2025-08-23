@@ -19,7 +19,7 @@ class ViewHonoraire extends ViewRecord
     {
         return [
             Action::make('pdf')
-                ->label('PDF')
+                ->label('PDF') 
                 ->color('success')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->url(fn(Honoraire $record) => route('pdf', $record)),

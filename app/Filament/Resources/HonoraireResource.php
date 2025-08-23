@@ -60,6 +60,16 @@ class HonoraireResource extends Resource
         return __('Honoraires');
     }
 
+    public static function getModelLabel(): string
+    {
+        return __('Honoraire');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Honoraires');
+    }
+
 
     /* public static function getNavigationBadge(): ?string
     {

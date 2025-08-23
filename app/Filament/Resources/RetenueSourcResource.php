@@ -43,6 +43,16 @@ class RetenueSourcResource extends Resource
         return __('Report of Withholding Tax');
     }
 
+    public static function getPluralModelLabel(): string
+    {
+        return __('Withholding Tax Reports');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Withholding Tax Report');
+    }
+
     public static function getEloquentQuery(): Builder
     {
         $fiscalYear = config('fiscal_year.current_year');

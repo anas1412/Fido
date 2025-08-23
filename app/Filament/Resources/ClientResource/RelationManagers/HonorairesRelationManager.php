@@ -30,6 +30,7 @@ use Illuminate\Support\Carbon;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Grid;
+use Illuminate\Database\Eloquent\Model;
 
 class HonorairesRelationManager extends RelationManager
 {
@@ -46,6 +47,20 @@ class HonorairesRelationManager extends RelationManager
         return parent::getEloquentQuery()->whereYear('date', $fiscalYear);
     }
  */
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Honoraires');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Honoraires');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Honoraire');
+    }
 
 
     public function form(Schema $schema): Schema

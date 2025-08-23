@@ -22,6 +22,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use App\Models\TaxSetting;
 use App\Models\Invoice;
+use Illuminate\Database\Eloquent\Model;
 
 class InvoicesRelationManager extends RelationManager
 {
@@ -32,20 +33,38 @@ class InvoicesRelationManager extends RelationManager
         return false;
     }
 
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Invoices');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Invoices');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Invoice');
+    }
+
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
                 Wizard::make([
-                    Wizard\Step::make('Client & Basic Information')
+                    Wizard\Step::make(__('Client & Basic Information'))
                         ->schema([
                             Forms\Components\TextInput::make('client_name')
+                                ->label(__('Client Name'))
                                 ->required()
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('client_mf')
+                                ->label(__('Client Tax ID'))
                                 ->required()
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('invoice_number')
+                                ->label(__('Invoice Number'))
                                 ->required()
                                 ->maxLength(255)
                                 ->readOnly()
@@ -59,21 +78,25 @@ class InvoicesRelationManager extends RelationManager
                                     return $newInvoiceNumber;
                                 }),
                             Forms\Components\DatePicker::make('date')
+                                ->label(__('Date'))
                                 ->required()
                                 ->default(now()->toDateString()),
                         ]),
-                    Wizard\Step::make('Invoice Items')
+                    Wizard\Step::make(__('Invoice Items'))
                         ->schema([
                             Forms\Components\Repeater::make('items')
+                                ->label(__('Invoice Items'))
                                 ->relationship()
                                 ->schema([
                                     Forms\Components\TextInput::make('object')
+                                        ->label(__('Object'))
                                         ->required()
                                         ->maxLength(255)
                                         ->columnSpanFull(),
                                     Grid::make(3)
                                         ->schema([
                                             Forms\Components\TextInput::make('quantity')
+                                                ->label(__('Quantity'))
                                                 ->required()
                                                 ->numeric()
                                                 ->live()
@@ -83,6 +106,7 @@ class InvoicesRelationManager extends RelationManager
                                                     $set('total_price', $quantity * $singlePrice);
                                                 }),
                                             Forms\Components\TextInput::make('single_price')
+                                                ->label(__('Unit Price'))
                                                 ->required()
                                                 ->numeric()
                                                 ->live()
@@ -92,6 +116,7 @@ class InvoicesRelationManager extends RelationManager
                                                     $set('total_price', $singlePrice * $quantity);
                                                 }),
                                             Forms\Components\TextInput::make('total_price')
+                                                ->label(__('Total Price'))
                                                 ->required()
                                                 ->numeric()
                                                 ->readOnly()
@@ -120,43 +145,48 @@ class InvoicesRelationManager extends RelationManager
                             $set('timbre_fiscal', $newTimbreFiscal);
                             $set('net_a_payer', $newNetAPayer);
                         }),
-                    Wizard\Step::make('Financial Details & Status')
+                    Wizard\Step::make(__('Financial Details & Status'))
                         ->schema([
                             Forms\Components\TextInput::make('total_hors_taxe')
+                                ->label(__('Total HT'))
                                 ->required()
                                 ->numeric()
                                 ->readOnly(), // Changed from disabled()
                                 
                             Forms\Components\TextInput::make('tva')
+                                ->label(__('TVA'))
                                 ->required()
                                 ->numeric()
                                 ->readOnly(), // Changed from disabled()
                                 
                             Forms\Components\TextInput::make('montant_ttc')
+                                ->label(__('Total TTC'))
                                 ->required()
                                 ->numeric()
                                 ->readOnly(), // Changed from disabled()
                                 
                             Forms\Components\TextInput::make('timbre_fiscal')
+                                ->label(__('Fiscal Stamp'))
                                 ->required()
                                 ->numeric()
                                 ->readOnly(), // Changed from disabled()
                                 
                             Forms\Components\TextInput::make('net_a_payer')
+                                ->label(__('Net to Pay'))
                                 ->required()
                                 ->numeric()
                                 ->readOnly(), // Changed from disabled()
                                 
                             Forms\Components\Select::make('status')
                                 ->options([
-                                    'draft' => 'Draft',
-                                    'sent' => 'Sent',
-                                    'paid' => 'Paid',
-                                    'overdue' => 'Overdue',
+                                    'draft' => __('Draft'),
+                                    'sent' => __('Sent'),
+                                    'paid' => __('Paid'),
+                                    'overdue' => __('Overdue'),
                                 ])
                                 ->required(),
                             Forms\Components\Toggle::make('exonere_tva')
-                                ->label('Exonération TVA')
+                                ->label(__('Exonération TVA'))
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                     $taxSettings = TaxSetting::first();
@@ -171,7 +201,7 @@ class InvoicesRelationManager extends RelationManager
                                     $set('net_a_payer', $newNetAPayer);
                                 }),
                             Forms\Components\Toggle::make('exonere_tf')
-                                ->label('Exonération Timbre Fiscal')
+                                ->label(__('Exonération Timbre Fiscal'))
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                     $taxSettings = TaxSetting::first();
@@ -192,12 +222,16 @@ class InvoicesRelationManager extends RelationManager
             ->recordTitleAttribute('invoice_number')
             ->columns([
                 Tables\Columns\TextColumn::make('invoice_number')
+                    ->label(__('Invoice Number'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date')
+                    ->label(__('Date'))
                     ->date(),
                 Tables\Columns\TextColumn::make('net_a_payer')
+                    ->label(__('Net to Pay'))
                     ->money('tnd'),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->label(__('Status')),
             ])
             ->filters([
                 //

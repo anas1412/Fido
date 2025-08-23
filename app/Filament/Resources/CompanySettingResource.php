@@ -24,6 +24,7 @@ class CompanySettingResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
+
     public static function form(Schema $schema): Schema
     {
         return $schema

@@ -55,6 +55,16 @@ class ClientResource extends Resource
         return __('Clients');
     }
 
+    public static function getModelLabel(): string
+    {
+        return __('Client');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Clients');
+    }
+
     protected static int $globalSearchResultsLimit = 20;
 
     /* public static function getNavigationBadge(): ?string

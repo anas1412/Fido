@@ -43,6 +43,16 @@ class HonoraireReportResource extends Resource
         return __('Report of Honoraires');
     }
 
+    public static function getPluralModelLabel(): string
+    {
+        return __('Honoraires Reports');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Honoraire Report');
+    }
+
     public static function getEloquentQuery(): Builder
     {
         $fiscalYear = config('fiscal_year.current_year');

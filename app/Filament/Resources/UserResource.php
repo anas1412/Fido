@@ -46,6 +46,15 @@ class UserResource extends Resource
         return __('Users Management');
     }
 
+    public static function getPluralModelLabel(): string
+    {
+        return __('Users');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('User');
+    }
 
 
     /* public static function getNavigationBadge(): ?string

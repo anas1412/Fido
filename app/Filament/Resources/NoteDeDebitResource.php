@@ -54,6 +54,16 @@ class NoteDeDebitResource extends Resource
         return __('Note de Débit');
     }
 
+    public static function getModelLabel(): string
+    {
+        return __('Note de Débit');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Notes de Débit');
+    }
+
 
     public static function form(Schema $schema): Schema
     {

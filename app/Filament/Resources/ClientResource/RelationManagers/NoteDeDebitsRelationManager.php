@@ -21,6 +21,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class NoteDeDebitsRelationManager extends RelationManager
 {
@@ -29,6 +30,21 @@ class NoteDeDebitsRelationManager extends RelationManager
     public function isReadOnly(): bool
     {
         return false;
+    }
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Notes de débit');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Notes de Débit');
+    }   
+
+    public static function getModelLabel(): string
+    {
+        return __('Note de Débit');
     }
 
     public function form(Schema $schema): Schema
