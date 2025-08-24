@@ -1,279 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice</title>
+    <title>Facture</title>
     <style>
-        @page {
-            size: A4;
-            margin-top: 10px;
-        }
-
+        @page { size: A4; margin: 30px 40px; }
         body {
             font-family: Arial, sans-serif;
-            font-size: 16px;
-            line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            margin-top: 0;
-            margin-bottom: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            font-size: 14px;
+            line-height: 1.4;
         }
-
         .header {
-            position: relative;
-            margin-bottom: 0px;
-        }
-
-        .header h1 {
-            font-size: 22px;
-            margin: 0 0 5px 0;
-        }
-
-        .header p {
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .header > div:first-child {
-            margin-right: 150px;
-        }
-
-        .logo-container {
-            position: absolute;
-            top: 0;
-            right: 0px;
-            text-align: center;
-        }
-
-        .logo {
-            width: 100px;
-            height: 100px;
-            border: 2px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 60px;
-            font-size: 10px;
-            margin-bottom: 0px;
-        }
-
-        .logo img {
-            width: 130px;
-            height: auto;
-            border: 1px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .mf-number {
-            font-size: 12px;
-            text-decoration: underline;
-            text-align: right;
-        }
-
-        .header-line {
-            border-top: 1px solid #000;
-            margin-top: 8px;
-        }
-
-        .invoice-details {
-            margin: 0;
-            padding-top: 0px;
-            font-size: 1.2em;
-        }
-
-        .client-info {
-            text-align: right;
-            margin-bottom: 5px;
-            font-size: 1.2em;
-        }
-
-        .client-box {
-            border: 1px solid #000;
-            padding: 5px;
-            display: inline-block;
-            margin-left: 30%;
-            text-align: left;
-            line-height: 1.2;
-        }
-
-        .client-box p {
-            margin: 0 0 5px 0;
-        }
-
-        .client-box p:last-child {
-            margin-bottom: 0;
-        }
-
-        .invoice-purpose {
-            margin-bottom: 20px;
-        }
-
-        .invoice-purpose p {
-            font-size: 1.2em;
-        }
-
-        .invoice-table-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             width: 100%;
-        }
-
-        .invoice-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: auto;
             margin-bottom: 10px;
-            font-size: 18px;
         }
-
-        .invoice-table th,
-        .invoice-table td {
-            border: 1px solid #000;
-            padding: 8px;
+        .left {
+            float: left;
             text-align: left;
         }
-
-        .invoice-table th {
-            background-color: #f2f2f2;
-        }
-
-        .total-in-words {
-            margin-bottom: 80px;
-            position: relative;
-            font-size: 15px;
-        }
-
-        .signature-text {
+        .right {
+            float: right;
             text-align: right;
-            margin-top: 20px;
+        }
+        .clear { clear: both; }
+        .title {
+            text-align: center;
+            font-size: 18px;
             font-weight: bold;
+            margin: 25px 0 15px;
+            text-decoration: underline;
         }
-
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            border-top: 1px solid #000;
-            padding-top: 3px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+        table {
             width: 100%;
-        }
-
-        .footer-table {
-            width: 100%;
+            border: 1px solid black;
             border-collapse: collapse;
+            font-size: 14px;
         }
-
-        .footer-table td {
-            padding: 0px;
+        th, td {
+            border: 1px solid black;
+            padding: 6px;
+        }
+        th {
             text-align: center;
+        }
+        td {
+            text-align: center;
+        }
+        .totals-row td {
+            border-top: none;
+            border-bottom: none;
+            font-size: 14px;
+        }
+        .totals-label {
+            text-align: left;
+            padding-left: 10px;
+            white-space: nowrap;
+        }
+        /* New class to reduce vertical padding only on specific rows */
+        .tight-spacing td {
+            padding-top: 0; /* Set to 0 for minimum space */
+            padding-bottom: 0; /* Set to 0 for minimum space */
+            line-height: 1; /* This is the key change */
+        }
+        .normal-line-height td {
+        line-height: inherit; /* Inherits the line-height from the body (1.4) */
+        }
+        .final-row-padding td {
+            padding-bottom: 6px;
+        }
+        .right-align {
+            text-align: right !important;
+            padding-right: 10px;
+        }
+        .left-align {
+            text-align: left !important;
+            padding-left: 10px;
+        }
+        .underline {
+            text-decoration: underline;
+        }
+        .dash-top {
+            border-top: 1px dashed black;
+        }
+        .bottom-text {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .signature {
+            margin-top: 60px;
+            text-align: right;
         }
     </style>
 </head>
-
 <body>
     <div class="header">
-        <div>
-            <h1>{{ $companySetting->company_name }}</h1>
-            <p>{{ $companySetting->slogan }}</p>
+        <div class="left">
+            <u>MAHER MESSAI</u><br>
+            <u>FRIPPERIE EN GROS</u><br>
+            <u>Cité ENNAIM – BIR BOU REGBBA</u><br><br>
+            <u>HAMMAMET</u><br><br>
+            <u>T.V.A.</u> : 0613465PAC000
         </div>
-        <div class="logo-container">
-            <div class="logo">
-                <img src="{{ public_path('images/CCT.jpg') }}" alt="Logo">
-            </div>
+        <div class="right">
+            <u>HAMMAMET LE {{ $date ?? '01/06/2024' }}</u>
         </div>
-        <br>
-        <div class="mf-number">M.F. : {{ $companySetting->mf_number }}</div>
-        <div class="header-line"></div>
+        <div class="clear"></div>
     </div>
 
-    <div class="invoice-details">
-        <p><strong>Invoice Number:</strong> {{ $invoice->invoice_number }}</p>
-        <p><strong>Invoice Date:</strong> {{ $formattedDate }}</p>
+    <div class="title">
+        FACTURE N°{{ $invoice_number ?? '02/2024' }}
     </div>
 
-    <div class="client-info">
-        <p>{{ $companySetting->location }} le : {{ $formattedDate }}</p>
-        <div class="client-box">
-            <p>Client: <strong>{{ $invoice->client->name }}</strong></p>
-            <p>Address: {{ $invoice->client->address }}</p>
-            <p>M.F.: {{ $invoice->client->mf }}</p>
-        </div>
-    </div>
+    <p>
+        <u>Doit</u> : {{ $client_name ?? 'INES MHADBI' }}<br>
+        M.F. : {{ $client_mf ?? '1692 555M' }}
+    </p>
 
-    <div class="invoice-table-container">
-        <table class="invoice-table">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Total Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($invoiceItems as $item)
-                    <tr>
-                        <td>{{ $item->description }}</td>
-                        <td>{{ $item->quantity }}</td>
-                        <td>{{ number_format($item->single_price, 3, '.', ',') }}</td>
-                        <td>{{ number_format($item->total_price, 3, '.', ',') }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Total HT:</strong></td>
-                    <td>{{ number_format($invoice->total_ht, 3, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Total TVA:</strong></td>
-                    <td>{{ number_format($invoice->total_tva, 3, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Total TTC:</strong></td>
-                    <td>{{ number_format($invoice->total_ttc, 3, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Total RS:</strong></td>
-                    <td>{{ number_format($invoice->total_rs, 3, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Total Timbre Fiscal:</strong></td>
-                    <td>{{ number_format($invoice->total_tf, 3, '.', ',') }}</td>
-                </tr>
-                <tr>
-                    <td colspan="3" style="text-align: right;"><strong>Net à Payer:</strong></td>
-                    <td>{{ number_format($invoice->net_to_pay, 3, '.', ',') }}</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+    <table>
+        <tr>
+            <th style="width: 10%;"><u>Qtés</u></th>
+            <th style="width: 50%;"><u>D E S I G N A T I O N S</u></th>
+            <th style="width: 20%;"><u>P.U. H.T.</u></th>
+            <th style="width: 20%;"><u>MONTANTS</u></th>
+        </tr>
+        <tr>
+            <td>05</td>
+            <td class="left-align">BALE DE FRIPPE</td>
+            <td>140.000</td>
+            <td>700.000</td>
+        </tr>
+        <tr class="totals-row tight-spacing normal-line-height">
+            <td></td>
+            <td colspan="2" class="totals-label">
+                - Total Hors Taxes .............................................................................................
+            </td>
+            <td class="right-align dash-top">700.000</td>
+        </tr>
+        <tr class="totals-row tight-spacing">
+            <td></td>
+            <td colspan="2" class="totals-label">
+                - T.V.A. : 19% ....................................................................................................
+            </td>
+            <td class="right-align">133.000</td>
+        </tr>
+        <tr class="totals-row  tight-spacing">
+            <td></td>
+            <td colspan="2" class="totals-label"></td>
+            <td class="right-align">-------------------------</td>
+        </tr>
+        <tr class="totals-row tight-spacing">
+            <td></td>
+            <td colspan="2" class="totals-label">
+                - Montant Toutes Taxes Comprises ..................................................................
+            </td>
+            <td class="right-align">833.000</td>
+        </tr>
+        <tr class="totals-row tight-spacing">
+            <td></td>
+            <td colspan="2" class="totals-label">
+                - Timbre fiscal ....................................................................................................
+            </td>
+            <td class="right-align">1.000</td>
+        </tr>
+        <tr class="totals-row  tight-spacing" >
+            <td></td>
+            <td colspan="2" class="totals-label"></td>
+            <td class="right-align">-------------------------</td>
+        </tr>
+        
+        <tr class="totals-row tight-spacing final-row-padding">
+            <td></td>
+            <td colspan="2" class="totals-label">
+                <u>- Net à votre aimable règlement </u>.......................................................................
+            </td>
+            <td class="right-align"><strong>834.000</strong></td>
+        </tr>
+    </table>
 
-    <div class="footer">
-        <table class="footer-table">
-            <tr>
-                <td>{{ $companySetting->address_line1 }}</td>
-                <td>Tél : {{ $companySetting->phone1 }}</td>
-                <td>GSM : {{ $companySetting->phone2 }}</td>
-            </tr>
-            <tr>
-                <td>{{ $companySetting->address_line2 }}</td>
-                <td>Fax : {{ $companySetting->fax }}</td>
-                <td>Email : {{ $companySetting->email }}</td>
-            </tr>
-        </table>
+    <p class="bottom-text">
+        Arrêtée la présente facture à la somme de : Huit Cent Trente Quatre Dinars.
+    </p>
+
+    <div class="signature">
+        <u>SIGNATURE</u>
     </div>
 </body>
-
 </html>
