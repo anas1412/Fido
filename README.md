@@ -147,6 +147,27 @@ php artisan seed:demo
   <img src="Demo2.png?raw=true" width="80%" alt="Demo Screenshot 2">
 </p>
 
+## Troubleshooting
+
+### `SQLSTATE[HY000]: General error: 26 file is not a database`
+
+This error indicates that the `database.sqlite` file is corrupted. To fix this, you can manually recreate the file.
+
+1.  **Delete the corrupted file:**
+    ```bash
+    del database.sqlite
+    ```
+
+2.  **Create an empty database file:**
+    ```bash
+    fsutil file createnew database.sqlite 0
+    ```
+
+3.  **Run the migrations:**
+    ```bash
+    php artisan migrate --seed
+    ```
+
 ## License
 
 Fido is built on the Laravel framework, licensed under the [MIT license](https://opensource.org/licenses/MIT).

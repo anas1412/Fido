@@ -79,3 +79,24 @@ Here is a prioritized list of recommended improvements and fixes to enhance the 
 | Task | Type | Description |
 |---|---|---|
 | **Expense Tracking** | `New Feature` | Add a new section for managing business expenses (rent, supplies, etc.). This provides a complete picture of profitability and is essential for tax declarations. |
+
+## Troubleshooting
+
+### `SQLSTATE[HY000]: General error: 26 file is not a database`
+
+This error indicates that the `database.sqlite` file is corrupted. To fix this, you can manually recreate the file.
+
+1.  **Delete the corrupted file:**
+    ```bash
+    del database.sqlite
+    ```
+
+2.  **Create an empty database file:**
+    ```bash
+    fsutil file createnew database.sqlite 0
+    ```
+
+3.  **Run the migrations:**
+    ```bash
+    php artisan migrate
+    ```

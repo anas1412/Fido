@@ -96,8 +96,15 @@ class ClientResource extends Resource
                     ->label(__('Name'))
                     ->required()
                     ->maxLength(255),
+                TextInput::make('owner_name')
+                    ->label(__('Owner Name'))
+                    ->maxLength(255),
                 TextInput::make('address')
                     ->label(__('Address'))
+                    ->maxLength(255),
+                TextInput::make('city')
+                    ->label(__('City'))
+                    ->default('Hammamet')
                     ->maxLength(255),
                 TextInput::make('phone')
                     ->label(__('Phone'))
@@ -153,17 +160,25 @@ class ClientResource extends Resource
                             ->weight('bold')
                             ->icon('heroicon-o-user-circle')
                             ->columnSpan(2),
+                        TextEntry::make('owner_name')
+                            ->label('Nom du propriétaire')
+                            ->icon('heroicon-o-user')
+                            ->columnSpan(2),
                         TextEntry::make('mf')
                             ->label('Matricule Fiscale')
                             ->icon('heroicon-o-identification')
+                            ->columnSpan(2),
+                        TextEntry::make('phone')
+                            ->label('Numéro de téléphone')
+                            ->icon('heroicon-o-phone')
                             ->columnSpan(2),
                         TextEntry::make('address')
                             ->label('Adresse')
                             ->icon('heroicon-o-map-pin')
                             ->columnSpan(2),
-                        TextEntry::make('phone')
-                            ->label('Numéro de téléphone')
-                            ->icon('heroicon-o-phone')
+                        TextEntry::make('city')
+                            ->label('Ville')
+                            ->icon('heroicon-o-map')
                             ->columnSpan(2),
                     ])
                     ->columns(4)

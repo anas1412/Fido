@@ -22,9 +22,11 @@ class ClientFactory extends Factory
 
         return [
             'name' => $this->faker->company,
+            'owner_name' => $this->faker->name(),
             'address' => $this->faker->address,
+            'city' => $this->faker->city(),
             'phone' => $this->faker->phoneNumber,
-            'mf' => $this->faker->unique()->numerify('#######/#/#/###/####'),
+            'mf' => $this->faker->unique()->regexify('[0-9]{7}[A-Z]{3}000'),
             'created_at' => $randomDayInPreviousMonth,
             'updated_at' => $randomDayInPreviousMonth,
         ];

@@ -134,5 +134,7 @@
     "View Invoice": "Détails de la facture",
     "Edit Invoice": "Modifier la facture",
     "Create Invoice": "Créer une facture",
+    "Owner Name": "Nom du propriétaire",
+    "City": "Ville",
     "Work in progress": "Travail en cours"
 }

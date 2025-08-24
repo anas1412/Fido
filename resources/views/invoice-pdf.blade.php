@@ -34,7 +34,7 @@
     width: 95%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 75px; /* Optional: Add some space above the table */
+    margin-top: 75px; 
     border: 1px solid black;
     border-collapse: collapse;
     font-size: 14px;
@@ -105,11 +105,11 @@
 <body>
     <div class="header">
         <div class="left">
-            <u>MAHER MESSAI</u><br>
-            <u>FRIPPERIE EN GROS</u><br>
-            <u>Cité ENNAIM – BIR BOU REGBBA</u><br><br>
-            <u>HAMMAMET</u><br><br>
-            <u>T.V.A.</u> : 0613465PAC000
+            <u>{{ $invoice->client->owner_name ?? '' }}</u><br>
+            <u>{{ $invoice->client->name }}</u><br>
+            <u>{{ $invoice->client->address }}</u><br><br>
+            <u>{{ $invoice->client->city ?? '' }}</u><br><br>
+            <u>T.V.A.</u> : {{ $invoice->client->mf }}
         </div>
         <div class="right">
             <u>HAMMAMET LE {{ $formattedDate }}</u>
@@ -118,7 +118,7 @@
     </div>
 
     <div class="title">
-        FACTURE N°{{ $invoice->invoice_number }}
+        FACTURE N°{{ substr($invoice->invoice_number, 0, 4) }}/{{ substr($invoice->invoice_number, 4, 4) }}
     </div>
 
     <p>

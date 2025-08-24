@@ -132,5 +132,7 @@
     "View Invoice": "عرض الفاتورة",
     "Edit Invoice": "تعديل الفاتورة",
     "Create Invoice": "إنشاء فاتورة",
+    "Owner Name": "اسم المالك",
+    "City": "المدينة",
     "Work in progress": "العمل قيد الإنجاز"
 }

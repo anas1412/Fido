@@ -21,32 +21,17 @@ class HonoraireFactory extends Factory
         $currentMonth = Carbon::now();
         $randomDayInCurrentMonth = $currentMonth->startOfMonth()->addDays(rand(0, $currentMonth->daysInMonth - 1));
 
-        // Fetch tax settings from the database
-        $taxSettings = TaxSetting::firstOrCreate(
-            [],
-            [
-                'tva' => 0.19,
-                'rs' => 0.03,
-                'tf' => 1,
-            ]
-        );
-
         $montantHT = $this->faker->randomFloat(2, 1000, 10000);
-
-        // Use tax settings for calculations
-        $tva = $montantHT * $taxSettings->tva;
-        $rs = $montantHT * $taxSettings->rs;
-        $tf = $taxSettings->tf;
 
         return [
             'object' => $this->faker->sentence,
             'date' => $randomDayInCurrentMonth,
             'montantHT' => $montantHT,
-            'tva' => $tva,
-            'rs' => $rs,
-            'tf' => $tf,
-            'montantTTC' => $montantHT + $tva,
-            'netapayer' => ($montantHT + $tva) - $rs - $tf,
+            'tva' => 0,
+            'rs' => 0,
+            'tf' => 0,
+            'montantTTC' => 0,
+            'netapayer' => 0,
             'client_id' => \App\Models\Client::factory(),
             'exonere_tf' => $this->faker->boolean,
             'exonere_rs' => $this->faker->boolean,
