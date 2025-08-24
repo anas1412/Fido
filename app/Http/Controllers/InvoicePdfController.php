@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\NumberToWords;
 use App\Models\Invoice;
 use App\Models\CompanySetting;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -11,7 +12,7 @@ class InvoicePdfController extends Controller
 {
     public function __invoke(Invoice $invoice)
     {
-        $formattedDate = Carbon::parse($invoice->invoice_date)->format('d/m/Y');
+        $formattedDate = Carbon::parse($invoice->date)->format('d/m/Y');
         $currentDate = Carbon::now()->format('d-m-Y');
 
         $companySetting = CompanySetting::first();
@@ -29,17 +30,20 @@ class InvoicePdfController extends Controller
                 'email' => env('COMPANY_EMAIL', 'default@example.com'),
             ]);
         }
+        
+        // THIS IS THE FIX: Your relationship is named 'items', not 'invoiceItems'.
+        $invoiceItems = $invoice->items;
 
-        // Fetch invoice items
-        $invoiceItems = $invoice->invoiceItems ?? collect(); // Ensure it's a collection even if null
-
+        $netToPayInWords = NumberToWords::convertToWords($invoice->net_a_payer) . ' Dinars.';
+        
         $fileName = "Facture_{$invoice->invoice_number}_{$currentDate}.pdf";
 
         return Pdf::loadView('invoice-pdf', [
             'invoice' => $invoice,
-            'invoiceItems' => $invoiceItems,
+            'invoiceItems' => $invoiceItems, // The variable name passed to the view is still 'invoiceItems'
             'formattedDate' => $formattedDate,
             'companySetting' => $companySetting,
+            'netToPayInWords' => $netToPayInWords,
         ])
             ->setPaper('A4', 'portrait')
             ->download($fileName);

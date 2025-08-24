@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Facture</title>
+    <title>Facture N°{{ $invoice->invoice_number }}</title>
     <style>
         @page { size: A4; margin: 30px 40px; }
         body {
@@ -46,6 +46,19 @@
         td {
             text-align: center;
         }
+        .item-row td {
+            height: 25px;
+            vertical-align: top;
+        }
+        /*
+         * This is the updated rule.
+         * It selects the cells (td) of any .item-row that directly follows another .item-row
+         * and hides its top border. Using 'hidden' has higher priority than 'none'
+         * when borders are collapsed, ensuring the line is removed.
+        */
+        tr.item-row + tr.item-row td {
+            border-top-style: hidden;
+        }
         .totals-row td {
             border-top: none;
             border-bottom: none;
@@ -56,14 +69,13 @@
             padding-left: 10px;
             white-space: nowrap;
         }
-        /* New class to reduce vertical padding only on specific rows */
         .tight-spacing td {
-            padding-top: 0; /* Set to 0 for minimum space */
-            padding-bottom: 0; /* Set to 0 for minimum space */
-            line-height: 1; /* This is the key change */
+            padding-top: 0;
+            padding-bottom: 0;
+            line-height: 1;
         }
         .normal-line-height td {
-        line-height: inherit; /* Inherits the line-height from the body (1.4) */
+            line-height: inherit;
         }
         .final-row-padding td {
             padding-bottom: 6px;
@@ -102,18 +114,18 @@
             <u>T.V.A.</u> : 0613465PAC000
         </div>
         <div class="right">
-            <u>HAMMAMET LE {{ $date ?? '01/06/2024' }}</u>
+            <u>HAMMAMET LE {{ $formattedDate }}</u>
         </div>
         <div class="clear"></div>
     </div>
 
     <div class="title">
-        FACTURE N°{{ $invoice_number ?? '02/2024' }}
+        FACTURE N°{{ $invoice->invoice_number }}
     </div>
 
     <p>
-        <u>Doit</u> : {{ $client_name ?? 'INES MHADBI' }}<br>
-        M.F. : {{ $client_mf ?? '1692 555M' }}
+        <u>Doit</u> : {{ $invoice->client_name }}<br>
+        M.F. : {{ $invoice->client_mf }}
     </p>
 
     <table>
@@ -123,25 +135,29 @@
             <th style="width: 20%;"><u>P.U. H.T.</u></th>
             <th style="width: 20%;"><u>MONTANTS</u></th>
         </tr>
-        <tr>
-            <td>05</td>
-            <td class="left-align">BALE DE FRIPPE</td>
-            <td>140.000</td>
-            <td>700.000</td>
+
+        @foreach ($invoiceItems as $item)
+        <tr class="item-row">
+            <td>{{ $item->quantity }}</td>
+            <td class="left-align">{{ $item->object }}</td>
+            <td>{{ number_format($item->single_price, 3, '.', '') }}</td>
+            <td>{{ number_format($item->total_price, 3, '.', '') }}</td>
         </tr>
+        @endforeach
+
         <tr class="totals-row tight-spacing normal-line-height">
             <td></td>
             <td colspan="2" class="totals-label">
                 - Total Hors Taxes .............................................................................................
             </td>
-            <td class="right-align dash-top">700.000</td>
+            <td class="right-align dash-top">{{ number_format($invoice->total_hors_taxe, 3, '.', '') }}</td>
         </tr>
         <tr class="totals-row tight-spacing">
             <td></td>
             <td colspan="2" class="totals-label">
                 - T.V.A. : 19% ....................................................................................................
             </td>
-            <td class="right-align">133.000</td>
+            <td class="right-align">{{ number_format($invoice->tva, 3, '.', '') }}</td>
         </tr>
         <tr class="totals-row  tight-spacing">
             <td></td>
@@ -153,14 +169,14 @@
             <td colspan="2" class="totals-label">
                 - Montant Toutes Taxes Comprises ..................................................................
             </td>
-            <td class="right-align">833.000</td>
+            <td class="right-align">{{ number_format($invoice->montant_ttc, 3, '.', '') }}</td>
         </tr>
         <tr class="totals-row tight-spacing">
             <td></td>
             <td colspan="2" class="totals-label">
                 - Timbre fiscal ....................................................................................................
             </td>
-            <td class="right-align">1.000</td>
+            <td class="right-align">{{ number_format($invoice->timbre_fiscal, 3, '.', '') }}</td>
         </tr>
         <tr class="totals-row  tight-spacing" >
             <td></td>
@@ -173,12 +189,12 @@
             <td colspan="2" class="totals-label">
                 <u>- Net à votre aimable règlement </u>.......................................................................
             </td>
-            <td class="right-align"><strong>834.000</strong></td>
+            <td class="right-align"><strong>{{ number_format($invoice->net_a_payer, 3, '.', '') }}</strong></td>
         </tr>
     </table>
 
     <p class="bottom-text">
-        Arrêtée la présente facture à la somme de : Huit Cent Trente Quatre Dinars.
+        Arrêtée la présente facture à la somme de : {{ $netToPayInWords ?? '' }}
     </p>
 
     <div class="signature">
