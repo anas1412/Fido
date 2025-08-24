@@ -126,25 +126,33 @@ class InvoicesRelationManager extends RelationManager
                                 ->columnSpan('full')
                                 ->live() // Make the repeater live to trigger updates on total_hors_taxe
                                 ->reactive()
-                        ])
-                        ->afterValidation(function (callable $set, callable $get) {
-                            $totalHorsTaxe = 0;
-                            foreach ($get('items') as $item) {
-                                $totalHorsTaxe += (float) $item['total_price'];
-                            }
-                            $set('total_hors_taxe', $totalHorsTaxe);
+                                ->afterStateUpdated(function (callable $set, $get) {
+                                    $items = $get('items') ?? [];
+                                    $totalHorsTaxe = 0;
 
-                            $taxSettings = TaxSetting::first();
-                            $newTva = $get('exonere_tva') ? 0 : ($totalHorsTaxe * $taxSettings->tva);
-                            $newMontantTTC = $totalHorsTaxe + $newTva;
-                            $newTimbreFiscal = $get('exonere_tf') ? 0 : $taxSettings->tf;
-                            $newNetAPayer = $newMontantTTC + $newTimbreFiscal;
+                                    foreach ($items as $item) {
+                                        $quantity = (float) ($item['quantity'] ?? 0);
+                                        $singlePrice = (float) ($item['single_price'] ?? 0);
+                                        $totalHorsTaxe += $quantity * $singlePrice;
+                                    }
 
-                            $set('tva', $newTva);
-                            $set('montant_ttc', $newMontantTTC);
-                            $set('timbre_fiscal', $newTimbreFiscal);
-                            $set('net_a_payer', $newNetAPayer);
-                        }),
+                                    $taxSettings = TaxSetting::first();
+                                    if (!$taxSettings) {
+                                        return;
+                                    }
+
+                                    $newTva = $get('exonere_tva') ? 0 : ($totalHorsTaxe * $taxSettings->tva);
+                                    $newMontantTTC = $totalHorsTaxe + $newTva;
+                                    $newTimbreFiscal = $get('exonere_tf') ? 0 : $taxSettings->tf;
+                                    $newNetAPayer = $newMontantTTC + $newTimbreFiscal;
+
+                                    $set('total_hors_taxe', $totalHorsTaxe);
+                                    $set('tva', $newTva);
+                                    $set('montant_ttc', $newMontantTTC);
+                                    $set('timbre_fiscal', $newTimbreFiscal);
+                                    $set('net_a_payer', $newNetAPayer);
+                                }),
+                        ]),
                     Wizard\Step::make(__('Financial Details & Status'))
                         ->schema([
                             Forms\Components\TextInput::make('total_hors_taxe')

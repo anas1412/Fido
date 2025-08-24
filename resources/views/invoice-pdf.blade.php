@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Facture N°{{ $invoice->invoice_number }}</title>
     <style>
-        @page { size: A4; margin: 30px 40px; }
+        @page { size: A4; margin: 30px 80px; }
         body {
             font-family: Arial, sans-serif;
             font-size: 14px;
@@ -31,17 +31,21 @@
             text-decoration: underline;
         }
         table {
-            width: 100%;
-            border: 1px solid black;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 75px; /* Optional: Add some space above the table */
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-size: 14px;
+}
         th, td {
             border: 1px solid black;
             padding: 6px;
         }
         th {
             text-align: center;
+            font-weight: normal;
         }
         td {
             text-align: center;
@@ -50,12 +54,6 @@
             height: 25px;
             vertical-align: top;
         }
-        /*
-         * This is the updated rule.
-         * It selects the cells (td) of any .item-row that directly follows another .item-row
-         * and hides its top border. Using 'hidden' has higher priority than 'none'
-         * when borders are collapsed, ensuring the line is removed.
-        */
         tr.item-row + tr.item-row td {
             border-top-style: hidden;
         }
@@ -145,17 +143,30 @@
         </tr>
         @endforeach
 
+         <tr class="item-row">
+            <td>&nbsp;</td>
+            <td class="left-align">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr class="item-row">
+            <td>&nbsp;</td>
+            <td class="left-align">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+
         <tr class="totals-row tight-spacing normal-line-height">
             <td></td>
             <td colspan="2" class="totals-label">
-                - Total Hors Taxes .............................................................................................
+                - Total Hors Taxes ..................................................................
             </td>
             <td class="right-align dash-top">{{ number_format($invoice->total_hors_taxe, 3, '.', '') }}</td>
         </tr>
         <tr class="totals-row tight-spacing">
             <td></td>
             <td colspan="2" class="totals-label">
-                - T.V.A. : 19% ....................................................................................................
+                - T.V.A. : 19% .........................................................................
             </td>
             <td class="right-align">{{ number_format($invoice->tva, 3, '.', '') }}</td>
         </tr>
@@ -167,14 +178,14 @@
         <tr class="totals-row tight-spacing">
             <td></td>
             <td colspan="2" class="totals-label">
-                - Montant Toutes Taxes Comprises ..................................................................
+                - Montant Toutes Taxes Comprises .......................................
             </td>
             <td class="right-align">{{ number_format($invoice->montant_ttc, 3, '.', '') }}</td>
         </tr>
         <tr class="totals-row tight-spacing">
             <td></td>
             <td colspan="2" class="totals-label">
-                - Timbre fiscal ....................................................................................................
+                - Timbre fiscal .........................................................................
             </td>
             <td class="right-align">{{ number_format($invoice->timbre_fiscal, 3, '.', '') }}</td>
         </tr>
@@ -187,7 +198,7 @@
         <tr class="totals-row tight-spacing final-row-padding">
             <td></td>
             <td colspan="2" class="totals-label">
-                <u>- Net à votre aimable règlement </u>.......................................................................
+                <u>- Net à votre aimable règlement </u>.............................................
             </td>
             <td class="right-align"><strong>{{ number_format($invoice->net_a_payer, 3, '.', '') }}</strong></td>
         </tr>

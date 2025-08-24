@@ -151,33 +151,34 @@ class InvoiceResource extends Resource
                                 ])
                                 ->columnSpan('full')
                                 ->live()
-                                ->reactive(),
-                        ])
-                        ->afterValidation(function (callable $set, $get) {
-                            $items = $get('items') ?? [];
-                            $totalHorsTaxe = 0;
+                                ->reactive()
+                                ->afterStateUpdated(function (callable $set, $get) {
+                                    $items = $get('items') ?? [];
+                                    $totalHorsTaxe = 0;
 
-                            foreach ($items as $index => $item) {
-                                $quantity = (float) ($item['quantity'] ?? 0);
-                                $singlePrice = (float) ($item['single_price'] ?? 0);
-                                $items[$index]['total_price'] = $quantity * $singlePrice;
-                                $totalHorsTaxe += $quantity * $singlePrice;
-                            }
+                                    foreach ($items as $item) {
+                                        $quantity = (float) ($item['quantity'] ?? 0);
+                                        $singlePrice = (float) ($item['single_price'] ?? 0);
+                                        $totalHorsTaxe += $quantity * $singlePrice;
+                                    }
 
-                            $set('items', $items);
+                                    $taxSettings = TaxSetting::first();
+                                    if (!$taxSettings) {
+                                        return;
+                                    }
 
-                            $taxSettings = TaxSetting::first();
-                            $newTva = $get('exonere_tva') ? 0 : ($totalHorsTaxe * $taxSettings->tva);
-                            $newMontantTTC = $totalHorsTaxe + $newTva;
-                            $newTimbreFiscal = $get('exonere_tf') ? 0 : $taxSettings->tf;
-                            $newNetAPayer = $newMontantTTC + $newTimbreFiscal;
+                                    $newTva = $get('exonere_tva') ? 0 : ($totalHorsTaxe * $taxSettings->tva);
+                                    $newMontantTTC = $totalHorsTaxe + $newTva;
+                                    $newTimbreFiscal = $get('exonere_tf') ? 0 : $taxSettings->tf;
+                                    $newNetAPayer = $newMontantTTC + $newTimbreFiscal;
 
-                            $set('total_hors_taxe', $totalHorsTaxe);
-                            $set('tva', $newTva);
-                            $set('montant_ttc', $newMontantTTC);
-                            $set('timbre_fiscal', $newTimbreFiscal);
-                            $set('net_a_payer', $newNetAPayer);
-                        }),
+                                    $set('total_hors_taxe', $totalHorsTaxe);
+                                    $set('tva', $newTva);
+                                    $set('montant_ttc', $newMontantTTC);
+                                    $set('timbre_fiscal', $newTimbreFiscal);
+                                    $set('net_a_payer', $newNetAPayer);
+                                }),
+                        ]),
 
                     Wizard\Step::make(__('Financial Details & Status'))
                         ->schema([
