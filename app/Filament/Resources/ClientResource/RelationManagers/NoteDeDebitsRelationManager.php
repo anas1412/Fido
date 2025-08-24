@@ -95,8 +95,6 @@ class NoteDeDebitsRelationManager extends RelationManager
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     })
                     ->searchable(),
-                TextColumn::make('description')
-                    ->label("Description"),
                 TextColumn::make('date')
                     ->label("Date de debit")
                     ->date()

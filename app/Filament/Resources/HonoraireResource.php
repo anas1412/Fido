@@ -241,8 +241,7 @@ class HonoraireResource extends Resource
                         $paddedSearch = str_pad($search, 8, '0', STR_PAD_LEFT);
                         $query->where('note', 'like', "%{$paddedSearch}%");
                     }),
-                TextColumn::make('object')
-                    ->label("Objet d'honoraire"),
+                
                 TextColumn::make('client.name')
                     ->label('Nom de client')
                     ->sortable()

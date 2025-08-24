@@ -14,14 +14,17 @@ use Filament\Schemas\Components\Wizard\Step;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Actions\ViewAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Infolists;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 
 
 
@@ -269,13 +272,23 @@ class InvoiceResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                ViewAction::make(),
-                EditAction::make()->visible(!auth()->user()?->is_demo),
-                DeleteAction::make()->visible(!auth()->user()?->is_demo),
+            ->recordActions([
+                ActionGroup::make([
+                    ViewAction::make(),
+                    Action::make('pdf')
+                        ->label('PDF')
+                        ->color('success')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->url(fn(Invoice $record) => route('pdf.invoice', $record)),
+
+                    EditAction::make()->visible(!auth()->user()?->is_demo),
+                    DeleteAction::make()->visible(!auth()->user()?->is_demo),
+                ]),
             ])
-            ->bulkActions([
-                DeleteBulkAction::make()->visible(!auth()->user()?->is_demo),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()->visible(!auth()->user()?->is_demo),
+                ]),
             ]);
     }
 

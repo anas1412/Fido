@@ -141,8 +141,6 @@ class NoteDeDebitResource extends Resource
                 TextColumn::make('amount')
                     ->label(__('Amount'))
                     ->money('TND'),
-                TextColumn::make('description')
-                    ->label(__('Description')),
                 TextColumn::make('date')
                     ->label(__('Issue Date'))
                     ->date(),

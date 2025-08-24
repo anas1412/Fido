@@ -175,8 +175,6 @@ class HonorairesRelationManager extends RelationManager
                         return str_pad($record->note, 8, '0', STR_PAD_LEFT);
                     })
                     ->searchable(),
-                TextColumn::make('object')
-                    ->label("Objet d'honoraire"),
                 TextColumn::make('date')
                     ->label("Date d'honoraire")
                     ->date()
