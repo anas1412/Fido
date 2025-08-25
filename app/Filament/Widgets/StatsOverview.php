@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Client;
 use App\Models\Honoraire;
+use App\Models\NoteDeDebit;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -40,11 +41,12 @@ class StatsOverview extends BaseWidget
                 ->color('info')
                 ->description('Nombre d\'honoraires traités cette année fiscale')
                 ->descriptionColor('success'),
-            Stat::make("Total Facturé (Année Fiscale)", Honoraire::whereYear('date', $currentFiscalYear)->sum('montantTTC'))
-                ->descriptionIcon('heroicon-o-currency-dollar')
-                ->color('success')
-                ->description('Montant total facturé cette année fiscale')
-                ->descriptionColor('info'),
+            Stat::make("Nombre de note de debits traités", NoteDeDebit::whereYear('created_at', $currentFiscalYear)->count())
+                ->descriptionIcon('heroicon-o-document-text')
+                ->color('warning')
+                ->description('Nombre de notes de débit traitées')
+                ->descriptionColor('warning'),
         ];
     }
 }
+

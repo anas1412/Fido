@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Client;
 use App\Models\Honoraire;
+use App\Models\Invoice;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -23,26 +24,35 @@ class StatsOverviewPart2 extends BaseWidget
     {
         $currentFiscalYear = config('fiscal_year.current_year');
 
+        $totalRS = Honoraire::whereYear('date', $currentFiscalYear)->sum('rs');
+        $totalTVA = Honoraire::whereYear('date', $currentFiscalYear)->sum('tva');
+        $totalTF = Honoraire::whereYear('date', $currentFiscalYear)->sum('tf');
+
+        $formattedTotalRS = number_format($totalRS, 3, '.', ',');
+        $formattedTotalTVA = number_format($totalTVA, 3, '.', ',');
+        $formattedTotalTF = number_format($totalTF, 3, '.', ',');
+
+
         return [
-            Stat::make("Total Retenue à la Source (Année Fiscale)", Honoraire::whereYear('date', $currentFiscalYear)->sum('rs'))
+            Stat::make("Total Retenue à la Source", $formattedTotalRS . ' TND')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('warning')
                 ->description('Montant total de retenue à la source cette année fiscale')
                 ->descriptionColor('warning'),
-            Stat::make("Total TVA Collectée (Année Fiscale)", Honoraire::whereYear('date', $currentFiscalYear)->sum('tva'))
+            Stat::make("Total TVA Collectée", $formattedTotalTVA . ' TND')
                 ->descriptionIcon('heroicon-m-receipt-percent')
                 ->color('success')
                 ->description('Montant total de TVA collectée cette année fiscale')
                 ->descriptionColor('success'),
-            Stat::make("Total TF Collectée (Année Fiscale)", Honoraire::whereYear('date', $currentFiscalYear)->sum('tf'))
+            Stat::make("Total TF Collectée", $formattedTotalTF . ' TND')
                 ->descriptionIcon('heroicon-m-calculator')
                 ->color('danger')
                 ->description('Montant total de TF collectée cette année fiscale')
                 ->descriptionColor('danger'),
-            Stat::make("Valeur Moyenne des Factures (Année Fiscale)", Honoraire::whereYear('date', $currentFiscalYear)->avg('montantTTC'))
-                ->descriptionIcon('heroicon-m-scale')
+            Stat::make("Nombre de facture traités", Invoice::whereYear('date', $currentFiscalYear)->count())
+                ->descriptionIcon('heroicon-m-document-text')
                 ->color('info')
-                ->description('Valeur moyenne des factures cette année fiscale')
+                ->description('Nombre de factures traitées cette année fiscale')
                 ->descriptionColor('info'),
         ];
     }
