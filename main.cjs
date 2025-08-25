@@ -82,7 +82,7 @@ function runArtisanCommand(args, dbPathToUse) { // Added dbPathToUse
         let timeoutId = setTimeout(() => {
             commandProcess.kill(); // Kill if it takes too long
             reject(new Error(`Command '${args.join(' ')}' timed out. Stderr: ${stderr.trim()}`));
-        }, 60000); // 60 seconds timeout
+        }, 120000); // 120 seconds timeout
 
         commandProcess.on('exit', (code) => { // Changed from 'close' to 'exit'
             clearTimeout(timeoutId);
