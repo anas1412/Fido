@@ -27,6 +27,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
+use App\Filament\Pages\EditTaxes;
+use App\Filament\Pages\ModifyFiscalYear;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -38,10 +40,22 @@ class AdminPanelProvider extends PanelProvider
             ->path('dashboard')
             ->login() 
             ->profile(isSimple: false)
-            /* ->userMenuItems([
-                'profile' => MenuItem::make()->label('Edit profile'),
-                // ...
-            ]) */
+            ->userMenuItems([
+                MenuItem::make('Edit Company')
+                    ->url(fn () => EditCompanySettings::getUrl() ?? '#') // fallback
+                    ->label(__('Edit Company')) // ensure label is set
+                    ->icon('heroicon-o-building-office'),
+
+                MenuItem::make('Edit Tax')
+                    ->url(fn () => EditTaxes::getUrl() ?? '#')
+                    ->label(__('Edit Tax'))
+                    ->icon('heroicon-o-calculator'),
+
+                MenuItem::make('Edit Fiscal Year')
+                    ->url(fn () => ModifyFiscalYear::getUrl() ?? '#')
+                    ->label(__('Edit Fiscal Year'))
+                    ->icon('heroicon-o-calendar'),
+            ])
             /* ->registration() */
             /* ->passwordReset() */
 

@@ -16,6 +16,8 @@ class EditCompanySettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    protected static ?string $slug = 'edit-company';
+
     protected static ?string $navigationLabel = null;
 
     protected static string | \UnitEnum | null $navigationGroup = null;
