@@ -41,7 +41,9 @@ class PdfController extends Controller
         }
 
         $taxSettings = TaxSetting::first();
-        return Pdf::loadView('pdf', [
+        $template = config('honoraire.template', 'pdf-default');
+
+        return Pdf::loadView($template, [
             'record' => $honoraire,
             'formattedDate' => $formattedDate,
             'tva' => $taxSettings->tva,
