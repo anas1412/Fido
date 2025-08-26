@@ -50,7 +50,7 @@ const artisanCwd = isDev ? __dirname : path.join(process.resourcesPath, 'app');
 const phpExecutable = isDev ? path.join(__dirname, 'php', 'php.exe') : path.join(process.resourcesPath, 'app', 'php', 'php.exe');
 const artisanScript = path.join(artisanCwd, 'artisan');
 
-const dbPath = process.env.DB_DATABASE;
+
 let storagePath = path.join(artisanCwd, 'storage'); // Base storage path
 
 // =================================================================

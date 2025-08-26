@@ -2,6 +2,35 @@
 
 use Illuminate\Support\Str;
 
+
+$dbName = env('DB_DATABASE', 'database.sqlite');
+$databasePath = $dbName;
+
+// If the database name is not an absolute path, create it in the AppData directory
+if (!preg_match('/^([a-zA-Z]:\\|\/)/', $databasePath)) {
+    $appName = env('APP_NAME', 'Fido');
+    
+    if (PHP_OS_FAMILY === 'Windows') {
+        $appData = getenv('APPDATA');
+        $databasePath = "{$appData}\\{$appName}\\{$dbName}";
+    } elseif (PHP_OS_FAMILY === 'Darwin') { // macOS
+        $home = getenv('HOME');
+        $databasePath = "{$home}/Library/Application Support/{$appName}/{$dbName}";
+    } else { // Linux
+        $home = getenv('HOME');
+        $databasePath = "{$home}/.config/{$appName}/{$dbName}";
+    }
+}
+
+// Ensure the directory and the database file exist
+$directory = dirname($databasePath);
+if (!file_exists($directory)) {
+    mkdir($directory, 0755, true);
+}
+if (!file_exists($databasePath)) {
+    touch($databasePath);
+}
+
 return [
 
     /*
@@ -34,7 +63,7 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE'),
+            'database' => $databasePath,
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
