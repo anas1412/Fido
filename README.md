@@ -134,7 +134,7 @@ php artisan seed:demo
 -   **Clients and Projects Management:** Easily track clients and engagements.
 -   **Custom Reports and Advanced Analytics:** Enhanced data insights for better decision-making.
 -   **ERP and CRM Integrations:** Connect with ERP & CRM systems for seamless data sharing and 24/7 support.
--   **Automated Backups:** Regular data backup and restore.
+-   **Database Backup & Restore:** Regular data backup and restore.
 -   **Kanban Workflow:** Visual task and project management.
 -   **Video Conferencing and Meeting Scheduling:** Tools to manage client meetings in-app.
 -   **Calendar and Push Notifications:** Stay on top of deadlines and important events.

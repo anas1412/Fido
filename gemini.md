@@ -65,6 +65,7 @@ Here is a prioritized list of recommended improvements and fixes to enhance the 
 | **Sequential Document Numbering** | `Fix` | Implement a system to ensure all fee notes and debit notes have unique, sequential, and non-editable numbers (e.g., `FACT-2024-001`). This is a critical legal and accounting requirement. |
 | **Database-driven Tax & Fiscal Year** | `Fix` | Move tax rates and fiscal year settings from hardcoded `config` files to the database. Create a settings page in Filament to allow the accountant to manage these values directly. |
 | **Use Database Transactions** | `Fix` | Wrap all financial document creation logic (invoices, notes, etc.) in `DB::transaction()` blocks to ensure data integrity and prevent partial, corrupt records from being saved if an error occurs. |
+| **Database Backup & Restore** | `New Feature` | Implement a comprehensive database backup and restore functionality. |
 
 ### Medium Priority
 
