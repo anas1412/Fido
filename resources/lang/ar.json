@@ -154,5 +154,22 @@
     "Backup creation failed.": "فشل إنشاء النسخة الاحتياطية.",
     "Backup applied successfully!": "تم تطبيق النسخة الاحتياطية بنجاح!",
     "IMPORTANT: You must RESTART the application for changes to take effect.": "هام: يجب عليك إعادة تشغيل التطبيق حتى تدخل التغييرات حيز التنفيذ.",
-    "Error applying backup": "خطأ أثناء تطبيق النسخة الاحتياطية"
+    "Error applying backup": "خطأ أثناء تطبيق النسخة الاحتياطية",
+        "Import & Apply Backup": "استيراد وتطبيق نسخة احتياطية",
+    "Format Database": "تهيئة قاعدة البيانات",
+    "Backup File (.sqlite)": "ملف النسخة الاحتياطية (.sqlite)",
+    "Are you sure you want to import and apply this backup? This action will OVERWRITE the current database and cannot be undone. You must restart the application afterwards.": "هل أنت متأكد من رغبتك في استيراد وتطبيق هذه النسخة الاحتياطية؟ هذا الإجراء سيقوم بالكتابة فوق قاعدة البيانات الحالية ولا يمكن التراجع عنه. يجب عليك إعادة تشغيل التطبيق بعد ذلك.",
+    "Yes, Import and Apply": "نعم، استيراد وتطبيق",
+    "DANGER: Are you sure you want to format the database? This action will PERMANENTLY DELETE ALL DATA and cannot be undone. The application will be reset to a blank state. You must restart the application afterwards.": "خطر: هل أنت متأكد من رغبتك في تهيئة قاعدة البيانات؟ هذا الإجراء سيقوم بحذف جميع البيانات بشكل دائم ولا يمكن التراجع عنه. سيتم إعادة تعيين التطبيق إلى حالة فارغة. يجب عليك إعادة تشغيل التطبيق بعد ذلك.",
+    "Yes, I understand, format the database": "نعم، أفهم، قم بتهيئة قاعدة البيانات",
+    "Backup imported and applied successfully!": "تم استيراد وتطبيق النسخة الاحتياطية بنجاح!",
+    "Error importing backup": "خطأ أثناء استيراد النسخة الاحتياطية",
+    "Database formatted successfully!": "تمت تهيئة قاعدة البيانات بنجاح!",
+    "IMPORTANT: You must RESTART the application to initialize a new database.": "هام: يجب عليك إعادة تشغيل التطبيق لتهيئة قاعدة بيانات جديدة.",
+    "Error formatting database": "خطأ أثناء تهيئة قاعدة البيانات",
+    "The backup file must be a .sqlite file.": "يجب أن يكون ملف النسخة الاحتياطية من نوع .sqlite.",
+    "Reset Application Data": "إعادة تعيين بيانات التطبيق",
+    "DANGER: Are you sure you want to reset the application? This action will PERMANENTLY DELETE ALL DATA and restore the database to its default state, including the default admin account. This cannot be undone.": "خطر: هل أنت متأكد من رغبتك في إعادة تعيين التطبيق؟ هذا الإجراء سيقوم بحذف جميع البيانات بشكل دائم واستعادة قاعدة البيانات إلى حالتها الافتراضية، بما في ذلك حساب المسؤول الافتراضي. لا يمكن التراجع عن هذا الإجراء.",
+    "Yes, I understand, reset the application": "نعم، أفهم، قم بإعادة تعيين التطبيق",
+    "The database has been reset to its default state.": "تمت إعادة تعيين قاعدة البيانات إلى حالتها الافتراضية."
 }

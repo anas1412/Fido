@@ -156,5 +156,22 @@
     "Backup creation failed.": "La création de la sauvegarde a échoué.",
     "Backup applied successfully!": "Sauvegarde appliquée avec succès !",
     "IMPORTANT: You must RESTART the application for changes to take effect.": "IMPORTANT : Vous devez REDÉMARRER l'application pour que les changements prennent effet.",
-    "Error applying backup": "Erreur lors de l'application de la sauvegarde"
+    "Error applying backup": "Erreur lors de l'application de la sauvegarde",
+    "Import & Apply Backup": "Importer & Appliquer une Sauvegarde",
+    "Format Database": "Formater la Base de Données",
+    "Backup File (.sqlite)": "Fichier de Sauvegarde (.sqlite)",
+    "Are you sure you want to import and apply this backup? This action will OVERWRITE the current database and cannot be undone. You must restart the application afterwards.": "Êtes-vous sûr de vouloir importer et appliquer cette sauvegarde ? Cette action va ÉCRASER la base de données actuelle et ne peut pas être annulée. Vous devez redémarrer l'application ensuite.",
+    "Yes, Import and Apply": "Oui, Importer et Appliquer",
+    "DANGER: Are you sure you want to format the database? This action will PERMANENTLY DELETE ALL DATA and cannot be undone. The application will be reset to a blank state. You must restart the application afterwards.": "DANGER : Êtes-vous sûr de vouloir formater la base de données ? Cette action va SUPPRIMER DÉFINITIVEMENT TOUTES LES DONNÉES et ne peut pas être annulée. L'application sera réinitialisée à un état vierge. Vous devez redémarrer l'application ensuite.",
+    "Yes, I understand, format the database": "Oui, je comprends, formater la base de données",
+    "Backup imported and applied successfully!": "Sauvegarde importée et appliquée avec succès !",
+    "Error importing backup": "Erreur lors de l'importation de la sauvegarde",
+    "Database formatted successfully!": "Base de données formatée avec succès !",
+    "IMPORTANT: You must RESTART the application to initialize a new database.": "IMPORTANT : Vous devez REDÉMARRER l'application pour initialiser une nouvelle base de données.",
+    "Error formatting database": "Erreur lors du formatage de la base de données",
+    "The backup file must be a .sqlite file.": "Le fichier de sauvegarde doit être un fichier .sqlite.",
+    "Reset Application Data": "Réinitialiser les Données de l'Application",
+    "DANGER: Are you sure you want to reset the application? This action will PERMANENTLY DELETE ALL DATA and restore the database to its default state, including the default admin account. This cannot be undone.": "DANGER : Êtes-vous sûr de vouloir réinitialiser l'application ? Cette action va SUPPRIMER DÉFINITIVEMENT TOUTES LES DONNÉES et restaurer la base de données à son état par défaut, y compris le compte administrateur par défaut. Cette action est irréversible.",
+    "Yes, I understand, reset the application": "Oui, je comprends, réinitialiser l'application",
+    "The database has been reset to its default state.": "La base de données a été réinitialisée à son état par défaut."
 }
