@@ -19,6 +19,8 @@ class ListNoteDeDebitReports extends ListRecords
 
     protected static ?string $title = "Rapport des note des debits";
 
+    protected static ?int $navigationSort = 60;
+
     protected function getHeaderActions(): array
     {
         return [

@@ -53,6 +53,8 @@ class HonoraireReportResource extends Resource
         return __('Honoraire Report');
     }
 
+    protected static ?int $navigationSort = 50;
+
 
     public static function table(Table $table): Table
     {

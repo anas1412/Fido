@@ -53,6 +53,8 @@ class RetenueSourcResource extends Resource
         return __('Withholding Tax Report');
     }
 
+    protected static ?int $navigationSort = 80;
+
     public static function getEloquentQuery(): Builder
     {
         $fiscalYear = config('fiscal_year.current_year');

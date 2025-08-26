@@ -64,6 +64,8 @@ class NoteDeDebitResource extends Resource
         return __('Notes de Débit');
     }
 
+    protected static ?int $navigationSort = 30;
+
 
     public static function form(Schema $schema): Schema
     {

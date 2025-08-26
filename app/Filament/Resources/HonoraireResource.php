@@ -48,6 +48,7 @@ class HonoraireResource extends Resource
 
     protected static string | \UnitEnum | null $navigationGroup = null;
 
+
     protected static ?string $navigationLabel = null;
 
     public static function getNavigationGroup(): string
@@ -69,6 +70,8 @@ class HonoraireResource extends Resource
     {
         return __('Honoraires');
     }
+
+    protected static ?int $navigationSort = 20;
 
 
     /* public static function getNavigationBadge(): ?string

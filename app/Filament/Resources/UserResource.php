@@ -56,6 +56,7 @@ class UserResource extends Resource
         return __('User');
     }
 
+    protected static ?int $navigationSort = 100;
 
     /* public static function getNavigationBadge(): ?string
     {

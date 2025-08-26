@@ -65,6 +65,8 @@ class ClientResource extends Resource
         return __('Clients');
     }
 
+    protected static ?int $navigationSort = 10;
+
     protected static int $globalSearchResultsLimit = 20;
 
     /* public static function getNavigationBadge(): ?string

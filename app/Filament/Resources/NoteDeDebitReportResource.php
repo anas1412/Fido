@@ -36,6 +36,8 @@ class NoteDeDebitReportResource extends Resource
 
     protected static ?string $navigationLabel = null;
 
+    protected static ?int $navigationSort = 70;
+
     public static function getNavigationGroup(): string
     {
         return __('Reports Generation');
@@ -56,7 +58,7 @@ class NoteDeDebitReportResource extends Resource
         return __('Debit Note Report');
     }
 
-    protected static ?int $navigationSort = 3;
+    
 
 
     public static function table(Table $table): Table
