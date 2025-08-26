@@ -64,10 +64,10 @@ class UserResource extends Resource
     } */
 
 
-    public static function canViewAny(): bool
-    {
-        return auth()->user()->isAdmin();
-    }
+    public static function canView(Model $record): bool
+{
+    return auth()->user()->is_admin || auth()->user()->is_demo;
+}
 
     public static function canCreate(): bool
     {
@@ -112,10 +112,12 @@ class UserResource extends Resource
                     ->maxLength(50),
                 Toggle::make('is_admin')
                     ->label(__('Admin'))
-                    ->required(),
+                    ->required()
+                    ->disabled(fn () => !auth()->user()?->is_admin),
                 Toggle::make('is_demo')
                     ->label(__('Demo User'))
-                    ->disabled(fn (?Model $record) => $record !== null),
+                    ->disabled(fn (?Model $record) => $record !== null)
+                    ->hint(__('This cannot be changed after creation.')),
             ]);
     }
 
@@ -134,6 +136,7 @@ class UserResource extends Resource
                 ToggleColumn::make('is_admin')
                     ->label(__('Admin'))
                     ->toggleable()
+                    ->disabled(fn () => !auth()->user()?->is_admin)
                     ->sortable(),
                 ToggleColumn::make('is_demo')
                     ->label(__('Demo User'))
@@ -149,12 +152,12 @@ class UserResource extends Resource
                 //
             ])
             ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()->visible(!auth()->user()?->is_demo),
+                DeleteAction::make()->visible(!auth()->user()?->is_demo),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->visible(!auth()->user()?->is_demo),
                 ]),
             ])->recordUrl(
                 #This makes the rows unclickable

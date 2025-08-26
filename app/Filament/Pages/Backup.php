@@ -41,10 +41,11 @@ class Backup extends Page implements HasTable
         return __('Database Backups');
     }
 
-    public static function canView(): bool
-    {
-        return auth()->user()->is_admin;
-    }
+    public static function canView(Model $record): bool
+{
+    return auth()->user()->is_admin || auth()->user()->is_demo;
+}
+
 
     public static function getNavigationGroup(): string
     {
@@ -57,7 +58,9 @@ class Backup extends Page implements HasTable
             Action::make('createBackup')
                 ->label(__('Create New Backup'))
                 ->icon('heroicon-o-plus')
-                ->action(fn() => $this->createBackup()),
+                ->action(fn() => $this->createBackup())
+                ->disabled(fn () => auth()->user()?->is_demo)
+                ->tooltip(__('Disabled in demo mode')),
 
             Action::make('importBackup')
                 ->label(__('Import & Apply Backup'))
@@ -76,7 +79,9 @@ class Backup extends Page implements HasTable
                 ->modalSubmitActionLabel(__('Yes, Import and Apply'))
                 ->action(function (array $data) {
                     $this->importAndApplyBackup($data['upload']);
-                }),
+                })
+                ->disabled(fn () => auth()->user()?->is_demo)
+                ->tooltip(__('Disabled in demo mode')),
 
             Action::make('formatDatabase')
                 ->label(__('Reset Application Data'))
@@ -86,7 +91,9 @@ class Backup extends Page implements HasTable
                 ->modalHeading(__('Reset Application Data'))
                 ->modalDescription(__('DANGER: Are you sure you want to reset the application? This action will PERMANENTLY DELETE ALL DATA and restore the database to its default state, including the default admin account. This cannot be undone.'))
                 ->modalSubmitActionLabel(__('Yes, I understand, reset the application'))
-                ->action(fn() => $this->formatDatabase()),
+                ->action(fn() => $this->formatDatabase())
+                ->disabled(fn () => auth()->user()?->is_demo)
+                ->tooltip(__('Disabled in demo mode')),
         ];
     }
 
@@ -113,7 +120,8 @@ class Backup extends Page implements HasTable
                     ->modalHeading(__('Apply Backup'))
                     ->modalDescription(__('Are you sure you want to apply this backup? This action overwrites the current database and cannot be undone. You must restart the application afterwards.'))
                     ->modalSubmitActionLabel(__('Yes, Apply'))
-                    ->action(fn(array $record) => $this->applyBackup($record['name'])),
+                    ->action(fn(array $record) => $this->applyBackup($record['name']))
+                    ->visible(!auth()->user()?->is_demo),
 
                 Action::make('delete')
                     ->label(__('Delete'))
@@ -123,7 +131,8 @@ class Backup extends Page implements HasTable
                     ->action(function (array $record) {
                         $this->deleteBackup($record['name']);
                     })
-                    ->after(fn () => $this->js('window.location.reload()')),
+                    ->after(fn () => $this->js('window.location.reload()'))
+                    ->visible(!auth()->user()?->is_demo),
             ])
             ->emptyStateHeading(__('No backups found'))
             ->emptyStateDescription(__('Click the "Create New Backup" button to get started.'))
