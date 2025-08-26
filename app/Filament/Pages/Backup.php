@@ -26,10 +26,22 @@ class Backup extends Page implements HasTable
     use InteractsWithActions;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-server';
-    protected static ?string $navigationLabel = 'Database Backups';
-    protected static ?string $title = 'Database Backups';
+    protected static ?string $navigationLabel = 'Database Backups'; // Will be translated below
+    protected static ?string $title = 'Database Backups'; // Will be translated below
     protected string $view = 'filament.pages.backup';
     protected static ?int $navigationSort = 90;
+
+    // --- TRANSLATION HOOKS ---
+    public static function getNavigationLabel(): string
+    {
+        return __('Database Backups');
+    }
+
+    public function getTitle(): string
+    {
+        return __('Database Backups');
+    }
+    // --- END TRANSLATION HOOKS ---
 
     public static function canView(): bool
     {
@@ -45,7 +57,7 @@ class Backup extends Page implements HasTable
     {
         return [
             Action::make('createBackup')
-                ->label('Create New Backup')
+                ->label(__('Create New Backup')) // MODIFIED
                 ->icon('heroicon-o-plus')
                 ->action(fn() => $this->createBackup()),
         ];
@@ -56,42 +68,38 @@ class Backup extends Page implements HasTable
         return $table
             ->records(fn () => $this->getBackups())
             ->columns([
-                TextColumn::make('name')->label('File Name')->searchable()->sortable(),
-                TextColumn::make('size')->label('Size'),
-                TextColumn::make('date')->label('Date')->dateTime()->sortable(),
+                TextColumn::make('name')->label(__('File Name'))->searchable()->sortable(), // MODIFIED
+                TextColumn::make('size')->label(__('Size')), // MODIFIED
+                TextColumn::make('date')->label(__('Date'))->dateTime()->sortable(), // MODIFIED
             ])
             ->actions([
                 Action::make('download')
-                    ->label('Download')
+                    ->label(__('Download')) // MODIFIED
                     ->icon('heroicon-o-arrow-down-tray')
                     ->action(fn(array $record): ?StreamedResponse => $this->downloadBackup($record['name'])),
 
                 Action::make('apply')
-                    ->label('Apply')
+                    ->label(__('Apply')) // MODIFIED
                     ->icon('heroicon-o-check-circle')
                     ->color('warning')
                     ->requiresConfirmation()
-                    ->modalHeading('Apply Backup')
-                    ->modalDescription('Are you sure you want to apply this backup? This action overwrites the current database and cannot be undone. You must restart the application afterwards.')
-                    ->modalSubmitActionLabel('Yes, Apply')
+                    ->modalHeading(__('Apply Backup')) // MODIFIED
+                    ->modalDescription(__('Are you sure you want to apply this backup? This action overwrites the current database and cannot be undone. You must restart the application afterwards.')) // MODIFIED
+                    ->modalSubmitActionLabel(__('Yes, Apply')) // MODIFIED
                     ->action(fn(array $record) => $this->applyBackup($record['name'])),
 
-                // --- THIS IS THE FINAL FIX ---
-                // We use a generic Action and configure it to look and act like a Delete button.
                 Action::make('delete')
-                    ->label('Delete')
+                    ->label(__('Delete')) // MODIFIED
                     ->icon('heroicon-o-trash')
                     ->color('danger')
                     ->requiresConfirmation()
                     ->action(function (array $record) {
                         $this->deleteBackup($record['name']);
                     })
-                    // This "after" hook forces the entire Livewire component (the page) to re-render,
-                    // which makes the table reload its data.
                     ->after(fn () => $this->js('window.location.reload()')),
             ])
-            ->emptyStateHeading('No backups found')
-            ->emptyStateDescription('Click the "Create New Backup" button to get started.')
+            ->emptyStateHeading(__('No backups found')) // MODIFIED
+            ->emptyStateDescription(__('Click the "Create New Backup" button to get started.')) // MODIFIED
             ->emptyStateIcon('heroicon-o-circle-stack');
     }
 
@@ -100,11 +108,11 @@ class Backup extends Page implements HasTable
         $disk = 'local';
         $path = "backups/{$fileName}";
         if (!Storage::disk($disk)->exists($path)) {
-            Notification::make()->title('Backup file not found.')->danger()->send();
+            Notification::make()->title(__('Backup file not found.'))->danger()->send(); // MODIFIED
             return;
         }
         Storage::disk($disk)->delete($path);
-        Notification::make()->title('Backup deleted successfully.')->success()->send();
+        Notification::make()->title(__('Backup deleted successfully.'))->success()->send(); // MODIFIED
     }
 
     public function getBackups(): Collection
@@ -129,7 +137,7 @@ class Backup extends Page implements HasTable
     {
         $databasePath = config('database.connections.sqlite.database');
         if (!File::exists($databasePath)) {
-            Notification::make()->title('Database file not found.')->danger()->send();
+            Notification::make()->title(__('Database file not found.'))->danger()->send(); // MODIFIED
             return;
         }
         $backupDisk = 'local';
@@ -138,9 +146,9 @@ class Backup extends Page implements HasTable
         $fileName = "backup-{$timestamp}.sqlite";
         try {
             Storage::disk($backupDisk)->put("{$backupPath}/{$fileName}", File::get($databasePath));
-            Notification::make()->title('Backup created successfully.')->success()->send();
+            Notification::make()->title(__('Backup created successfully.'))->success()->send(); // MODIFIED
         } catch (\Throwable $e) {
-            Notification::make()->title('Backup creation failed.')->body($e->getMessage())->danger()->send();
+            Notification::make()->title(__('Backup creation failed.'))->body($e->getMessage())->danger()->send(); // MODIFIED
         }
     }
 
@@ -149,7 +157,7 @@ class Backup extends Page implements HasTable
         $disk = 'local';
         $path = "backups/{$fileName}";
         if (!Storage::disk($disk)->exists($path)) {
-            Notification::make()->title('Backup file not found.')->danger()->send();
+            Notification::make()->title(__('Backup file not found.'))->danger()->send(); // MODIFIED
             return null;
         }
         return Storage::disk($disk)->download($path);
@@ -161,7 +169,7 @@ class Backup extends Page implements HasTable
         $backupPath = "backups/{$fileName}";
         $currentDatabasePath = config('database.connections.sqlite.database');
         if (!Storage::disk($disk)->exists($backupPath)) {
-            Notification::make()->title('Backup file not found.')->danger()->send();
+            Notification::make()->title(__('Backup file not found.'))->danger()->send(); // MODIFIED
             return;
         }
         try {
@@ -170,9 +178,12 @@ class Backup extends Page implements HasTable
                 File::makeDirectory($dir, 0755, true, true);
             }
             File::copy(Storage::disk($disk)->path($backupPath), $currentDatabasePath);
-            Notification::make()->title('Backup applied successfully!')->body('IMPORTANT: You must RESTART the application for changes to take effect.')->success()->persistent()->send();
+            Notification::make()
+                ->title(__('Backup applied successfully!')) // MODIFIED
+                ->body(__('IMPORTANT: You must RESTART the application for changes to take effect.')) // MODIFIED
+                ->success()->persistent()->send();
         } catch (\Throwable $e) {
-            Notification::make()->title('Error applying backup')->body($e->getMessage())->danger()->send();
+            Notification::make()->title(__('Error applying backup'))->body($e->getMessage())->danger()->send(); // MODIFIED
         }
     }
 
