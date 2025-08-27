@@ -154,7 +154,7 @@ function createLoadingWindow() {
 
 function createMainWindow(serverUrl) {
     mainWindow = new BrowserWindow({
-        width: 1200, height: 800, show: false, backgroundColor: '#2e2c29',
+        width: 1600, height: 1200, show: false, backgroundColor: '#2e2c29',
         autoHideMenuBar: true,
         icon: path.join(__dirname, 'public', 'images', 'favicon.ico'),
         webPreferences: { nodeIntegration: false, contextIsolation: true, preload: path.join(__dirname, 'preload.js') },
