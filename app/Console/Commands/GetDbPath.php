@@ -30,12 +30,6 @@ class GetDbPath extends Command
     {
         $databasePath = Config::get('database.connections.sqlite.database');
         
-        // Ensure the directory exists before outputting the path
-        $directory = dirname($databasePath);
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
-
         $this->line($databasePath);
         return 0;
     }

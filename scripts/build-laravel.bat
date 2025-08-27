@@ -1,4 +1,6 @@
 @echo off
+
+
 setlocal
 
 rem Change directory to the project root (one level up from this script)
@@ -16,3 +18,4 @@ echo "Laravel build script finished."
 rem Return to the original directory
 popd
 endlocal
+
