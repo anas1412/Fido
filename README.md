@@ -122,6 +122,7 @@ php artisan seed:demo
 -   **Client & Invoice Management:** Track your clients and manage their invoices and fee notes (honoraires) all in one place.
 -   **Customizable Document Templates:** Tailor the design of your fee notes, invoices, and debit notes to match your professional brand.
 -   **One-Click PDF Downloads:** Generate and download PDF versions of all your reports and financial documents for easy printing, emailing, or archiving.
+-   **Database Backup & Restore:** Create, download, apply, and import database backups directly from the admin panel.
 -   **Employees Accounts Management:** Easily manage employees access on the dashboard.
 -   **Professional Fees Report:** Generate and export detailed professional fees reports.
 -   **Withholding Tax Statement:** Simplifies management of withholding tax obligations.
@@ -134,7 +135,6 @@ php artisan seed:demo
 -   **Clients and Projects Management:** Easily track clients and engagements.
 -   **Custom Reports and Advanced Analytics:** Enhanced data insights for better decision-making.
 -   **ERP and CRM Integrations:** Connect with ERP & CRM systems for seamless data sharing and 24/7 support.
--   **Database Backup & Restore:** Regular data backup and restore.
 -   **Kanban Workflow:** Visual task and project management.
 -   **Video Conferencing and Meeting Scheduling:** Tools to manage client meetings in-app.
 -   **Calendar and Push Notifications:** Stay on top of deadlines and important events.

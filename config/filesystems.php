@@ -1,5 +1,21 @@
 <?php
 
+// This logic mirrors the database configuration to ensure storage paths are
+// consistent across both development and packaged Electron environments.
+$appName = env('APP_NAME', 'Fido');
+$storageRoot = '';
+
+if (PHP_OS_FAMILY === 'Windows') {
+    $appData = getenv('APPDATA');
+    $storageRoot = "{$appData}\\{$appName}\storage";
+} elseif (PHP_OS_FAMILY === 'Darwin') { // macOS
+    $home = getenv('HOME');
+    $storageRoot = "{$home}/Library/Application Support/{$appName}/storage";
+} else { // Linux
+    $home = getenv('HOME');
+    $storageRoot = "{$home}/.config/{$appName}/storage";
+}
+
 return [
 
     /*
@@ -25,24 +41,24 @@ return [
     | most supported storage drivers are configured here for reference.
     |
     | Supported Drivers: "local", "ftp", "sftp", "s3"
-    |
-    */
+    | */
 
     'disks' => [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => $storageRoot,
             'throw' => false,
         ],
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => $storageRoot . '/public',
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
+
 
         's3' => [
             'driver' => 's3',

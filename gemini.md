@@ -6,6 +6,27 @@ This document provides a summary of the technologies used, project structure, an
 
 The project, named "Fido," is a web application built using the Laravel framework. Its primary function appears to be managing clients, invoices (honoraires), credit notes (note de debit), and other financial data. The application includes a comprehensive administration panel built with Filament, which allows for easy management of the application's resources.
 
+## Data Management: Database and Backups
+
+To ensure the application works correctly and consistently across both development and packaged Electron environments, Fido uses a unified data storage strategy that always points to the local user's writable application data directory.
+
+### Database Location
+
+*   **Type:** Single-file SQLite database.
+*   **Logic:** The database path is dynamically determined based on the user's operating system. It is **always** stored in the user's profile, never in the project or installation folder.
+*   **Example Paths:**
+    *   **Windows:** `C:\Users\<UserName>\AppData\Roaming\Fido\database.sqlite`
+    *   **macOS:** `~/Library/Application Support/Fido/database.sqlite`
+    *   **Linux:** `~/.config/Fido/database.sqlite`
+
+### Backups Location
+
+*   **Management:** Backups are created and managed from the "Database Backups" page within the application.
+*   **Logic:** The backup path follows the same logic as the database, ensuring backups are also always stored in a writable location.
+*   **Example Path:** The backups are stored in a `storage/backups` subfolder relative to the OS-specific paths above (e.g., `...\AppData\Roaming\Fido\storage\backups`).
+
+This unified approach prevents file system permission errors in the packaged Electron application and makes the development environment behave identically to the final product.
+
 ## Core Technologies
 
 ### Backend
@@ -54,6 +75,14 @@ The project follows a standard Laravel application structure:
 -   **`storage/`**: Contains cached framework files, session files, and logs.
 -   **`tests/`**: Contains the application's automated tests.
 
+## Key Features
+
+-   **Client & Invoice Management:** Track clients and manage their invoices, fee notes (honoraires), and debit notes.
+-   **Document Generation:** Create and download PDF versions of all financial documents.
+-   **Reporting:** Generate professional fees reports, withholding tax statements, and debit note statements.
+-   **Database Backup & Restore:** A dedicated page in the admin panel allows users to create, download, apply, and import database backups. Backups are stored internally and can be downloaded for external safekeeping.
+-   **User Management:** Control access for employees and administrators.
+
 ## Development To-Do List
 
 Here is a prioritized list of recommended improvements and fixes to enhance the Fido application.
@@ -65,7 +94,7 @@ Here is a prioritized list of recommended improvements and fixes to enhance the 
 | **Sequential Document Numbering** | `Fix` | Implement a system to ensure all fee notes and debit notes have unique, sequential, and non-editable numbers (e.g., `FACT-2024-001`). This is a critical legal and accounting requirement. |
 | **Database-driven Tax & Fiscal Year** | `Fix` | Move tax rates and fiscal year settings from hardcoded `config` files to the database. Create a settings page in Filament to allow the accountant to manage these values directly. |
 | **Use Database Transactions** | `Fix` | Wrap all financial document creation logic (invoices, notes, etc.) in `DB::transaction()` blocks to ensure data integrity and prevent partial, corrupt records from being saved if an error occurs. |
-| **Database Backup & Restore** | `New Feature` | Implement a comprehensive database backup and restore functionality. |
+
 
 ### Medium Priority
 
