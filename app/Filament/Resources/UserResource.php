@@ -114,10 +114,6 @@ class UserResource extends Resource
                     ->label(__('Admin'))
                     ->required()
                     ->disabled(fn () => !auth()->user()?->is_admin),
-                Toggle::make('is_demo')
-                    ->label(__('Demo User'))
-                    ->disabled(fn (?Model $record) => $record !== null)
-                    ->hint(__('This cannot be changed after creation.')),
             ]);
     }
 
