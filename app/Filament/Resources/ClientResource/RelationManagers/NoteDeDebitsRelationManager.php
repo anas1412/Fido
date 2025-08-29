@@ -113,7 +113,9 @@ class NoteDeDebitsRelationManager extends RelationManager
                         ->label('PDF')
                         ->color('success')
                         ->icon('heroicon-o-arrow-down-tray')
-                        ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id])),
+                        ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id]))
+                        ->disabled()
+                        ->tooltip(__('Work in progress')),
 
                     EditAction::make()->visible(!auth()->user()?->is_demo),
                     DeleteAction::make()->visible(!auth()->user()?->is_demo),
