@@ -34,8 +34,8 @@
 
         /* Header, Date, Title, Debtor styles */
         .header-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .header-left { width: 50%; text-align: left; vertical-align: top; font-weight: bold; text-transform: uppercase; }
-        .header-left .slogan { font-size: 12px; font-weight: normal; text-transform: none; margin-top: 2px; }
+        .header-left { width: 50%; text-align: left; vertical-align: top; text-transform: uppercase; }
+        .header-left .slogan { font-weight: normal; text-transform: none; margin-top: 2px; }
         .header-right { width: 50%; text-align: right; vertical-align: top; }
         .header-right img { width: 120px; height: auto; margin-bottom: 4px; }
         .date { text-transform:uppercase; font-size:13px; }
@@ -108,7 +108,7 @@
             </td>
             <td class="header-right">
                 <img src="{{ public_path('images/CCT.jpg') }}" alt="Logo">
-                <div class="date">HAMMAMET Le {{ $formattedDate }}</div>
+                <div class="date">HAMMAMET <u>Le {{ $formattedDate }}</u></div>
             </td>
         </tr>
     </table>
@@ -126,7 +126,7 @@
         </thead>
         <tbody>
             <tr>
-                <td class="desc-main">{{ $record->object }}</td>
+                <td class="desc-main"><strong>{{ $record->object }}</strong></td>
                 <td class="amt-main">{{ number_format($ht, 3, '.', ',') }}</td>
             </tr>
             <tr class="totals-row">
@@ -163,13 +163,13 @@
     </table>
 
     <!-- Footer -->
-    <div class="inwords">Arrêter la présente facture à la somme de {{ ucfirst($dinarsInWords) }} Dinars{{ $millimes ? ' et '.$millimes.' millimes' : '' }}.</div>
+    <div class="inwords"><u>Arrêter la présente facture à la somme de {{ ucfirst($dinarsInWords) }} Dinars{{ $millimes ? ' et '.$millimes.' millimes' : '' }}.</u></div>
     <br><br>
-    <div class="sign">LE COMPTABLE<br>{{ $companySetting->accountant_name ?? 'NABIL KAROUI' }}</div>
+    <div class="sign"><u>LE COMPTABLE</u><br>{{ $companySetting->accountant_name ?? 'NABIL KAROUI' }}</div>
     <div class="footer">
-        <div>{{ $companySetting->address_line1 }} {{ $companySetting->address_line2 }}</div>
+        <strong><div>{{ $companySetting->address_line1 }} {{ $companySetting->address_line2 }}</div>
         <div>T.V.A.: 729 544 A A P 000 / RNE: 0729544A</div>
-        <div>TEL/FAX: {{ $companySetting->fax }} / MOBILE: {{ $companySetting->phone1 }}/{{ $companySetting->phone2 }}</div>
+        <div>TEL/FAX: {{ $companySetting->fax }} / MOBILE: {{ $companySetting->phone1 }}/{{ $companySetting->phone2 }}</div></strong>
     </div>
 
 </body>
