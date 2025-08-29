@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note d'honoraire - Alternative</title>
+    <title>Note d'honoraire</title>
     <style>
         @page {
             size: A4;
@@ -151,18 +151,17 @@
         }
 
         .invoice-table {
-            width: 80%;
+            width: 50%;
             border-collapse: collapse;
             margin: auto;
             margin-bottom: 10px;
             font-size: 18px;
-            border: 1px solid #000;
             /* Center the table */
         }
 
         .invoice-table th,
         .invoice-table td {
-            border: 1px solid #000;
+            border: none;
             padding: 8px;
         }
 
