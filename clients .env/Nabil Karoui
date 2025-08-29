@@ -14,16 +14,16 @@ DEMO_PASSWORD="password"
 DEMO_EMAIL="demo@fido.tn"
 
 # Company Settings Defaults
-COMPANY_NAME="Cabinet Foulen Fouleni"
-COMPANY_SLOGAN="Comptable Commissaire aux comptes Membre de la compagnie des comptables de Tunisie"
-COMPANY_MF_NUMBER="0123456E-A-P-000"
+COMPANY_NAME="FIDUCIAIRE KAROUI NABIL"
+COMPANY_SLOGAN="BUREAU DE COMPTABILITE"
+COMPANY_MF_NUMBER="729544A-A-P-000"
 COMPANY_LOCATION="Hammamet"
-COMPANY_ADDRESS_LINE1="Rue Taieb Azzabi"
-COMPANY_ADDRESS_LINE2="Hammamet, Nabeul"
-COMPANY_PHONE1="54 93 00 48"
-COMPANY_PHONE2="50 377 851"
-COMPANY_FAX="72 12 34 56"
-COMPANY_EMAIL="anas.bassoumi@gmail.com"
+COMPANY_ADDRESS_LINE1="Bureau B1, 1ère étage, Residence <<BOCHRA>> Avenue Des Nations UNies"
+COMPANY_ADDRESS_LINE2="Hammamet"
+COMPANY_PHONE1="98 249 871"
+COMPANY_PHONE2="53 249 871"
+COMPANY_FAX="72 323 571"
+COMPANY_EMAIL="bnabil.karoui@gmail.com"
 
 HONORAIRE_TEMPLATE=pdf-nabilkaroui
 
