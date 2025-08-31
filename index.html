@@ -3,6 +3,18 @@
         <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+            <meta name="description" content="FIDO est un logiciel de comptabilité intelligent conçu pour les comptables tunisiens. Automatisez vos tâches et gérez vos clients facilement.">
+            <meta name="keywords" content="comptabilité, logiciel comptable, Tunisie, gestion clients, facturation, automatisation, fido">
+            <meta name="author" content="FIDO Team">
+            <meta property="og:title" content="FIDO - Logiciel de Comptabilité Intelligent">
+            <meta property="og:description" content="Automatisation comptable pour les professionnels en Tunisie.">
+            <meta property="og:image" content="https://fido.tn/logo.png">
+            <meta property="og:url" content="https://fido.tn">
+            <meta name="twitter:card" content="summary_large_image">
+            <link rel="canonical" href="https://fido.tn">
+
+
             <link rel="icon" href="favicon.ico" type="image/x-icon">
             <title x-data x-text="$store.i18n.t('pageTitle')"></title>
             <script src="https://cdn.tailwindcss.com"></script>
@@ -387,5 +399,20 @@
                     <p class="text-sm text-gray-500" x-text="$store.i18n.t('demoModalContact')"></p>
                 </div>
             </div>
+            <script type="application/ld+json">
+                {
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareApplication",
+                    "name": "FIDO",
+                    "description": "Logiciel de comptabilité intelligent pour les professionnels tunisiens.",
+                    "applicationCategory": "Accounting",
+                    "operatingSystem": "Windows",
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "480",
+                        "priceCurrency": "TND"
+                    }
+                }
+                </script>
         </body>
     </html>
