@@ -2,7 +2,7 @@
     "private": true,
     "type": "module",
     "name": "fido",
-    "version": "2.5.0",
+    "version": "2.8.0",
     "description": "Fido: Automating Accounting with Ease",
     "author": "anas1412",
     "main": "main.cjs",
