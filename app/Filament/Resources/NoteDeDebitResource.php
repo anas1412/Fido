@@ -150,20 +150,18 @@ class NoteDeDebitResource extends Resource
             ->filters([
                 //
             ])
-            ->recordActions([
-                ActionGroup::make([
-                    ViewAction::make(),
-                    Action::make('pdf')
-                        ->label('PDF')
-                        ->color('success')
-                        ->icon('heroicon-o-arrow-down-tray')
-                        ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id]))
-                        ->disabled()
-                        ->tooltip(__('Work in progress')),
+            ->actions([
+                ViewAction::make(),
+                Action::make('pdf')
+                    ->label('PDF')
+                    ->color('success')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id]))
+                    ->disabled()
+                    ->tooltip(__('Work in progress')),
 
-                    EditAction::make()->visible(!auth()->user()?->is_demo),
-                    DeleteAction::make()->visible(!auth()->user()?->is_demo),
-                ]),
+                EditAction::make()->visible(!auth()->user()?->is_demo),
+                DeleteAction::make()->visible(!auth()->user()?->is_demo),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

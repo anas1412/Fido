@@ -125,8 +125,6 @@ class ClientResource extends Resource
                     ->label(__('Name'))
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('address')
-                    ->label(__('Address')),
                 TextColumn::make('phone')
                     ->label(__('Phone'))
                     ->searchable(),
@@ -137,12 +135,10 @@ class ClientResource extends Resource
             ->filters([
                 //
             ])
-            ->recordActions([
-                ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make()->visible(!auth()->user()?->is_demo),
-                    DeleteAction::make()->visible(!auth()->user()?->is_demo),
-                ]),
+            ->actions([
+                ViewAction::make(),
+                EditAction::make()->visible(!auth()->user()?->is_demo),
+                DeleteAction::make()->visible(!auth()->user()?->is_demo),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

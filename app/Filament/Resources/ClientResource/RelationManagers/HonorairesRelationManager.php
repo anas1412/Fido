@@ -186,18 +186,16 @@ class HonorairesRelationManager extends RelationManager
             ->headerActions([
                 CreateAction::make()->visible(!auth()->user()?->is_demo),
             ])
-            ->recordActions([
-                ActionGroup::make([
-                    ViewAction::make(),
-                    Action::make('pdf')
-                        ->label('PDF')
-                        ->color('success')
-                        ->icon('heroicon-o-arrow-down-tray')
-                        ->url(fn(Honoraire $record) => route('pdf', $record)),
+            ->actions([
+                ViewAction::make(),
+                Action::make('pdf')
+                    ->label('PDF')
+                    ->color('success')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->url(fn(Honoraire $record) => route('pdf', $record)),
 
-                    EditAction::make()->visible(!auth()->user()?->is_demo),
-                    DeleteAction::make()->visible(!auth()->user()?->is_demo),
-                ]),
+                EditAction::make()->visible(!auth()->user()?->is_demo),
+                DeleteAction::make()->visible(!auth()->user()?->is_demo),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -260,8 +260,8 @@ class HonoraireResource extends Resource
             ->filters([
                 //
             ])
-            ->recordActions([
-                ActionGroup::make([
+            ->actions([
+                
                     ViewAction::make(),
                     Action::make('pdf')
                         ->label('PDF')
@@ -271,7 +271,7 @@ class HonoraireResource extends Resource
 
                     EditAction::make()->visible(!auth()->user()?->is_demo),
                     DeleteAction::make()->visible(!auth()->user()?->is_demo),
-                ]),
+                
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
