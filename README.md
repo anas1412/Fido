@@ -151,22 +151,14 @@ php artisan seed:demo
 
 ### `SQLSTATE[HY000]: General error: 26 file is not a database`
 
-This error indicates that the `database.sqlite` file is corrupted. To fix this, you can manually recreate the file.
+This error indicates that the `database.sqlite` file is corrupted. To fix this, simply run the `reset-database.bat` script included in the project.
 
-1.  **Delete the corrupted file:**
-    ```bash
-    del database.sqlite
-    ```
+This script will automatically:
+1.  Locate and delete the corrupted database file (for both standard and demo versions).
+2.  Create a new, empty database file.
+3.  Run the necessary database migrations and seed it with initial data.
 
-2.  **Create an empty database file:**
-    ```bash
-    fsutil file createnew database.sqlite 0
-    ```
-
-3.  **Run the migrations:**
-    ```bash
-    php artisan migrate --seed
-    ```
+Just double-click `reset-database.bat` to run it.
 
 ## License
 
