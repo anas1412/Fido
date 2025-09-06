@@ -27,7 +27,6 @@ class InvoiceFactory extends Factory
             'montant_ttc' => 0,
             'timbre_fiscal' => 0,
             'net_a_payer' => 0,
-            'status' => $this->faker->randomElement(['draft', 'sent', 'paid', 'overdue']),
         ];
     }
 }

@@ -180,7 +180,7 @@ class InvoiceResource extends Resource
                                 }),
                         ]),
 
-                    Wizard\Step::make(__('Financial Details & Status'))
+                    Wizard\Step::make(__('Financial Details'))
                         ->schema([
                             Forms\Components\TextInput::make('total_hors_taxe')
                                 ->label(__('Total HT'))
@@ -212,14 +212,7 @@ class InvoiceResource extends Resource
                                 ->numeric()
                                 ->readOnly(), // Changed from disabled()
                                 
-                            Forms\Components\Select::make('status')
-                                ->options([
-                                    'draft' => __('Draft'),
-                                    'sent' => __('Sent'),
-                                    'paid' => __('Paid'),
-                                    'overdue' => __('Overdue'),
-                                ])
-                                ->required(),
+                            
                             Forms\Components\Toggle::make('exonere_tva')
                                 ->label(__('Exonération TVA'))
                                 ->live()
@@ -267,8 +260,7 @@ class InvoiceResource extends Resource
                 Tables\Columns\TextColumn::make('net_a_payer')
                     ->label(__('Net to Pay'))
                     ->money('tnd'),
-                Tables\Columns\TextColumn::make('status')
-                    ->label(__('Status')),
+                
             ])
             ->filters([
                 //
@@ -339,10 +331,8 @@ class InvoiceResource extends Resource
                         TextEntry::make('date')
                             ->label(__('Invoice Date'))
                             ->date(),
-                        TextEntry::make('status')
-                            ->label(__('Status')),
                     ])
-                    ->columns(3),
+                    ->columns(2),
 
                 Section::make(__('Invoice Items'))
                     ->schema([

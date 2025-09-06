@@ -153,7 +153,7 @@ class InvoicesRelationManager extends RelationManager
                                     $set('net_a_payer', $newNetAPayer);
                                 }),
                         ]),
-                    Wizard\Step::make(__('Financial Details & Status'))
+                    Wizard\Step::make(__('Financial Details'))
                         ->schema([
                             Forms\Components\TextInput::make('total_hors_taxe')
                                 ->label(__('Total HT'))
@@ -185,14 +185,6 @@ class InvoicesRelationManager extends RelationManager
                                 ->numeric()
                                 ->readOnly(), // Changed from disabled()
                                 
-                            Forms\Components\Select::make('status')
-                                ->options([
-                                    'draft' => __('Draft'),
-                                    'sent' => __('Sent'),
-                                    'paid' => __('Paid'),
-                                    'overdue' => __('Overdue'),
-                                ])
-                                ->required(),
                             Forms\Components\Toggle::make('exonere_tva')
                                 ->label(__('Exonération TVA'))
                                 ->live()
@@ -238,8 +230,6 @@ class InvoicesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('net_a_payer')
                     ->label(__('Net to Pay'))
                     ->money('tnd'),
-                Tables\Columns\TextColumn::make('status')
-                    ->label(__('Status')),
             ])
             ->filters([
                 //

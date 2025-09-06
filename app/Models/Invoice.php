@@ -20,7 +20,6 @@ class Invoice extends Model
         'montant_ttc',
         'timbre_fiscal',
         'net_a_payer',
-        'status',
     ];
 
     public function client()
