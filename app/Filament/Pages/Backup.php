@@ -60,7 +60,7 @@ class Backup extends Page implements HasTable
                 ->icon('heroicon-o-plus')
                 ->action(fn() => $this->createBackup())
                 ->disabled(fn () => auth()->user()?->is_demo)
-                ->tooltip(__('Disabled in demo mode')),
+                ->tooltip(fn () => auth()->user()?->is_demo ? __('Disabled in demo mode') : null),
 
             Action::make('importBackup')
                 ->label(__('Import & Apply Backup'))
@@ -81,7 +81,7 @@ class Backup extends Page implements HasTable
                     $this->importAndApplyBackup($data['upload']);
                 })
                 ->disabled(fn () => auth()->user()?->is_demo)
-                ->tooltip(__('Disabled in demo mode')),
+                ->tooltip(fn () => auth()->user()?->is_demo ? __('Disabled in demo mode') : null),
 
             Action::make('formatDatabase')
                 ->label(__('Reset Application Data'))
@@ -93,7 +93,7 @@ class Backup extends Page implements HasTable
                 ->modalSubmitActionLabel(__('Yes, I understand, reset the application'))
                 ->action(fn() => $this->formatDatabase())
                 ->disabled(fn () => auth()->user()?->is_demo)
-                ->tooltip(__('Disabled in demo mode')),
+                ->tooltip(fn () => auth()->user()?->is_demo ? __('Disabled in demo mode') : null),
         ];
     }
 
