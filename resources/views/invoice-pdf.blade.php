@@ -1,3 +1,11 @@
+@php
+    use App\Helpers\NumberToWords;
+
+    $netToPay = $invoice->net_a_payer;
+    $dinars = floor($netToPay);
+    $millimes = round(($netToPay - $dinars) * 1000);
+    $netToPayInWords = NumberToWords::convertToWords($dinars);
+@endphp
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -205,7 +213,7 @@
     </table>
 
     <p class="bottom-text">
-        Arrêtée la présente facture à la somme de : {{ $netToPayInWords ?? '' }}
+        Arrêtée la présente facture à la somme de : {{ $netToPayInWords }} dinars et {{ $millimes }} millimes.
     </p>
 
     <div class="signature">
