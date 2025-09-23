@@ -174,5 +174,6 @@
     "DANGER: Are you sure you want to reset the application? This action will PERMANENTLY DELETE ALL DATA and restore the database to its default state, including the default admin account. This cannot be undone.": "DANGER : Êtes-vous sûr de vouloir réinitialiser l'application ? Cette action va SUPPRIMER DÉFINITIVEMENT TOUTES LES DONNÉES et restaurer la base de données à son état par défaut, y compris le compte administrateur par défaut. Cette action est irréversible.",
     "Yes, I understand, reset the application": "Oui, je comprends, réinitialiser l'application",
     "The database has been reset to its default state.": "La base de données a été réinitialisée à son état par défaut.",
-    "Disabled in demo mode": "Désactivé en mode démo"
+    "Disabled in demo mode": "Désactivé en mode démo",
+    "Client of Client Address": "Adresse du client du client"
 }

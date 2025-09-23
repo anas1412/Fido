@@ -98,6 +98,9 @@ class InvoiceResource extends Resource
                                 ->label(__('Client Tax ID'))
                                 ->required()
                                 ->maxLength(255),
+                            Forms\Components\TextInput::make('client_address')
+                                ->label(__('Client Address'))
+                                ->maxLength(255),
                             Forms\Components\TextInput::make('invoice_number')
                                 ->label(__('Invoice Number'))
                                 ->required()
@@ -318,6 +321,8 @@ class InvoiceResource extends Resource
                             ->weight('bold'),
                         TextEntry::make('client_mf')
                             ->label(__('Client of Client Tax ID')),
+                        TextEntry::make('client_address')
+                            ->label(__('Client of Client Address')),
                     ])
                     ->columns(2),
 

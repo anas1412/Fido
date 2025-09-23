@@ -22,7 +22,6 @@ class ClientFactory extends Factory
 
         return [
             'name' => $this->faker->company,
-            'owner_name' => $this->faker->name(),
             'address' => $this->faker->address,
             'city' => $this->faker->city(),
             'phone' => $this->faker->phoneNumber,

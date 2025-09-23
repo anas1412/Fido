@@ -113,9 +113,8 @@
 <body>
     <div class="header">
         <div class="left">
-            <u>{{ $invoice->client->owner_name ?? '' }}</u><br>
             <u>{{ $invoice->client->name }}</u><br>
-            <u>{{ $invoice->client->address }}</u><br><br>
+            <u>{{ $invoice->client->address }}</u><br>
             <u>{{ $invoice->client->city ?? '' }}</u><br><br>
             <u>T.V.A.</u> : {{ $invoice->client->mf }}
         </div>
@@ -131,6 +130,7 @@
 
     <p>
         <u>Doit</u> : {{ $invoice->client_name }}<br>
+        <u>Adresse</u> : {{ $invoice->client_address }}<br>
         M.F. : {{ $invoice->client_mf }}
     </p>
 

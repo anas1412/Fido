@@ -98,9 +98,6 @@ class ClientResource extends Resource
                     ->label(__('Name'))
                     ->required()
                     ->maxLength(255),
-                TextInput::make('owner_name')
-                    ->label(__('Owner Name'))
-                    ->maxLength(255),
                 TextInput::make('address')
                     ->label(__('Address'))
                     ->maxLength(255),
@@ -157,10 +154,6 @@ class ClientResource extends Resource
                             ->label('Nom du client')
                             ->weight('bold')
                             ->icon('heroicon-o-user-circle')
-                            ->columnSpan(2),
-                        TextEntry::make('owner_name')
-                            ->label('Nom du propriétaire')
-                            ->icon('heroicon-o-user')
                             ->columnSpan(2),
                         TextEntry::make('mf')
                             ->label('Matricule Fiscale')

@@ -63,6 +63,9 @@ class InvoicesRelationManager extends RelationManager
                                 ->label(__('Client Tax ID'))
                                 ->required()
                                 ->maxLength(255),
+                            Forms\Components\TextInput::make('client_address')
+                                ->label(__('Client Address'))
+                                ->maxLength(255),
                             Forms\Components\TextInput::make('invoice_number')
                                 ->label(__('Invoice Number'))
                                 ->required()

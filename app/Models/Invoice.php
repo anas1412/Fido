@@ -13,6 +13,7 @@ class Invoice extends Model
         'client_id',
         'client_name',
         'client_mf',
+        'client_address',
         'invoice_number',
         'date',
         'total_hors_taxe',
