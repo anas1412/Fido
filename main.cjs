@@ -5,7 +5,7 @@
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
 const fs = require('fs');
-const { app, BrowserWindow, dialog, ipcMain, net } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, net, session } = require('electron');
 const axios = require('axios'); // Using axios for polling
 
 // =================================================================
@@ -168,6 +168,9 @@ function createMainWindow(serverUrl) {
 // =================================================================
 //  6. APPLICATION LIFECYCLE
 // =================================================================
+
+// Configure session to use a persistent path for cookies
+app.setPath('sessionData', path.join(app.getPath('userData'), 'session-data'));
 
 app.whenReady().then(async () => {
     createLoadingWindow();
