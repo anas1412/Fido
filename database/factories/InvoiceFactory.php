@@ -14,13 +14,17 @@ class InvoiceFactory extends Factory
 
     public function definition(): array
     {
+        // Create a client for this invoice
+        $client = Client::factory()->create(); // This will create a new client
+
         $totalHorsTaxe = $this->faker->randomFloat(2, 100, 5000);
 
         return [
-            'client_id' => Client::factory(),
-            'client_name' => '',
-            'client_mf' => '',
-            'invoice_number' => '',
+            'client_id' => $client->id, // Use the ID of the newly created client
+            'client_name' => $client->name, // Use the name of the newly created client
+            'client_mf' => $client->mf, // Use the mf of the newly created client
+            'client_address' => $client->address, // Use the address of the newly created client
+            'invoice_number' => $this->faker->unique()->randomNumber(5),
             'date' => $this->faker->dateTimeThisMonth()->format('Y-m-d'),
             'total_hors_taxe' => $totalHorsTaxe,
             'tva' => 0,

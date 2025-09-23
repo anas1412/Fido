@@ -204,7 +204,7 @@
 <body>
     <div class="header">
         <div>
-            <h1>Cabinet Ezzeddine Haouel</h1>
+            <h1>{{ $companySetting->company_name }}</h1>
             {{-- <p>Comptable Commissaire aux comptes Membre de la</p>
             <p>compagnie des comptables de Tunisie</p> --}}
         </div>
@@ -271,14 +271,14 @@
     <div class="footer">
         <table class="footer-table">
             <tr>
-                <td>Av. Mohamed Ali Hammi</td>
-                <td>Tél : 72 26 38 83</td>
-                <td>GSM : 26 43 69 22 - 27 43 69 22 - 28 43 69 22 </td>
+                <td>{{ $companySetting->address_line1 }}</td>
+                <td>Tél : {{ $companySetting->phone1 }}</td>
+                <td>GSM : {{ $companySetting->phone2 }}</td>
             </tr>
             <tr>
-                <td>8050 Hammamet</td>
-                <td>Fax : 72 26 38 79</td>
-                <td>Email : ezzeddine.haouel@yahoo.fr</td>
+                <td>{{ $companySetting->address_line2 }}</td>
+                <td>Fax : {{ $companySetting->fax }}</td>
+                <td>Email : {{ $companySetting->email }}</td>
             </tr>
         </table>
     </div>

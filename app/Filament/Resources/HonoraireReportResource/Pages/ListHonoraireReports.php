@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\HonoraireReportResource\Pages;
 
 use App\Models\TaxSetting;
+use App\Models\CompanySetting;
 use App\Filament\Resources\HonoraireReportResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -59,6 +60,7 @@ class ListHonoraireReports extends ListRecords
                     });
                     $totalNetapayer = $totalTTC - $totalRS + $totalTF;
 
+                    $companySetting = CompanySetting::first();
 
                     $pdf = Pdf::loadView('honoraire-report', [
                         'clients' => $clients,
@@ -76,6 +78,7 @@ class ListHonoraireReports extends ListRecords
                         'totalTTC' => $totalTTC,
                         'totalTF' => $totalTF,
                         'totalNetapayer' => $totalNetapayer,
+                        'companySetting' => $companySetting,
 
                     ]);
 

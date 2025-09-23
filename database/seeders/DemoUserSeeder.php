@@ -68,20 +68,17 @@ class DemoUserSeeder extends Seeder
                 $invoice->invoice_number = $invoiceNumber;
                 $invoice->client_id = $client->id;
 
-                // Introduce randomness for client_name and client_mf
-                if (rand(0, 1)) { // 50% chance to use a different client's details
-                    $randomClient = Client::inRandomOrder()->where('id', '!=', $client->id)->first();
-                    if ($randomClient) {
-                        $invoice->client_name = $randomClient->name;
-                        $invoice->client_mf = $randomClient->mf;
-                    } else {
-                        // Fallback if no other client exists (e.g., only one client in DB)
-                        $invoice->client_name = $client->name;
-                        $invoice->client_mf = $client->mf;
-                    }
+                // Ensure client_name, client_mf, and client_address are from a different client
+                $randomClient = Client::inRandomOrder()->where('id', '!=', $client->id)->first();
+                if ($randomClient) {
+                    $invoice->client_name = $randomClient->name;
+                    $invoice->client_mf = $randomClient->mf;
+                    $invoice->client_address = $randomClient->address;
                 } else {
+                    // Fallback if no other client exists (e.g., only one client in DB)
                     $invoice->client_name = $client->name;
                     $invoice->client_mf = $client->mf;
+                    $invoice->client_address = $client->address;
                 }
 
                 // Create invoice items first
