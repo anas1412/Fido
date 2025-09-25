@@ -94,16 +94,16 @@ class RetenueSourcResource extends Resource
                     ->collapsible(),
             )
             ->filters([
-                SelectFilter::make('client')
-                    ->relationship('client', 'name')
-                    ->searchable()
-                    ->label('Nom du client'),
                 Filter::make('date_range')
                     ->schema([
                         DatePicker::make('start_date')
-                            ->label('Date de début'),
+                            ->label('Date de début')
+                            ->required()
+                            ->default(now()->startOfYear()),
                         DatePicker::make('end_date')
-                            ->label('Date de fin'),
+                            ->label('Date de fin')
+                            ->required()
+                            ->default(now()->endOfYear()),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -112,12 +112,8 @@ class RetenueSourcResource extends Resource
                                 fn(Builder $query): Builder => $query->whereBetween('date', [$data['start_date'], $data['end_date']]),
                             );
                     }),
-            ], layout: FiltersLayout::AboveContent)->filtersFormColumns(2)
-            /* ->filtersTriggerAction(
-                fn(Action $action) => $action
-                    ->button()
-                    ->label('Choisir un client et les dates')
-            ) */
+            ], layout: FiltersLayout::AboveContent)->filtersFormColumns(1)
+
             ->recordActions([
                 /* Tables\Actions\ViewAction::make(), */])
             ->toolbarActions([
@@ -137,5 +133,10 @@ class RetenueSourcResource extends Resource
         return [
             'index' => ListRetenueSourcs::route('/'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return !auth()->user()?->is_demo;
     }
 }

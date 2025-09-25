@@ -73,10 +73,6 @@ class HonoraireReportResource extends Resource
                     ->label('Client')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('client.mf')
-                    ->label('M.F')
-                    ->sortable()
-                    ->searchable(),
                 TextColumn::make('montantHT')
                     ->label('Montant HT')
                     ->summarize(Sum::make()->label('')),
@@ -105,9 +101,13 @@ class HonoraireReportResource extends Resource
                 Filter::make('date_range')
                     ->schema([
                         DatePicker::make('start_date')
-                            ->label('Date de début'),
+                            ->label('Date de début')
+                            ->required()
+                            ->default(now()->startOfYear()),
                         DatePicker::make('end_date')
-                            ->label('Date de fin'),
+                            ->label('Date de fin')
+                            ->required()
+                            ->default(now()->endOfYear()),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query

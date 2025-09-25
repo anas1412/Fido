@@ -33,6 +33,6 @@ class NoteDeDebitPdfController extends Controller
             'companySetting' => $companySetting,
         ])
             ->setPaper('A4', 'portrait')
-            ->download($fileName);
+            ->stream($fileName);
     }
 }

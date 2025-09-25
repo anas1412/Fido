@@ -263,11 +263,12 @@ class HonoraireResource extends Resource
             ->actions([
                 
                     ViewAction::make(),
-                    Action::make('pdf')
-                        ->label('PDF')
-                        ->color('success')
-                        ->icon('heroicon-o-arrow-down-tray')
-                        ->url(fn(Honoraire $record) => route('pdf', $record)),
+                    Action::make('print')
+                        ->label(__('Print'))
+                        ->color('info')
+                        ->icon('heroicon-o-printer')
+                        ->url(fn(Honoraire $record) => route('pdf', $record))
+                        ->openUrlInNewTab(),
 
                     EditAction::make()->visible(!auth()->user()?->is_demo),
                     DeleteAction::make()->visible(!auth()->user()?->is_demo),

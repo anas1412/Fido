@@ -46,6 +46,6 @@ class InvoicePdfController extends Controller
             'netToPayInWords' => $netToPayInWords,
         ])
             ->setPaper('A4', 'portrait')
-            ->download($fileName);
+            ->stream($fileName);
     }
 }

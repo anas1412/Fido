@@ -175,5 +175,6 @@
     "Yes, I understand, reset the application": "Oui, je comprends, réinitialiser l'application",
     "The database has been reset to its default state.": "La base de données a été réinitialisée à son état par défaut.",
     "Disabled in demo mode": "Désactivé en mode démo",
-    "Client of Client Address": "Adresse du client du client"
+    "Client of Client Address": "Adresse du client du client",
+    "Print": "Imprimer"
 }

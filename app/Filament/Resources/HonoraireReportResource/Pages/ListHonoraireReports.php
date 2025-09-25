@@ -25,79 +25,23 @@ class ListHonoraireReports extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('generateReportAll')
-                ->label("Générer Rapport de tous les clients")
-                ->action(function (array $data) {
-                    $startDate = $data['start_date'];
-                    $endDate = $data['end_date'];
-                    $currentDateFormatted = now()->format('d/m/Y');
-                    $clients = Client::all();
-                    $allHonoraires = collect();
+            Action::make('printReport')
+                ->label("Imprimer Rapport")
+                ->color('info')
+                ->icon('heroicon-o-printer')
+                ->url(function (\Filament\Resources\Pages\ListRecords $livewire): string {
+                    $filterData = $livewire->getTableFiltersForm()->getState(); // Get the state of the filter form
 
-                    $hs = Honoraire::whereBetween('date', [$startDate, $endDate])->get();
+                    $startDate = $filterData['date_range']['start_date'] ?? null;
+                    $endDate = $filterData['date_range']['end_date'] ?? null;
 
-                    $startDateFormatted = date('d/m/Y', strtotime($data['start_date']));
-                    $endDateFormatted = date('d/m/Y', strtotime($data['end_date']));
+                    if (!$startDate || !$endDate) {
+                        return '#'; // Return a placeholder if dates are not selected, though required() should prevent this.
+                    }
 
-                    $taxSettings = TaxSetting::first();
-                    $tva = $taxSettings->tva * 100;
-                    $rs = $taxSettings->rs * 100;
-                    $tf = $taxSettings->tf * 100;
-
-                    // Initialize totals
-                    $totalHT = $hs->sum('montantHT');
-                    $totalTVA = $hs->sum(function ($honoraire) use ($taxSettings) {
-                        return $honoraire->montantHT * $taxSettings->tva;
-                    });
-                    $totalRS = $hs->sum(function ($honoraire) use ($totalTVA, $taxSettings) {
-                        return ($honoraire->montantHT + $honoraire->montantHT * $taxSettings->tva) * $taxSettings->rs;
-                    });
-                    $totalTTC = $hs->sum(function ($honoraire) use ($taxSettings) {
-                        return $honoraire->montantHT + ($honoraire->montantHT * $taxSettings->tva);
-                    });
-                    $totalTF = $hs->sum(function () use ($taxSettings) {
-                        return $taxSettings->tf;
-                    });
-                    $totalNetapayer = $totalTTC - $totalRS + $totalTF;
-
-                    $companySetting = CompanySetting::first();
-
-                    $pdf = Pdf::loadView('honoraire-report', [
-                        'clients' => $clients,
-                        'honoraires' => $allHonoraires,
-                        'hs' => $hs,
-                        'startDate' => $startDateFormatted,
-                        'endDate' => $endDateFormatted,
-                        'currentDate' => $currentDateFormatted,
-                        'tva' => $tva,
-                        'rs' => $rs,
-                        'tf' => $tf,
-                        'totalHT' => $totalHT,
-                        'totalTVA' => $totalTVA,
-                        'totalRS' => $totalRS,
-                        'totalTTC' => $totalTTC,
-                        'totalTF' => $totalTF,
-                        'totalNetapayer' => $totalNetapayer,
-                        'companySetting' => $companySetting,
-
-                    ]);
-
-                    $currentDate = now()->format('d-m-Y');
-                    return response()->streamDownload(function () use ($pdf) {
-
-                        echo $pdf->output();
-                    }, "rapport_des_honoraires_{$currentDate}.pdf");
+                    return route('pdf.honoraire-report', ['start_date' => $startDate, 'end_date' => $endDate]);
                 })
-
-                ->schema([
-                    DatePicker::make('start_date')
-                        ->label('Date de début')
-                        ->required(),
-                    DatePicker::make('end_date')
-                        ->label('Date de fin')
-                        ->required(),
-                ]),
-
+                ->openUrlInNewTab()
         ];
     }
 }

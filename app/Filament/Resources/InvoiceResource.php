@@ -270,11 +270,12 @@ class InvoiceResource extends Resource
             ])
             ->actions([
                 ViewAction::make(),
-                Action::make('pdf')
-                    ->label('PDF')
-                    ->color('success')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->url(fn(Invoice $record) => route('pdf.invoice', $record)),
+                Action::make('print')
+                    ->label(__('Print'))
+                    ->color('info')
+                    ->icon('heroicon-o-printer')
+                    ->url(fn(Invoice $record) => route('pdf.invoice', $record))
+                    ->openUrlInNewTab(),
 
                 EditAction::make()->visible(!auth()->user()?->is_demo),
                 DeleteAction::make()->visible(!auth()->user()?->is_demo),

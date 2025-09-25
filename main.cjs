@@ -161,7 +161,7 @@ function createMainWindow(serverUrl) {
     });
 
     mainWindow.loadURL(serverUrl);
-    if (isDev) mainWindow.webContents.openDevTools();
+    if (isDev) mainWindow.webContents.openDevTools({ mode: 'detach' });
     mainWindow.on('closed', () => { mainWindow = null; });
 }
 

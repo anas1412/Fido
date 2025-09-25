@@ -18,11 +18,12 @@ class ViewInvoice extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('pdf')
-                ->label('PDF')
-                ->color('success')
-                ->icon('heroicon-o-arrow-down-tray')
-                ->url(fn(Invoice $record) => route('pdf.invoice', ['invoice' => $record->id])),
+            Action::make('print')
+                ->label(__('Print'))
+                ->color('info')
+                ->icon('heroicon-o-printer')
+                ->url(fn(Invoice $record) => route('pdf.invoice', ['invoice' => $record->id]))
+                ->openUrlInNewTab(),
 
             EditAction::make()->visible(!auth()->user()?->is_demo),
             DeleteAction::make()->visible(!auth()->user()?->is_demo),

@@ -120,7 +120,7 @@
 
         .retenue-table th:nth-child(3),
         .retenue-table td:nth-child(3) {
-            width: 10%;
+            width: 28%;
             white-space: normal;
             /* Override the nowrap property */
             word-wrap: break-word;
@@ -130,48 +130,41 @@
 
         .retenue-table th:nth-child(4),
         .retenue-table td:nth-child(4) {
-            width: 13%;
-            text-align: center;
-            /* M.F */
+            width: 10%;
+            text-align: right;
+            /* Total H.T */
         }
 
         .retenue-table th:nth-child(5),
         .retenue-table td:nth-child(5) {
-            width: 10%;
+            width: 7%;
             text-align: right;
-            /* Total H.T */
+            /* T.V.A */
         }
 
         .retenue-table th:nth-child(6),
         .retenue-table td:nth-child(6) {
             width: 10%;
             text-align: right;
-            /* T.V.A */
+            /* R.S */
         }
 
         .retenue-table th:nth-child(7),
         .retenue-table td:nth-child(7) {
             width: 10%;
             text-align: right;
-            /* R.S */
+            /* Montant T.T.C */
         }
 
         .retenue-table th:nth-child(8),
         .retenue-table td:nth-child(8) {
-            width: 10%;
-            text-align: right;
-            /* Montant T.T.C */
-        }
-
-        .retenue-table th:nth-child(9),
-        .retenue-table td:nth-child(9) {
-            width: 7%;
+            width: 5%;
             text-align: right;
             /* Timbre */
         }
 
-        .retenue-table th:nth-child(10),
-        .retenue-table td:nth-child(10) {
+        .retenue-table th:nth-child(9),
+        .retenue-table td:nth-child(9) {
             width: 10%;
             text-align: right;
             /* Net à payer */
@@ -230,11 +223,10 @@
                 <th>Réf.</th>
                 <th>Date</th>
                 <th>Client</th>
-                <th>M.F</th>
-                <th>Total H.T</th>
-                <th>T.V.A ({{ $tva }}%)</th>
-                <th>R.S ({{ $rs }}%)</th>
-                <th>Montant T.T.C</th>
+                <th>H.T</th>
+                <th>T.V.A</th>
+                <th>R.S</th>
+                <th>T.T.C</th>
                 <th>Timbre</th>
                 <th>Net à payer</th>
             </tr>
@@ -245,7 +237,6 @@
                     <td>{{ str_pad($honoraire->note, 8, '0', STR_PAD_LEFT) }}</td>
                     <td>{{ date('d/m/Y', strtotime($honoraire->date)) }}</td>
                     <td>{{ $honoraire->client->name }}</td>
-                    <td>{{ $honoraire->client->mf }}</td>
                     <td>{{ number_format($honoraire->montantHT, 3, '.', ',') }}</td>
                     <td>{{ number_format($honoraire->tva, 3, '.', ',') }}</td>
                     <td>{{ number_format($honoraire->rs, 3, '.', ',') }}</td>
@@ -257,7 +248,7 @@
             @endforeach
             <br><br>
             <tr>
-                <td style="text-align: right;" colspan="4"><strong>TOTAUX:</strong></td>
+                <td style="text-align: right;" colspan="3"><strong>TOTAUX:</strong></td>
                 <td style="text-align: right;"><strong>{{ number_format($totalHT, 3, '.', ',') }}</strong></td>
                 <td style="text-align: right;"><strong>{{ number_format($totalTVA, 3, '.', ',') }}</strong></td>
                 <td style="text-align: right;"><strong>{{ number_format($totalRS, 3, '.', ',') }}</strong></td>

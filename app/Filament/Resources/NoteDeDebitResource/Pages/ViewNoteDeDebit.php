@@ -18,13 +18,12 @@ class ViewNoteDeDebit extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('pdf')
-                ->label('PDF')
-                ->color('success')
-                ->icon('heroicon-o-arrow-down-tray')
+            Action::make('print')
+                ->label(__('Print'))
+                ->color('info')
+                ->icon('heroicon-o-printer')
                 ->url(fn(NoteDeDebit $record) => route('pdf.note-de-debit', ['noteDeDebit' => $record->id]))
-                ->disabled()
-                ->tooltip(__('Work in progress')),
+                ->openUrlInNewTab(),
 
             EditAction::make()->visible(!auth()->user()?->is_demo),
             DeleteAction::make()->visible(!auth()->user()?->is_demo),
