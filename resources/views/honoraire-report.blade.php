@@ -234,7 +234,7 @@
         <tbody>
             @foreach ($hs as $honoraire)
                 <tr>
-                    <td>{{ str_pad($honoraire->note, 8, '0', STR_PAD_LEFT) }}</td>
+                    <td>{{ substr(str_pad($honoraire->note, 8, '0', STR_PAD_LEFT), 0, 4) . '/' . substr(str_pad($honoraire->note, 8, '0', STR_PAD_LEFT), 4, 4) }}</td>
                     <td>{{ date('d/m/Y', strtotime($honoraire->date)) }}</td>
                     <td>{{ $honoraire->client->name }}</td>
                     <td>{{ number_format($honoraire->montantHT, 3, '.', ',') }}</td>
