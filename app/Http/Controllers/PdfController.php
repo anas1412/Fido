@@ -268,7 +268,7 @@ class PdfController extends Controller
         $currentDate = Carbon::now()->format('d-m-Y');
         $fileName = "Retenue_Source_Report_{$startDate}_to_{$endDate}_{$currentDate}.pdf";
 
-        $pdf = Pdf::loadView('retenue-source-all', [
+        $pdf = Pdf::loadView('retenue-source-report', [
             'fiscalYear' => $fiscalYear,
             'clients' => $clients,
             'startDate' => $startDate,
