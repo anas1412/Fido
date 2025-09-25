@@ -227,6 +227,9 @@ class InvoicesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('invoice_number')
                     ->label(__('Invoice Number'))
                     ->searchable(),
+                Tables\Columns\TextColumn::make('client_name')
+                    ->label(__('Beneficiary Name'))
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('date')
                     ->label(__('Date'))
                     ->date(),
