@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\RetenueSourcResource\Pages;
+namespace App\Filament\Resources\RetenueSourceResource\Pages;
 
 use App\Models\CompanySetting;
 use App\Helpers\FiscalHelper;
 use App\Models\TaxSetting;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
-use App\Filament\Resources\RetenueSourcResource;
+use App\Filament\Resources\RetenueSourceResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Actions\Action;
@@ -17,9 +17,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class ListRetenueSourcs extends ListRecords
+class ListRetenueSources extends ListRecords
 {
-    protected static string $resource = RetenueSourcResource::class;
+    protected static string $resource = RetenueSourceResource::class;
 
     protected static ?string $title = "Rapport des retenues à la source";
 

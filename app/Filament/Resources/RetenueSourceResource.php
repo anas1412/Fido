@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms\Components\DatePicker;
-use App\Filament\Resources\RetenueSourcResource\Pages\ListRetenueSourcs;
+use App\Filament\Resources\RetenueSourceResource\Pages\ListRetenueSources;
 use App\Filament\Resources\RetenueSourcResource\Pages;
 use App\Models\Honoraire;
 use Filament\Forms;
@@ -23,7 +23,7 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\Summarizers\Sum;
 
-class RetenueSourcResource extends Resource
+class RetenueSourceResource extends Resource
 {
     protected static ?string $model = Honoraire::class;
 
@@ -131,7 +131,7 @@ class RetenueSourcResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListRetenueSourcs::route('/'),
+            'index' => ListRetenueSources::route('/'),
         ];
     }
 
