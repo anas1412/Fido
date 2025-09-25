@@ -34,6 +34,11 @@ class StatsOverviewPart2 extends BaseWidget
 
 
         return [
+            Stat::make("Total hors tax", Honoraire::whereYear('created_at', $currentFiscalYear)->sum('montantHT'))
+                ->descriptionIcon('heroicon-m-document-text')
+                ->color('info')
+                ->description('Total hors tax (Honoraires) cette année fiscale')
+                ->descriptionColor('info'),
             Stat::make("Total Retenue à la Source", $formattedTotalRS . ' TND')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('warning')
@@ -49,11 +54,6 @@ class StatsOverviewPart2 extends BaseWidget
                 ->color('danger')
                 ->description('Montant total de TF collectée cette année fiscale')
                 ->descriptionColor('danger'),
-            Stat::make("Nombre de facture traités", Invoice::whereYear('date', $currentFiscalYear)->count())
-                ->descriptionIcon('heroicon-m-document-text')
-                ->color('info')
-                ->description('Nombre de factures traitées cette année fiscale')
-                ->descriptionColor('info'),
         ];
     }
 }

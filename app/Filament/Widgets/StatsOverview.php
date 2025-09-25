@@ -29,7 +29,7 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-o-calendar-days')
                 ->color('primary')
                 ->description('Pour changer l\'année, veuillez cliquer içi')
-                ->descriptionColor('success')
+                ->descriptionColor('primary')
                 ->url('dashboard/modify-fiscal-year'),
             Stat::make('Nombre des clients enregistrés', Client::count())
                 ->descriptionIcon('heroicon-o-users')
@@ -40,11 +40,11 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-o-document-text')
                 ->color('info')
                 ->description('Nombre d\'honoraires traités cette année fiscale')
-                ->descriptionColor('success'),
-            Stat::make("Nombre de note de debits traités", NoteDeDebit::whereYear('created_at', $currentFiscalYear)->count())
+                ->descriptionColor('info'),
+            Stat::make("Nombre de facture traités", NoteDeDebit::whereYear('created_at', $currentFiscalYear)->count())
                 ->descriptionIcon('heroicon-o-document-text')
                 ->color('warning')
-                ->description('Nombre de notes de débit traitées')
+                ->description('Nombre de facture traités cette année fiscale')
                 ->descriptionColor('warning'),
         ];
     }
