@@ -257,6 +257,9 @@ class InvoiceResource extends Resource
                 Tables\Columns\TextColumn::make('client.name')
                     ->label(__('Client Name'))
                     ->searchable(),
+                Tables\Columns\TextColumn::make('client_name')
+                    ->label(__('Client\'s Client Name'))
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('date')
                     ->label(__('Date'))
                     ->date(),
