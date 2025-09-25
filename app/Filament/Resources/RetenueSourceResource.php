@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\RetenueSourceResource\Pages\ListRetenueSources;
-use App\Filament\Resources\RetenueSourcResource\Pages;
+use App\Filament\Resources\RetenueSourceResource\Pages;
 use App\Models\Honoraire;
 use Filament\Forms;
 use Filament\Forms\Form;

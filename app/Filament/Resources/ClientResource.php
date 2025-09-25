@@ -179,11 +179,11 @@ class ClientResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            HonorairesRelationManager::class,
-            NoteDeDebitsRelationManager::class,
-            InvoicesRelationManager::class,
-        ];
+        return array_filter([
+            config('features.honoraires') ? HonorairesRelationManager::class : null,
+            config('features.note_de_debit') ? NoteDeDebitsRelationManager::class : null,
+            config('features.invoices') ? InvoicesRelationManager::class : null,
+        ]);
     }
 
 

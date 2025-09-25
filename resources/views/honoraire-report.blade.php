@@ -211,7 +211,7 @@
             </div>
         </div>
         <br>
-        <div class="mf-number">M.F. : 0729831E-A-P-000</div>
+        <div class="mf-number">M.F. : {{ $companySetting->mf_number }}</div>
 
         <div class="header-line"></div>
     </div>

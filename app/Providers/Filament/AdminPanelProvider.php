@@ -29,6 +29,15 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use App\Filament\Pages\EditTaxes;
 use App\Filament\Pages\ModifyFiscalYear;
+use App\Filament\Resources\ClientResource;
+use App\Filament\Resources\CompanySettingResource;
+use App\Filament\Resources\HonoraireResource;
+use App\Filament\Resources\HonoraireReportResource;
+use App\Filament\Resources\InvoiceResource;
+use App\Filament\Resources\NoteDeDebitResource;
+use App\Filament\Resources\NoteDeDebitReportResource;
+use App\Filament\Resources\RetenueSourceResource;
+use App\Filament\Resources\UserResource;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -67,8 +76,20 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Green,
             ])
             
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->resources([
+                // Conditionally register resources based on feature flags
+                ...(config('features.honoraires') ? [HonoraireResource::class] : []),
+                ...(config('features.note_de_debit') ? [NoteDeDebitResource::class] : []),
+                ...(config('features.invoices') ? [InvoiceResource::class] : []),
+                ...(config('features.honoraire_reports') ? [HonoraireReportResource::class] : []),
+                ...(config('features.retenue_a_la_source_report') ? [RetenueSourceResource::class] : []),
+                ...(config('features.note_de_debit_report') ? [NoteDeDebitReportResource::class] : []),
+                // Other resources that should always be enabled or have their own flags
+                ClientResource::class,
+                CompanySettingResource::class,
+                UserResource::class,
+            ])
             ->pages([
                 Dashboard::class,
                 EditCompanySettings::class,
