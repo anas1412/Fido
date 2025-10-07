@@ -43,6 +43,11 @@ class ModifyFiscalYear extends Page implements HasForms
         return 1001;
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function canView(): bool
     {
         return auth()->user()->isAdmin();

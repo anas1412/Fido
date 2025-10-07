@@ -24,8 +24,6 @@ class DynamicMonthlyChart extends ChartWidget
     {
         return [
             'clients' => 'Clients',
-            'honoraires' => 'Honoraires',
-            'note_de_debits' => 'Notes de Débit',
             'invoices' => 'Factures',
         ];
     }
@@ -37,15 +35,11 @@ class DynamicMonthlyChart extends ChartWidget
 
         $colorMap = [
             'clients' => 'rgba(54, 162, 235, 0.2)',
-            'honoraires' => 'rgba(255, 99, 132, 0.2)',
-            'note_de_debits' => 'rgba(255, 205, 86, 0.2)',
             'invoices' => 'rgba(75, 192, 192, 0.2)',
         ];
 
         $borderColorMap = [
             'clients' => 'rgba(54, 162, 235, 1)',
-            'honoraires' => 'rgba(255, 99, 132, 1)',
-            'note_de_debits' => 'rgba(255, 205, 86, 1)',
             'invoices' => 'rgba(75, 192, 192, 1)',
         ];
 
@@ -77,15 +71,11 @@ class DynamicMonthlyChart extends ChartWidget
     {
         $tableMap = [
             'clients' => 'clients',
-            'honoraires' => 'honoraires',
-            'note_de_debits' => 'note_de_debits',
             'invoices' => 'invoices',
         ];
 
         $dateColumnMap = [
             'clients' => 'created_at',
-            'honoraires' => 'date',
-            'note_de_debits' => 'date',
             'invoices' => 'date',
         ];
 

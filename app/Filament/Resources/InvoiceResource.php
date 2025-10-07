@@ -90,17 +90,6 @@ class InvoiceResource extends Resource
                                         $set('invoice_number', $newInvoiceNumber);
                                     }
                                 }),
-                            Forms\Components\TextInput::make('client_name')
-                                ->label(__('Client Name'))
-                                ->required()
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('client_mf')
-                                ->label(__('Client Tax ID'))
-                                ->required()
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('client_address')
-                                ->label(__('Client Address'))
-                                ->maxLength(255),
                             Forms\Components\TextInput::make('invoice_number')
                                 ->label(__('Invoice Number'))
                                 ->required()
@@ -256,9 +245,6 @@ class InvoiceResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('client.name')
                     ->label(__('Client Name'))
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('client_name')
-                    ->label(__('Beneficiary Name'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date')
                     ->label(__('Date'))

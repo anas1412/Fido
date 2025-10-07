@@ -38,7 +38,9 @@ class InvoicePdfController extends Controller
         
         $fileName = "Facture_{$invoice->invoice_number}_{$currentDate}.pdf";
 
-        return Pdf::loadView('invoice-pdf', [
+        $invoiceTemplate = config('invoice.template', 'invoice-pdf');
+
+        return Pdf::loadView($invoiceTemplate, [
             'invoice' => $invoice,
             'invoiceItems' => $invoiceItems, // The variable name passed to the view is still 'invoiceItems'
             'formattedDate' => $formattedDate,

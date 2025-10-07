@@ -1,5 +1,5 @@
 <x-filament::page>
-    <div class="grid grid-cols-1 gap-6 mb-8 md:grid-cols-3">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <x-filament::card>
             <x-slot name="header">
                 <h2 class="text-lg font-medium text-gray-900">TVA Rate</h2>
@@ -10,7 +10,7 @@
             </div>
         </x-filament::card>
 
-        <x-filament::card>
+        {{-- <x-filament::card>
             <x-slot name="header">
                 <h2 class="text-lg font-medium text-gray-900">RS Value</h2>
             </x-slot>
@@ -18,7 +18,7 @@
                 <span class="text-3xl font-semibold text-primary-600">{{ number_format($this->rs * 100, 2) }}%</span>
                 <span class="ml-2 text-sm text-gray-600">Pourcentage de RS</span>
             </div>
-        </x-filament::card>
+        </x-filament::card> --}}
 
         <x-filament::card>
             <x-slot name="header">

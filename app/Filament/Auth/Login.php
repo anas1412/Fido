@@ -12,8 +12,6 @@ class Login extends \Filament\Auth\Pages\Login
     {
         $schema = parent::form($schema);
 
-        
-
         return $schema;
     }
 }

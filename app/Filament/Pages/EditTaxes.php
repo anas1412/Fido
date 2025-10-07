@@ -49,7 +49,7 @@ class EditTaxes extends Page implements HasForms
 
     public ?array $data = [];
     public float $tva = 0;
-    public float $rs = 0;
+    // public float $rs = 0;
     public float $tf = 0;
 
     public function mount(): void
@@ -58,13 +58,13 @@ class EditTaxes extends Page implements HasForms
             [],
             [
                 'tva' => 0.19,
-                'rs' => 0.03,
+                // 'rs' => 0.03,
                 'tf' => 1,
             ]
         );
         $this->form->fill($taxSetting->attributesToArray());
         $this->tva = $this->data['tva'] ?? 0;
-        $this->rs = $this->data['rs'] ?? 0;
+        // $this->rs = $this->data['rs'] ?? 0;
         $this->tf = $this->data['tf'] ?? 0;
     }
 
@@ -76,10 +76,10 @@ class EditTaxes extends Page implements HasForms
                     ->label(__('TVA Value (decimal)'))
                     ->numeric()
                     ->required(),
-                TextInput::make('rs')
+                /* TextInput::make('rs')
                     ->label(__('RS Value (decimal)'))
                     ->numeric()
-                    ->required(),
+                    ->required(), */
                 TextInput::make('tf')
                     ->label(__('Fiscal Stamp Value (dinars)'))
                     ->numeric()
@@ -104,7 +104,7 @@ class EditTaxes extends Page implements HasForms
             $data = $this->form->getState();
             TaxSetting::firstOrCreate([])->update($data);
             $this->tva = $data['tva'] ?? 0;
-            $this->rs = $data['rs'] ?? 0;
+            // $this->rs = $data['rs'] ?? 0;
             $this->tf = $data['tf'] ?? 0;
         } catch (Exception $e) {
             Notification::make()

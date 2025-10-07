@@ -5,7 +5,7 @@ namespace App\Providers\Filament;
 use Filament\Pages\Dashboard;
 use App\Filament\Pages\EditCompanySettings;
 use App\Filament\Widgets\StatsOverview;
-use App\Filament\Widgets\StatsOverviewPart2;
+
 use Filament\Widgets\AccountWidget;
 use App\Models\User;
 use Filament\Http\Middleware\Authenticate;
@@ -29,6 +29,7 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use App\Filament\Pages\EditTaxes;
 use App\Filament\Pages\ModifyFiscalYear;
+
 use App\Filament\Resources\ClientResource;
 use App\Filament\Resources\CompanySettingResource;
 use App\Filament\Resources\HonoraireResource;
@@ -60,10 +61,10 @@ class AdminPanelProvider extends PanelProvider
                     ->label(__('Edit Tax'))
                     ->icon('heroicon-o-calculator'),
 
-                MenuItem::make('Edit Fiscal Year')
+                /* MenuItem::make('Edit Fiscal Year')
                     ->url(fn () => ModifyFiscalYear::getUrl() ?? '#')
                     ->label(__('Edit Fiscal Year'))
-                    ->icon('heroicon-o-calendar'),
+                    ->icon('heroicon-o-calendar'), */
             ])
             /* ->registration() */
             /* ->passwordReset() */
@@ -97,7 +98,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 StatsOverview::class,
-                StatsOverviewPart2::class,
+
                 AccountWidget::class,
                 /* Widgets\FilamentInfoWidget::class, */
             ])

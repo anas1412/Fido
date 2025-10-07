@@ -113,10 +113,10 @@
 <body>
     <div class="header">
         <div class="left">
-            <u>{{ $invoice->client->name }}</u><br>
-            <u>{{ $invoice->client->address }}</u><br>
-            <u>{{ $invoice->client->city ?? '' }}</u><br><br>
-            <u>T.V.A.</u> : {{ $invoice->client->mf }}
+            <u>{{ $companySetting->company_name }}</u><br>
+            <u>{{ $companySetting->address_line1 }}</u><br><br>
+            <u>{{ $companySetting->address_line2 ?? '' }}</u><br><br>
+            <u>T.V.A.</u> : {{ $companySetting->mf_number }}
         </div>
         <div class="right">
             <u>HAMMAMET LE {{ $formattedDate }}</u>
@@ -129,9 +129,9 @@
     </div>
 
     <p>
-        <u>Doit</u> : {{ $invoice->client_name }}<br>
-        <u>Adresse</u> : {{ $invoice->client_address }}<br>
-        M.F. : {{ $invoice->client_mf }}
+        <u>Doit</u> : {{ $invoice->client->name }}<br>
+        <u>Adresse</u> : {{ $invoice->client->address }}<br>
+        M.F. : {{ $invoice->client->mf }}
     </p>
 
     <table>

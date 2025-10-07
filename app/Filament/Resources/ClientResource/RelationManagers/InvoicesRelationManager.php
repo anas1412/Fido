@@ -55,17 +55,6 @@ class InvoicesRelationManager extends RelationManager
                 Wizard::make([
                     Wizard\Step::make(__('Client & Basic Information'))
                         ->schema([
-                            Forms\Components\TextInput::make('client_name')
-                                ->label(__('Client Name'))
-                                ->required()
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('client_mf')
-                                ->label(__('Client Tax ID'))
-                                ->required()
-                                ->maxLength(255),
-                            Forms\Components\TextInput::make('client_address')
-                                ->label(__('Client Address'))
-                                ->maxLength(255),
                             Forms\Components\TextInput::make('invoice_number')
                                 ->label(__('Invoice Number'))
                                 ->required()
@@ -226,9 +215,6 @@ class InvoicesRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('invoice_number')
                     ->label(__('Invoice Number'))
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('client_name')
-                    ->label(__('Beneficiary Name'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date')
                     ->label(__('Date'))
