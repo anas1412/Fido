@@ -114,8 +114,9 @@
     <div class="header">
         <div class="left">
             <u>{{ $companySetting->company_name }}</u><br>
-            <u>{{ $companySetting->address_line1 }}</u><br><br>
-            <u>{{ $companySetting->address_line2 ?? '' }}</u><br><br>
+            <u>{{ $companySetting->address_line1 }}</u><br>
+            <u>{{ $companySetting->address_line2 ?? '' }}</u><br>
+            <u>{{ $companySetting->location ?? '' }}</u><br><br>
             <u>T.V.A.</u> : {{ $companySetting->mf_number }}
         </div>
         <div class="right">
