@@ -79,6 +79,10 @@ class ClientResource extends Resource
         return ClientResource::getUrl('view', ['record' => $record]);
     }
 
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+        return $record->name;
+    }
 
     public static function getGloballySearchableAttributes(): array
     {
