@@ -49,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('dashboard')
             ->login() 
             ->profile(isSimple: false)
+            ->spa()
             ->userMenuItems([
                 MenuItem::make('Edit Company')
                     ->url(fn () => EditCompanySettings::getUrl() ?? '#') // fallback
