@@ -55,6 +55,26 @@ IF %DB_WAS_RESET% EQU 1 (
     ECHO - php artisan seed:demo
 ) ELSE (
     ECHO No database was found to reset.
+    ECHO.
+    CHOICE /C YN /M "Do you want to create a new database in the standard Fido location?"
+    IF ERRORLEVEL 2 GOTO :EOF
+
+    ECHO.
+    ECHO Creating a new database...
+    IF NOT EXIST "%APP_DATA_PATH%\Fido" (
+        ECHO Creating directory: %APP_DATA_PATH%\Fido
+        mkdir "%APP_DATA_PATH%\Fido"
+    )
+    fsutil file createnew "%FIDO_DB_PATH%" 0 > nul
+    ECHO.
+    ECHO ---
+    ECHO Running database migrations and seeding initial data...
+    php artisan migrate:fresh --seed
+    ECHO ---
+    ECHO New database created and seeded successfully.
+    ECHO You may now need to seed the admin or demo user.
+    ECHO - php artisan seed:admin
+    ECHO - php artisan seed:demo
 )
 
 ECHO.
