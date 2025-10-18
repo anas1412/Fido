@@ -15,6 +15,11 @@ class InvoiceItem extends Model
         'quantity',
         'single_price',
         'total_price',
+        'commercial_details',
+    ];
+
+    protected $casts = [
+        'commercial_details' => 'array',
     ];
 
     public function invoice()

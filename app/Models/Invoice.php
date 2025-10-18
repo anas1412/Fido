@@ -21,6 +21,12 @@ class Invoice extends Model
         'montant_ttc',
         'timbre_fiscal',
         'net_a_payer',
+        'mode_de_paiement',
+        'mode_de_livraison',
+        'banque',
+        'iban',
+        'swift',
+        'nombre_de_lot',
     ];
 
     public function client()

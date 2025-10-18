@@ -68,6 +68,14 @@ class InvoicesRelationManager extends RelationManager
                                         $count++;
                                     } while (Invoice::where('invoice_number', $newInvoiceNumber)->exists());
                                     return $newInvoiceNumber;
+                                })
+                                ->live(onBlur: true)
+                                ->afterStateUpdated(function ($state, callable $set) {
+                                    if ($state) {
+                                        $invoiceNumber = $state;
+                                        $nombreDeLot = 'NTF' . str_replace('-', '', $invoiceNumber);
+                                        $set('nombre_de_lot', $nombreDeLot);
+                                    }
                                 }),
                             Forms\Components\DatePicker::make('date')
                                 ->label(__('Date'))
@@ -84,14 +92,15 @@ class InvoicesRelationManager extends RelationManager
                                         ->label(__('Object'))
                                         ->required()
                                         ->maxLength(255)
-                                        ->columnSpanFull(),
+                                        ->columnSpanFull()
+                                        ->live(onBlur: true),
                                     Grid::make(3)
                                         ->schema([
                                             Forms\Components\TextInput::make('quantity')
-                                                ->label(__('Quantity'))
+                                                ->label(__('Quantité ou nombre de colis/paloxe'))
                                                 ->required()
                                                 ->numeric()
-                                                ->live()
+                                                ->live(onBlur: true)
                                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                                     $quantity = (float) $state;
                                                     $singlePrice = (float) $get('single_price');
@@ -101,7 +110,7 @@ class InvoicesRelationManager extends RelationManager
                                                 ->label(__('Unit Price'))
                                                 ->required()
                                                 ->numeric()
-                                                ->live()
+                                                ->live(onBlur: true)
                                                 ->afterStateUpdated(function ($state, callable $set, $get) {
                                                     $singlePrice = (float) $state;
                                                     $quantity = (float) $get('quantity');
@@ -113,6 +122,16 @@ class InvoicesRelationManager extends RelationManager
                                                 ->numeric()
                                                 ->readOnly()
                                                 ->live(),
+                                            Forms\Components\TextInput::make('commercial_details.poids_brut_kg')
+                                                ->label(__('Poids Brut Kg'))
+                                                ->numeric()
+                                                ->live(onBlur: true)
+                                                ->default(0),
+                                            Forms\Components\TextInput::make('commercial_details.poids_net_kg')
+                                                ->label(__('Poids Net Kg'))
+                                                ->numeric()
+                                                ->live(onBlur: true)
+                                                ->default(0),
                                         ]),
                                 ])
                                 ->columnSpan('full')
@@ -204,6 +223,46 @@ class InvoicesRelationManager extends RelationManager
                                     $set('net_a_payer', $newNetAPayer);
                                 }),
                         ]),
+                    Wizard\Step::make(__('Invoice Details'))
+                                            ->schema([
+                                                Forms\Components\TextInput::make('mode_de_paiement')
+                                                    ->label(__('Mode de paiement'))
+                                                    ->default('Virement bancaire, 60 jours après livraison')
+                                                    ->maxLength(255)
+                                                    ->live(onBlur: true),
+                                                Forms\Components\TextInput::make('mode_de_livraison')
+                                                    ->label(__('Mode de livraison'))
+                                                    ->default('EX-WORK')
+                                                    ->maxLength(255)
+                                                    ->live(onBlur: true),
+                                                Forms\Components\TextInput::make('banque')
+                                                    ->label(__('Banque'))
+                                                    ->default('STB BANK Hammamet, 340 Avenue des Nations Unies Hammamet 8050')
+                                                    ->maxLength(255)
+                                                    ->live(onBlur: true),
+                                                Forms\Components\TextInput::make('iban')
+                                                    ->label(__('IBAN'))
+                                                    ->default('TN59 1030 1029 1553 6637 8885')
+                                                    ->maxLength(255)
+                                                    ->live(onBlur: true),
+                                                Forms\Components\TextInput::make('swift')
+                                                    ->label(__('SWIFT'))
+                                                    ->default('STBKTNTT')
+                                                    ->maxLength(255)
+                                                    ->live(onBlur: true),
+                                                Forms\Components\TextInput::make('nombre_de_lot')
+                                                    ->label(__('Nombre de lot'))
+                                                    ->maxLength(255)
+                                                    ->readOnly()
+                                                    ->live(onBlur: true)
+                                                    ->afterStateHydrated(function (callable $set, callable $get) {
+                                                        $invoiceNumber = $get('invoice_number');
+                                                        if ($invoiceNumber) {
+                                                            $nombreDeLot = 'NTF' . str_replace('-', '', $invoiceNumber);
+                                                            $set('nombre_de_lot', $nombreDeLot);
+                                                        }
+                                                    }),
+                                            ]),
                 ])->columnSpanFull(),
             ])->columns(1);
     }

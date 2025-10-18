@@ -36,7 +36,7 @@
     },
     "build": {
         "appId": "tn.cyberia.fido",
-        "productName": "Fido",
+        "productName": "Fido Netu Fresh",
         "asar": true,
         "win": {
             "icon": "public/images/favicon.ico",
