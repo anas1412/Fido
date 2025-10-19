@@ -280,7 +280,7 @@ class InvoicesRelationManager extends RelationManager
                     ->date(),
                 Tables\Columns\TextColumn::make('net_a_payer')
                     ->label(__('Net to Pay'))
-                    ->money('tnd'),
+                    ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND'),
             ])
             ->filters([
                 //

@@ -318,7 +318,7 @@ class InvoiceResource extends Resource
                     ->date(),
                 Tables\Columns\TextColumn::make('net_a_payer')
                     ->label(__('Net to Pay'))
-                    ->money('tnd'),
+                    ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND'),
                 
             ])
             ->filters([
@@ -399,20 +399,20 @@ class InvoiceResource extends Resource
                     ->schema([
                         TextEntry::make('total_hors_taxe')
                             ->label(__('Total HT'))
-                            ->money('tnd'),
+                            ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND'),
                         TextEntry::make('tva')
                             ->label(__('TVA'))
-                            ->money('tnd'),
+                            ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND'),
                         TextEntry::make('montant_ttc')
                             ->label(__('Total TTC'))
-                            ->money('tnd')
+                            ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND')
                             ->weight('bold'),
                         TextEntry::make('timbre_fiscal')
                             ->label(__('Fiscal Stamp'))
-                            ->money('tnd'),
+                            ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND'),
                         TextEntry::make('net_a_payer')
                             ->label(__('Net to Pay'))
-                            ->money('tnd')
+                            ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND')
                             ->weight('bold'),
                     ])->columns(5)->columnSpanFull(),
 
@@ -426,10 +426,10 @@ class InvoiceResource extends Resource
                                     ->label(__('Quantité ou nombre de colis/paloxe')),
                                 TextEntry::make('single_price')
                                     ->label(__('Unit Price'))
-                                    ->money('tnd'),
+                                    ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND'),
                                 TextEntry::make('total_price')
                                     ->label(__('Total Price'))
-                                    ->money('tnd'),
+                                    ->money(\App\Models\CompanySetting::first()?->currency ?? 'TND'),
                                 TextEntry::make('commercial_details.poids_brut_kg')
                                     ->label(__('Poids Brut Kg')),
                                 TextEntry::make('commercial_details.poids_net_kg')

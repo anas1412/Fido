@@ -21,5 +21,6 @@ class CompanySetting extends Model
         'phone3',
         'fax',
         'email',
+        'currency',
     ];
 }

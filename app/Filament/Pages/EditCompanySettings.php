@@ -11,6 +11,7 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use App\Models\CompanySetting;
+use Filament\Forms\Components\Select;
 
 class EditCompanySettings extends Page implements HasForms
 {
@@ -61,6 +62,7 @@ class EditCompanySettings extends Page implements HasForms
                 'phone2' => env('COMPANY_PHONE2', '+0987654321'),
                 'fax' => env('COMPANY_FAX', '+1234567890'),
                 'email' => env('COMPANY_EMAIL', 'info@yourcompany.com'),
+                'currency' => env('COMPANY_CURRENCY', 'TND'),
             ]
         );
 
@@ -110,6 +112,14 @@ class EditCompanySettings extends Page implements HasForms
                     ->label(__('Email'))
                     ->email()
                     ->maxLength(255),
+                Select::make('currency')
+                    ->label(__('Currency'))
+                    ->options([
+                        'TND' => 'TND',
+                        'EUR' => 'EUR',
+                    ])
+                    ->required()
+                    ->default(env('COMPANY_CURRENCY', 'TND')),
             ])
             ->statePath('data');
     }
