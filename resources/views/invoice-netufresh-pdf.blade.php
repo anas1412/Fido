@@ -10,7 +10,7 @@
         }
         body {
             font-family: Arial, sans-serif;
-            font-size: 13px;
+            font-size: 15px; /* General text is larger */
             color: #000;
             margin: 0;
             padding: 1.5cm 2.5cm; 
@@ -40,17 +40,16 @@
             margin-bottom: 30px;
         }
         
-        /* MODIFIED: This class is now for the inline address block */
         .client-details-inline {
             display: inline-block;
-            vertical-align: top; /* Aligns the top of the address with the "Client:" label */
-            margin-left: 10px; /* Adds a small space after the colon */
+            vertical-align: top;
+            margin-left: 10px;
         }
         
         .invoice-title {
             text-align: center;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px; /* Larger */
             margin-bottom: 20px;
             text-decoration: underline;
         }
@@ -59,7 +58,7 @@
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 13px; /* FONT SIZE REVERTED TO ORIGINAL */
         }
         .items-table th, .items-table td {
             border: 1px solid #000;
@@ -100,7 +99,7 @@
             vertical-align: top;
         }
         .payment-details .label {
-            width: 160px;
+            width: 170px; 
         }
         .payment-details .spacer-row {
             height: 15px;
@@ -121,7 +120,7 @@
             right: 2.5cm;
             padding-top: 10px;
             text-align: center;
-            font-size: 11px;
+            font-size: 13px; /* Larger */
             line-height: 1.4;
         }
     </style>
@@ -158,7 +157,6 @@
         </div>
 
         <div class="client-info">
-            {{-- MODIFIED HTML STRUCTURE FOR INLINE DISPLAY --}}
             <strong style="margin-left: 100px; display: inline-block; vertical-align: top;">Client:</strong>
             <div class="client-details-inline">
                 {{ $invoice->client->name}}<br>
@@ -168,7 +166,7 @@
         </div>
 
         <div class="invoice-title">
-            Facture N° {{ $invoice->invoice_number }}
+            Facture N° {{ substr($invoice->invoice_number, 0, -4) }}/{{ substr($invoice->invoice_number, -4) }}
         </div>
 
         <table class="items-table">

@@ -83,7 +83,7 @@ class InvoiceResource extends Resource
                                         $currentYear = date('Y');
                                         $count = \App\Models\Invoice::count() + 1;
                                         do {
-                                            $newInvoiceNumber = str_pad($count, 4, '0', STR_PAD_LEFT) . $currentYear;
+                                            $newInvoiceNumber = str_pad($count, 2, '0', STR_PAD_LEFT) . $currentYear;
                                             $count++;
                                         } while (\App\Models\Invoice::where('invoice_number', $newInvoiceNumber)->exists());
 

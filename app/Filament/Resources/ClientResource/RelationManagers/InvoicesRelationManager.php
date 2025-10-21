@@ -64,7 +64,7 @@ class InvoicesRelationManager extends RelationManager
                                     $currentYear = date('Y');
                                     $count = Invoice::count() + 1;
                                     do {
-                                        $newInvoiceNumber = str_pad($count, 4, '0', STR_PAD_LEFT) . $currentYear;
+                                        $newInvoiceNumber = str_pad($count, 2, '0', STR_PAD_LEFT) . $currentYear;
                                         $count++;
                                     } while (Invoice::where('invoice_number', $newInvoiceNumber)->exists());
                                     return $newInvoiceNumber;
