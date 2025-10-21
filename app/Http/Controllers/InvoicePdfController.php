@@ -28,6 +28,7 @@ class InvoicePdfController extends Controller
                 'phone2' => env('COMPANY_PHONE2', 'Default Phone 2'),
                 'fax' => env('COMPANY_FAX', 'Default Fax'),
                 'email' => env('COMPANY_EMAIL', 'default@example.com'),
+                'currency' => env('COMPANY_CURRENCY', 'tnd'),
             ]);
         }
         

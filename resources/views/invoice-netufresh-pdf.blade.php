@@ -1,223 +1,259 @@
-@php
-    use App\Helpers\NumberToWords;
-
-    $netToPay = $invoice->net_a_payer;
-    $dinars = floor($netToPay);
-    $millimes = round(($netToPay - $dinars) * 1000);
-    $netToPayInWords = NumberToWords::convertToWords($dinars);
-@endphp
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Facture N°{{ $invoice->invoice_number }}</title>
+    <title>Facture {{ $invoice->invoice_number }}</title>
     <style>
-        @page { size: A4; margin: 30px 80px; }
+        /* A4 Page Formatting & Margins */
+        @page {
+            margin: 0;
+        }
         body {
             font-family: Arial, sans-serif;
-            font-size: 14px;
+            font-size: 13px;
+            color: #000;
+            margin: 0;
+            padding: 1.5cm 2.5cm; 
             line-height: 1.4;
         }
-        .header {
+
+        .container {
             width: 100%;
-            margin-bottom: 10px;
+            padding-bottom: 3cm; 
         }
-        .left {
-            float: left;
-            text-align: left;
-        }
-        .right {
-            float: right;
-            text-align: right;
-        }
-        .clear { clear: both; }
-        .title {
+        
+        /* --- Header & Logo --- */
+        .header {
             text-align: center;
-            font-size: 18px;
+            margin-bottom: 50px;
+        }
+        .logo-container img {
+            width: 220px;
+        }
+        .header-date {
+            text-align: right;
+            margin-bottom: 30px;
+        }
+
+        /* --- Client & Invoice Info --- */
+        .client-info {
+            margin-bottom: 30px;
+        }
+        
+        /* MODIFIED: This class is now for the inline address block */
+        .client-details-inline {
+            display: inline-block;
+            vertical-align: top; /* Aligns the top of the address with the "Client:" label */
+            margin-left: 10px; /* Adds a small space after the colon */
+        }
+        
+        .invoice-title {
+            text-align: center;
             font-weight: bold;
-            margin: 25px 0 15px;
+            font-size: 16px;
+            margin-bottom: 20px;
             text-decoration: underline;
         }
-        table {
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 75px; 
-    border: 1px solid black;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-        th, td {
-            border: 1px solid black;
-            padding: 6px;
+
+        /* --- Items Table --- */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
         }
-        th {
+        .items-table th, .items-table td {
+            border: 1px solid #000;
+            padding: 8px;
             text-align: center;
-            font-weight: normal;
+            vertical-align: middle;
         }
-        td {
+        .items-table th {
+            font-weight: bold;
+        }
+        .items-table .designation {
+            text-align: left;
+            width: 35%;
+        }
+        .total-row td {
+            font-weight: bold;
+        }
+
+        /* --- Totals & Payment Details --- */
+        .amount-in-words {
+            margin-top: 25px;
+            margin-bottom: 40px;
+        }
+        .amount-centered {
             text-align: center;
+            margin-top: 5px;
         }
-        .item-row td {
-            height: 25px;
+        .payment-details {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .payment-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .payment-details td {
+            padding: 3px 0;
             vertical-align: top;
         }
-        tr.item-row + tr.item-row td {
-            border-top-style: hidden;
+        .payment-details .label {
+            width: 160px;
         }
-        .totals-row td {
-            border-top: none;
-            border-bottom: none;
-            font-size: 14px;
+        .payment-details .spacer-row {
+            height: 15px;
         }
-        .totals-label {
-            text-align: left;
-            padding-left: 10px;
-            white-space: nowrap;
+        .stamp {
+            position: absolute;
+            right: 20px;
+            bottom: -20px;
+            width: 120px;
+            height: 120px;
         }
-        .tight-spacing td {
-            padding-top: 0;
-            padding-bottom: 0;
-            line-height: 1;
-        }
-        .normal-line-height td {
-            line-height: inherit;
-        }
-        .final-row-padding td {
-            padding-bottom: 6px;
-        }
-        .right-align {
-            text-align: right !important;
-            padding-right: 10px;
-        }
-        .left-align {
-            text-align: left !important;
-            padding-left: 10px;
-        }
-        .underline {
-            text-decoration: underline;
-        }
-        .dash-top {
-            border-top: 1px dashed black;
-        }
-        .bottom-text {
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .signature {
-            margin-top: 60px;
-            text-align: right;
+
+        /* --- Footer --- */
+        .footer {
+            position: fixed;
+            bottom: 1.5cm;
+            left: 2.5cm;
+            right: 2.5cm;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.4;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="left">
-            <u>{{ $invoice->client->name }}</u><br>
-            <u>{{ $invoice->client->address }}</u><br>
-            <u>{{ $invoice->client->city ?? '' }}</u><br><br>
-            <u>T.V.A.</u> : {{ $invoice->client->mf }}
-        </div>
-        <div class="right">
-            <u>HAMMAMET LE {{ $formattedDate }}</u>
-        </div>
-        <div class="clear"></div>
-    </div>
-
-    <div class="title">
-        FACTURE N°{{ substr($invoice->invoice_number, 0, 4) }}/{{ substr($invoice->invoice_number, 4, 4) }}
-    </div>
-
-    <p>
-        <u>Doit</u> : {{ $invoice->client_name }}<br>
-        <u>Adresse</u> : {{ $invoice->client_address }}<br>
-        M.F. : {{ $invoice->client_mf }}
-    </p>
-
-    <table>
-        <tr>
-            <th style="width: 10%;"><u>Qtés</u></th>
-            <th style="width: 50%;"><u>D E S I G N A T I O N S</u></th>
-            <th style="width: 20%;"><u>P.U. H.T.</u></th>
-            <th style="width: 20%;"><u>MONTANTS</u></th>
-        </tr>
-
-        @foreach ($invoiceItems as $item)
-        <tr class="item-row">
-            <td>{{ $item->quantity }}</td>
-            <td class="left-align">{{ $item->object }}</td>
-            <td>{{ number_format($item->single_price, 3, '.', '') }}</td>
-            <td>{{ number_format($item->total_price, 3, '.', '') }}</td>
-        </tr>
-        @endforeach
-
-         <tr class="item-row">
-            <td>&nbsp;</td>
-            <td class="left-align">&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr class="item-row">
-            <td>&nbsp;</td>
-            <td class="left-align">&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-
-        <tr class="totals-row tight-spacing normal-line-height">
-            <td></td>
-            <td colspan="2" class="totals-label">
-                - Total Hors Taxes ..................................................................
-            </td>
-            <td class="right-align dash-top">{{ number_format($invoice->total_hors_taxe, 3, '.', '') }}</td>
-        </tr>
-        <tr class="totals-row tight-spacing">
-            <td></td>
-            <td colspan="2" class="totals-label">
-                - T.V.A. : 19% .........................................................................
-            </td>
-            <td class="right-align">{{ number_format($invoice->tva, 3, '.', '') }}</td>
-        </tr>
-        <tr class="totals-row  tight-spacing">
-            <td></td>
-            <td colspan="2" class="totals-label"></td>
-            <td class="right-align">-------------------------</td>
-        </tr>
-        <tr class="totals-row tight-spacing">
-            <td></td>
-            <td colspan="2" class="totals-label">
-                - Montant Toutes Taxes Comprises .......................................
-            </td>
-            <td class="right-align">{{ number_format($invoice->montant_ttc, 3, '.', '') }}</td>
-        </tr>
-        <tr class="totals-row tight-spacing">
-            <td></td>
-            <td colspan="2" class="totals-label">
-                - Timbre fiscal .........................................................................
-            </td>
-            <td class="right-align">{{ number_format($invoice->timbre_fiscal, 3, '.', '') }}</td>
-        </tr>
-        <tr class="totals-row  tight-spacing" >
-            <td></td>
-            <td colspan="2" class="totals-label"></td>
-            <td class="right-align">-------------------------</td>
-        </tr>
+    @php
+        use App\Helpers\NumberToWords; 
         
-        <tr class="totals-row tight-spacing final-row-padding">
-            <td></td>
-            <td colspan="2" class="totals-label">
-                <u>- Net à votre aimable règlement </u>.............................................
-            </td>
-            <td class="right-align"><strong>{{ number_format($invoice->net_a_payer, 3, '.', '') }}</strong></td>
-        </tr>
-    </table>
+        $totalPackages = 0;
+        $totalGrossWeight = 0;
+        $totalNetWeight = 0;
+        $totalAmount = 0;
+        foreach ($invoiceItems as $item) {
+            $totalPackages += $item->quantity;
+            $totalGrossWeight += $item->commercial_details['poids_brut_kg'] ?? 0;
+            $totalNetWeight += $item->commercial_details['poids_net_kg'] ?? 0;
+            $totalAmount += $item->total_price;
+        }
+        
+        $euros = floor($totalAmount);
+        $amountInWords = NumberToWords::convertToWords($euros, 'fr');
+    @endphp
 
-    <p class="bottom-text">
-        Arrêtée la présente facture à la somme de : {{ $netToPayInWords }} dinars et {{ $millimes }} millimes.
-    </p>
+    <div class="container">
+        
+        <div class="header">
+            <div class="logo-container">
+                <img src="{{ public_path('images/NetuFreshLogo.jpg') }}" alt="Netu Fresh Logo">
+            </div>
+        </div>
+        
+        <div class="header-date">
+            Hammamet le {{ $formattedDate }}
+        </div>
 
-    <div class="signature">
-        <u>SIGNATURE</u>
+        <div class="client-info">
+            {{-- MODIFIED HTML STRUCTURE FOR INLINE DISPLAY --}}
+            <strong style="margin-left: 100px; display: inline-block; vertical-align: top;">Client:</strong>
+            <div class="client-details-inline">
+                {{ $invoice->client->name}}<br>
+                {{ $invoice->client->address}}<br>
+                {{ $invoice->client->city}}
+            </div>
+        </div>
+
+        <div class="invoice-title">
+            Facture N° {{ $invoice->invoice_number }}
+        </div>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th class="designation">Designation</th>
+                    <th>Nombre de colis/Paloxe</th>
+                    <th>Poids Brut Kg</th>
+                    <th>Poids Net Kg</th>
+                    <th>Prix Unitaire(€)</th>
+                    <th>Total (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($invoiceItems as $item)
+                    <tr>
+                        <td class="designation">{{ $item->object }}</td>
+                        <td>{{ $item->quantity }}</td>
+                        <td>{{ number_format($item->commercial_details['poids_brut_kg'] ?? 0, 0, ',', ' ') }}</td>
+                        <td>{{ number_format($item->commercial_details['poids_net_kg'] ?? 0, 0, ',', ' ') }}</td>
+                        <td>{{ number_format($item->single_price, 2, ',', ' ') }}</td>
+                        <td>{{ number_format($item->total_price, 2, ',', ' ') }}</td>
+                    </tr>
+                @endforeach
+                <tr class="total-row">
+                    <td class="designation">Total</td>
+                    <td>{{ $totalPackages }}</td>
+                    <td>{{ number_format($totalGrossWeight, 0, ',', ' ') }}</td>
+                    <td>{{ number_format($totalNetWeight, 0, ',', ' ') }}</td>
+                    <td></td>
+                    <td>{{ number_format($totalAmount, 2, ',', ' ') }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="amount-in-words">
+            Arrêtée la présente facture à la somme de :
+            <div class="amount-centered">
+                <strong>{{ ucfirst($amountInWords) }} EUROS</strong>
+            </div>
+        </div>
+
+        <div class="payment-details">
+            <table>
+                <tr>
+                    <td class="label">* Mode de paiement:</td>
+                    <td>{{ $invoice->mode_de_paiement }}</td>
+                </tr>
+                <tr>
+                    <td class="label">* Mode de livraison:</td>
+                    <td>{{ $invoice->mode_de_livraison }}</td>
+                </tr>
+                <tr class="spacer-row"><td colspan="2"></td></tr>
+                <tr>
+                    <td class="label">* Banque:</td>
+                    <td>
+                        {{ $invoice->banque }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">* IBAN:</td>
+                    <td>{{ $invoice->iban }}</td>
+                </tr>
+                <tr>
+                    <td class="label">* Swift:</td>
+                    <td>{{ $invoice->swift }}</td>
+                </tr>
+                <tr class="spacer-row"><td colspan="2"></td></tr>
+                <tr>
+                    <td class="label">N° de lot</td>
+                    <td>{{ $invoice->nombre_de_lot}}</td>
+                </tr>
+            </table>
+
+            <img src="{{ public_path('images/netu-fresh-stamp.png') }}" alt="Stamp" class="stamp">
+        </div>
+
     </div>
+
+    <div class="footer">
+        Siege Sociale : {{ $companySetting->address_line1 }} {{ $companySetting->address_line2 }}<br>
+        Gsm : {{ $companySetting->phone1 }} - {{ $companySetting->phone2 }}<br>
+        Email : {{ $companySetting->email }}<br>
+        Rc : 1922773C - MF: {{ $companySetting->mf_number }}
+    </div>
+
 </body>
 </html>
