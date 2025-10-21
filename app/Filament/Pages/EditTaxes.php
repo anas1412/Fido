@@ -47,6 +47,11 @@ class EditTaxes extends Page implements HasForms
         return auth()->user()->isAdmin();
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public ?array $data = [];
     public float $tva = 0;
     // public float $rs = 0;

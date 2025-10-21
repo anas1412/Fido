@@ -25,9 +25,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         
-        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+        /*LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch->locales(['fr', 'en']);
-        });
+        });*/
 
     }
 }

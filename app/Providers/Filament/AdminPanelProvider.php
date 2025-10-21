@@ -57,10 +57,10 @@ class AdminPanelProvider extends PanelProvider
                     ->label(__('Edit Company')) // ensure label is set
                     ->icon('heroicon-o-building-office'),
 
-                MenuItem::make('Edit Tax')
+                /*MenuItem::make('Edit Tax')
                     ->url(fn () => EditTaxes::getUrl() ?? '#')
                     ->label(__('Edit Tax'))
-                    ->icon('heroicon-o-calculator'),
+                    ->icon('heroicon-o-calculator'),*/
 
                 /* MenuItem::make('Edit Fiscal Year')
                     ->url(fn () => ModifyFiscalYear::getUrl() ?? '#')
