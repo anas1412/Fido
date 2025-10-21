@@ -289,7 +289,7 @@ class InvoicesRelationManager extends RelationManager
                 CreateAction::make()->visible(!auth()->user()?->is_demo),
             ])
             ->actions([
-                ViewAction::make(),
+                
                 Action::make('print')
                     ->label(__('Print'))
                     ->color('info')
@@ -306,4 +306,8 @@ class InvoicesRelationManager extends RelationManager
                 ]),
             ]);
     }
+
+    
+
+
 }
