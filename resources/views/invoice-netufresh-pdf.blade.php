@@ -241,7 +241,6 @@
                 </tr>
             </table>
 
-            <img src="{{ public_path('images/netu-fresh-stamp.png') }}" alt="Stamp" class="stamp">
         </div>
 
     </div>
