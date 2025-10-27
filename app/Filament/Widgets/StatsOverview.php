@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Client;
 use App\Models\Honoraire;
+use App\Models\Invoice;
 use App\Models\NoteDeDebit;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -30,10 +31,10 @@ class StatsOverview extends BaseWidget
                 ->color('success')
                 ->description('Nombre total de clients enregistrés')
                 ->descriptionColor('success'),
-            Stat::make("Nombre de facture traités", NoteDeDebit::whereYear('created_at', $currentFiscalYear)->count())
+            Stat::make("Nombre de factures traitées", Invoice::whereYear('date', $currentFiscalYear)->count())
                 ->descriptionIcon('heroicon-o-document-text')
                 ->color('warning')
-                ->description('Nombre de facture traités cette année fiscale')
+                ->description('Nombre de factures traitées cette année fiscale')
                 ->descriptionColor('warning'),
         ];
     }

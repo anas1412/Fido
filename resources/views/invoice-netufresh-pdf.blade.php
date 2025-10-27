@@ -20,6 +20,7 @@
         .container {
             width: 100%;
             padding-bottom: 3cm; 
+            page-break-inside: avoid;
         }
         
         /* --- Header & Logo --- */
@@ -58,11 +59,11 @@
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px; /* FONT SIZE REVERTED TO ORIGINAL */
+            font-size: 13px; /* Smaller font size for compactness */
         }
         .items-table th, .items-table td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 4px; /* Reduced padding for compactness */
             text-align: center;
             vertical-align: middle;
         }

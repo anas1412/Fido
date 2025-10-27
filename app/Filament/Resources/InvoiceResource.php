@@ -232,6 +232,7 @@ class InvoiceResource extends Resource
                                                 Forms\Components\Toggle::make('exonere_tva')
                                                     ->label(__('Exonération TVA'))
                                                     ->live()
+                                                    ->default(true)
                                                     ->afterStateUpdated(function ($state, callable $set, $get) {
                                                         $taxSettings = TaxSetting::first();
                                                         $totalHorsTaxe = $get('total_hors_taxe');
@@ -247,6 +248,7 @@ class InvoiceResource extends Resource
                                                 Forms\Components\Toggle::make('exonere_tf')
                                                     ->label(__('Exonération Timbre Fiscal'))
                                                     ->live()
+                                                    ->default(true)
                                                     ->afterStateUpdated(function ($state, callable $set, $get) {
                                                         $taxSettings = TaxSetting::first();
                                                         $newTimbreFiscal = $state ? 0 : $taxSettings->tf;
