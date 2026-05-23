@@ -16,190 +16,46 @@
 
 
             <link rel="icon" href="favicon.ico" type="image/x-icon">
-            <title x-data x-text="$store.i18n.t('pageTitle')"></title>
+            <title>FIDO - Logiciel de Comptabilité Intelligent</title>
             <script src="https://cdn.tailwindcss.com"></script>
             
             <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
             <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js"></script>
             
-            <!-- FINAL, CENTRALIZED, AND WORKING SCRIPT -->
             <script>
                 document.addEventListener('alpine:init', () => {
-                    Alpine.store('i18n', {
-                        lang: 'fr',
-                        translations: {
-                            // General & Nav
-                            pageTitle: { en: 'FIDO - Smart Accounting Software', fr: 'FIDO - Logiciel de Comptabilité Intelligent' },
-                            navFeatures: { en: 'Features', fr: 'Fonctionnalités' },
-                            navPricing: { en: 'Pricing', fr: 'Tarifs' },
-                            navContact: { en: 'Contact', fr: 'Contact' },
-                            navGetStarted: { en: 'Get Started', fr: 'Commencer' },
-                            
-                            // Hero & Features
-                            heroTitle: { en: 'Accounting Software Made Simple', fr: 'Le Logiciel de Comptabilité Simplifié' },
-                            heroSubtitle: { en: 'Designed for Tunisian accountants to automate tasks and manage clients easily', fr: 'Conçu pour les comptables tunisiens pour automatiser les tâches et gérer les clients' },
-                            heroBtnStart: { en: 'Get Started Now', fr: 'Commencez Maintenant' },
-                            heroBtnContact: { en: 'Contact Us', fr: 'Nous Contacter' },
-                            heroBtnRequestDemo: { en: 'Request a Demo', fr: 'Demander une démo' },
-                            demoModalTitle: { en: 'Demo Access', fr: 'Accès Démo' },
-                            demoModalEmail: { en: 'Email', fr: 'Email' },
-                            demoModalPassword: { en: 'Password', fr: 'Mot de passe' },
-                            demoModalDownload: { en: 'Download Demo', fr: 'Télécharger la Démo' },
-                            demoModalInstructions: { en: 'Please use the following credentials to access the demo:', fr: 'Veuillez utiliser les informations suivantes pour accéder à la démo :' },
-                            demoNoticeReadOnly: {
-                                en: 'Please note: This demo is a read-only environment, designed for exploration. Functionalities such as adding, editing, or deleting data are disabled.',
-                                fr: 'Veuillez noter : Cette démo est un environnement en lecture seule, conçu pour l\'exploration. Les fonctionnalités telles que l\'ajout, la modification ou la suppression de données sont désactivées.'
-                                },
-                            demoNoticePerformance: { en: 'As a demonstration, occasional delays may occur; your patience is appreciated.', fr: "S'agissant d'une démonstration, des ralentissements occasionnels peuvent survenir ; votre patience est appréciée." },
-                            demoModalContact: { en: 'Having trouble? Contact us.', fr: 'Un problème ? Contactez-nous.' },
-                            heroBtnDemo: { en: 'Download Demo', fr: 'Télécharger la Démo' },
-                            featuresTitle: { en: 'Everything You Need', fr: 'Tout Ce Dont Vous Avez Besoin' },
-                            featuresSubtitle: { en: 'Comprehensive tools for Tunisian accountants to streamline their workflow', fr: 'Outils complets pour les comptables tunisiens pour rationaliser leur flux de travail' },
-                            
-                            features: [
-                                {
-                                    title: { en: 'Dashboard Data', fr: 'Données du Tableau de Bord' },
-                                    description: { en: 'Visualize key financial metrics and client data at a glance.', fr: 'Visualisez les indicateurs financiers clés et les données clients en un coup d\'œil.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Client Management', fr: 'Gestion des Clients' },
-                                    description: { en: 'Maintain a centralized database of all your clients and their information.', fr: 'Maintenez une base de données centralisée de tous vos clients et de leurs informations.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div>'
-                                },
-                                {
-                                    title: {
-                                        en: 'Client Invoice Management (Multi-Company)',
-                                        fr: 'Gestion des Factures Client (Multi-Entreprise)'
-                                    },
-                                    description: {
-                                        en: 'Manage commercial invoices for each company and their clients directly within the application.',
-                                        fr: 'Gérez les factures commerciales pour chaque entreprise et leurs clients directement dans l\'application.'
-                                    },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Fee Note Management', fr: 'Gestion des Honoraires' },
-                                    description: { en: 'Create, manage, and track professional fee notes with ease.', fr: 'Créez, gérez et suivez facilement les notes d\'honoraires.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Withholding Tax', fr: 'Retenue à la Source' },
-                                    description: { en: 'Simplify management of withholding tax obligations with automated reporting.', fr: 'Simplifiez la gestion des retenues à la source avec des rapports automatisés.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Debit Note Management', fr: 'Gestion des Notes de Débit' },
-                                    description: { en: 'Efficiently create and manage debit notes for various transactions. (Report generation is Work in Progress)', fr: 'Créez et gérez efficacement les notes d\'débit pour diverses transactions. (La génération de rapports est en cours)' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Financial Reporting', fr: 'Rapports Financiers' },
-                                    description: { en: 'Generate detailed reports for fee notes and debit notes for better insights. (Some parts are Work in Progress)', fr: 'Générez des rapports détaillés pour les notes d\'honoraires et de débit pour de meilleures informations. (Certaines parties sont en cours de développement)' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Employee Accounts', fr: 'Comptes Employés' },
-                                    description: { en: 'Manage employee access and permissions with role-based dashboard controls.', fr: 'Gérez l\'accès des employés avec des contrôles basés sur les rôles.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Advanced Configuration', fr: 'Configuration Avancée' },
-                                    description: {en: 'Configure company details, tax rates (VAT, SR et FT), and fiscal year settings.', fr: 'Configurez les détails de l\'entreprise, les taux de taxe (TVA, RS et TF), et les paramètres de l\'année fiscale.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Customizable Templates', fr: 'Modèles Personnalisables' },
-                                    description: { en: 'Tailor the design of your fee notes, invoices, and debit notes to match your professional brand.', fr: 'Personnalisez le design de vos notes d\'honoraires, factures et notes de débit pour correspondre à votre image de marque.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'One-Click PDF Export', fr: 'Export PDF en un Clic' },
-                                    description: { en: 'Download and share any document—reports, invoices, or statements—as a professional, print-ready PDF.', fr: 'Téléchargez et partagez n\'importe quel document (rapports, factures ou relevés) en tant que PDF professionnel prêt à imprimer.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></div>'
-                                },
-                                {
-                                    title: { en: 'Manual Backups', fr: 'Sauvegardes Manuelles' },
-                                    description: { en: 'Secure your data with manual database backups.', fr: 'Sécurisez vos données avec des sauvegardes manuelles de base de données.' },
-                                    icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m16 0L8 12m8 0l-8 5"></path></svg></div>'
-                                }
-                            ],
-                            
-                            // --- PRICING SECTION DATA RESTRUCTURED ---
-                            pricingTitle: { en: 'Flexible Plans to Fit Your Needs', fr: 'Des Formules Flexibles Selon Vos Besoins' },
-                            testimonialsTitle: { en: 'Trusted by Professionals', fr: 'Approuvé par les professionnels' },
-                            testimonialsSubtitle: { en: 'Our software is used and recommended by accountants in Hammamet, Tunisia.', fr: 'Notre logiciel est utilisé et recommandé par des experts-comptables de Hammamet, Tunisie.' },
-                            testimonials: [
-                                {
-                                    quote: { fr: 'Fido a changé la donne pour notre cabinet. C\'est intuitif, puissant et nous a fait gagner un temps précieux.', en: 'Fido a été un game-changer pour notre cabinet. C\'est intuitif, puissant et nous a fait gagner un temps précieux.' },
-                                    author: 'Ezeeddine Haouel'
-                                },
-                                {
-                                    quote: { fr: 'Le meilleur logiciel de comptabilité pour les professionnels tunisiens. Je le recommande vivement à tous mes confrères.', en: 'The best accounting software for Tunisian professionals. I highly recommend it to all my colleagues.' },
-                                    author: 'Nabil Karoui'
-                                }
-                            ],
-                            
-                            
-
-                            // Plan 2
-                            plan2Title: { en: 'Fixed Price Pack', fr: 'Pack Prix Fixe' },
-                                                            plan2Price: { en: 'Starting from 480 TND', fr: 'À partir de 480 TND' },
-                            plan2Subtitle: { en: 'A fixed set of features with dedicated support.', fr: 'Un ensemble fixe de fonctionnalités avec support dédié.' },
-                                                                                                            plan2Features: [
-                                { en: 'Base website setup (480 TND)', fr: 'Site de base (480 TND)' },
-                                { en: 'Optional Modules (100 TND each): Fee Notes, Client Invoices, Withholding Tax, Debit Notes, Rapports, etc.', fr: 'Modules Optionnels (100 TND chacun) : Honoraires, Factures Client, Retenue à la Source, Notes de Débit, Rapports, etc.' },
-                                { en: 'Enhanced Privacy & Security', fr: 'Confidentialité et Sécurité Améliorées' },
-                                { en: 'Technical support (from 20 to 50 TND)', fr: 'Support technique (de 20 à 50 TND)' },
-                                { en: 'Custom Report Generation', fr: 'Génération de Rapports Personnalisés' },
-                                { en: 'Delivered as a local .exe installer', fr: 'Livré sous forme \'installateur .exe local' },
-                                { en: 'Ideal for professionals who want a ready-to-use solution', fr: 'Idéal pour les professionnels souhaitant une solution clé en main' }
-                            ],
-
-                            // Plan 3 - Extra Support
-                            plan3Title: { en: 'Extra Support Pack', fr: 'Pack Support Plus' },
-                            plan3Price: { en: 'From 50 TND', fr: 'À partir de 50 TND' },
-                            plan3Subtitle: { en: 'Priority support, hands-on training, and a dedicated account manager.', fr: 'Support prioritaire, formation pratique et gestionnaire de compte dédié.' },
-                            plan3Features: [
-                                { en: 'Priority Technical Support — fast-track assistance', fr: 'Support Technique Prioritaire — assistance accélérée' },
-                                { en: 'On-site Training — get your team up to speed', fr: 'Formation sur Site — familiarisez votre équipe' },
-                                { en: 'Dedicated Account Manager — a single point of contact', fr: 'Gestionnaire de Compte Dédié — un interlocuteur unique' },
-                                { en: 'Custom Development & Integration — tailored to your workflow', fr: 'Développement et Intégration Personnalisés — adaptés à votre flux' },
-                                { en: 'Monthly Software Updates & Cloud Backups', fr: 'Mises à Jour Mensuelles et Sauvegardes Cloud' },
-                                { en: 'Add to any Fixed Price Pack for full coverage', fr: 'À ajouter à tout Pack Prix Fixe pour une couverture complète' }
-                            ],
-
-                            // Contact & Footer
-                            contactTitle: { en: 'Get in Touch', fr: 'Contactez-Nous' },
-                            contactSubtitle: { en: 'Have questions or need assistance? Reach out to us!', fr: 'Vous avez des questions ou besoin d\'aide ? Contactez-nous !' },
-                            footerSlogan: { en: 'Smart accounting software for Tunisian professionals.', fr: 'Logiciel de comptabilité intelligent pour les professionnels tunisiens.' },
-                            footerLinksTitle: { en: 'Quick Links', fr: 'Liens Rapides' },
-                            footerSupportTitle: { en: 'Support', fr: 'Support' },
-                            footerRepoLink: { en: 'GitHub Repository', fr: 'Dépôt GitHub' },
-                            footerCopyright: {
-                                en: `© ${new Date().getFullYear()} Fido. All rights reserved.`, 
-                                fr: `© ${new Date().getFullYear()} Fido. Tous droits réservés.` 
-                            },
-                            comingSoon: { en: 'Coming Soon', fr: 'Bientôt Disponible' },
-                        },
-
-                        t(key) {
-                            const translation = this.translations[key];
-                            if (translation) {
-                                return translation[this.lang] || translation['en'] || key;
-                            }
-                            return key;
-                        },
-
-                        getPlanFeatures(planKey) {
-                            const features = this.translations[planKey] || [];
-                            return features.map(feature => feature[this.lang] || feature['en']);
-                        },
-
-                        setLang(newLang) {
-                            this.lang = newLang;
-                            document.documentElement.lang = newLang;
-                        }
+                    Alpine.store('data', {
+                        features: [
+                            { title: 'Données du Tableau de Bord', description: 'Visualisez les indicateurs financiers clés et les données clients en un coup d\'œil.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"></path></svg></div>' },
+                            { title: 'Gestion des Clients', description: 'Maintenez une base de données centralisée de tous vos clients et de leurs informations.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div>' },
+                            { title: 'Gestion des Factures Client (Multi-Entreprise)', description: 'Gérez les factures commerciales pour chaque entreprise et leurs clients directement dans l\'application.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>' },
+                            { title: 'Gestion des Honoraires', description: 'Créez, gérez et suivez facilement les notes d\'honoraires.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>' },
+                            { title: 'Retenue à la Source', description: 'Simplifiez la gestion des retenues à la source avec des rapports automatisés.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path></svg></div>' },
+                            { title: 'Gestion des Notes de Débit', description: 'Créez et gérez efficacement les notes de débit pour diverses transactions. (La génération de rapports est en cours)', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg></div>' },
+                            { title: 'Rapports Financiers', description: 'Générez des rapports détaillés pour les notes d\'honoraires et de débit pour de meilleures informations. (Certaines parties sont en cours de développement)', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div>' },
+                            { title: 'Comptes Employés', description: 'Gérez l\'accès des employés avec des contrôles basés sur les rôles.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>' },
+                            { title: 'Configuration Avancée', description: 'Configurez les détails de l\'entreprise, les taux de taxe (TVA, RS et TF), et les paramètres de l\'année fiscale.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>' },
+                            { title: 'Modèles Personnalisables', description: 'Personnalisez le design de vos notes d\'honoraires, factures et notes de débit pour correspondre à votre image de marque.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div>' },
+                            { title: 'Export PDF en un Clic', description: 'Téléchargez et partagez n\'importe quel document (rapports, factures ou relevés) en tant que PDF professionnel prêt à imprimer.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></div>' },
+                            { title: 'Sauvegardes Manuelles', description: 'Sécurisez vos données avec des sauvegardes manuelles de base de données.', icon: '<div class="p-3 bg-green-100 rounded-lg"><svg class="w-6 h-6 text-[#6FBF44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m16 0L8 12m8 0l-8 5"></path></svg></div>' }
+                        ],
+                        plan2Features: [
+                            'Site de base (480 TND)',
+                            'Modules Optionnels (100 TND chacun) : Honoraires, Factures Client, Retenue à la Source, Notes de Débit, Rapports, etc.',
+                            'Confidentialité et Sécurité Améliorées',
+                            'Support technique (de 20 à 50 TND)',
+                            'Génération de Rapports Personnalisés',
+                            'Livré sous forme d\'installateur .exe local',
+                            'Idéal pour les professionnels souhaitant une solution clé en main'
+                        ],
+                        plan3Features: [
+                            'Support Technique Prioritaire — assistance accélérée',
+                            'Formation sur Site — familiarisez votre équipe',
+                            'Gestionnaire de Compte Dédié — un interlocuteur unique',
+                            'Développement et Intégration Personnalisés — adaptés à votre flux',
+                            'Mises à Jour Mensuelles et Sauvegardes Cloud',
+                            'À ajouter à tout Pack Prix Fixe pour une couverture complète'
+                        ]
                     });
                 });
             </script>
@@ -213,7 +69,6 @@
                 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
                 body { font-family: "Inter", sans-serif; }
                 [id] { scroll-margin-top: 80px; }
-                .lang-active { font-weight: 700; color: #6FBF44; text-decoration: underline; text-underline-offset: 4px; }
             </style>
         </head>
         
@@ -226,15 +81,10 @@
                     </a>
                     
                     <div class="items-center hidden gap-8 md:flex">
-                        <a href="#features" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
-                        <a href="#pricing" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
-                        <a href="#contact" class="text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
-                        <div class="flex items-center gap-3 text-sm font-medium">
-                            <button @click="$store.i18n.setLang('en')" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="transition hover:text-primary">EN</button>
-                            <span class="text-gray-300">|</span>
-                            <button @click="$store.i18n.setLang('fr')" :class="{ 'lang-active': $store.i18n.lang === 'fr' }" class="transition hover:text-primary">FR</button>
-                        </div>
-                        <a href="#pricing" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5da939] transition" x-text="$store.i18n.t('navGetStarted')"></a>
+                        <a href="#features" class="text-gray-600 transition hover:text-primary">Fonctionnalités</a>
+                        <a href="#pricing" class="text-gray-600 transition hover:text-primary">Tarifs</a>
+                        <a href="#contact" class="text-gray-600 transition hover:text-primary">Contact</a>
+                        <a href="#pricing" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#5da939] transition">Commencer</a>
                     </div>
 
                     <div class="md:hidden">
@@ -246,15 +96,11 @@
                 
                 <div id="mobile-menu" x-show="isMenuOpen" x-transition class="absolute w-full bg-white shadow-lg md:hidden" @click.away="isMenuOpen = false">
                     <div class="flex flex-col px-4 pt-2 pb-4 space-y-4">
-                        <a href="#features" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navFeatures')"></a>
-                        <a href="#pricing" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navPricing')"></a>
-                        <a href="#contact" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary" x-text="$store.i18n.t('navContact')"></a>
-                        <a href="#pricing" @click="isMenuOpen = false" class="block w-full text-center bg-primary text-white px-4 py-2 mt-2 rounded-lg hover:bg-[#5da939] transition" x-text="$store.i18n.t('navGetStarted')"></a>
-                        <div class="flex items-center justify-center gap-4 pt-4 mt-4 border-t border-gray-100">
-                            <button @click="$store.i18n.setLang('en'); isMenuOpen = false" :class="{ 'lang-active': $store.i18n.lang === 'en' }" class="text-lg transition hover:text-primary">EN</button>
-                            <span class="text-gray-300">|</span>
-                            <button @click="$store.i18n.setLang('fr'); isMenuOpen = false" :class="{ 'lang-active': $store.i18n.lang === 'fr' }" class="text-lg transition hover:text-primary">FR</button>
-                        </div>
+                        <a href="#features" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary">Fonctionnalités</a>
+                        <a href="#pricing" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary">Tarifs</a>
+                        <a href="#contact" @click="isMenuOpen = false" class="block text-gray-600 transition hover:text-primary">Contact</a>
+                        <a href="#pricing" @click="isMenuOpen = false" class="block w-full text-center bg-primary text-white px-4 py-2 mt-2 rounded-lg hover:bg-[#5da939] transition">Commencer</a>
+
                     </div>
                 </div>
             </nav>
@@ -263,11 +109,11 @@
                 <div class="max-w-5xl px-4 py-20 mx-auto">
                     <div class="text-center">
                         <img src="https://github.com/anas1412/Fido/raw/main/public/images/logo.png?raw=true" alt="FIDO Logo" class="w-32 mx-auto mb-6"/>
-                        <h1 class="mb-6 text-4xl font-bold text-gray-900 md:text-5xl" x-text="$store.i18n.t('heroTitle')"></h1>
-                        <p class="max-w-2xl mx-auto mb-8 text-xl text-gray-600" x-text="$store.i18n.t('heroSubtitle')"></p>
+                        <h1 class="mb-6 text-4xl font-bold text-gray-900 md:text-5xl">Le Logiciel de Comptabilité Simplifié</h1>
+                        <p class="max-w-2xl mx-auto mb-8 text-xl text-gray-600">Conçu pour les comptables tunisiens pour automatiser les tâches et gérer les clients</p>
                         <div class="flex flex-col justify-center gap-4 sm:flex-row mb-12">
-                            <a href="#pricing" class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-[#5da939] transition shadow-lg" x-text="$store.i18n.t('heroBtnStart')"></a>
-                            <a href="#" @click.prevent="isDemoModalOpen = true" class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50" x-text="$store.i18n.t('heroBtnRequestDemo')"></a>
+                            <a href="#pricing" class="bg-primary text-white px-8 py-4 rounded-lg text-lg hover:bg-[#5da939] transition shadow-lg">Commencez Maintenant</a>
+                            <a href="#" @click.prevent="isDemoModalOpen = true" class="px-8 py-4 text-lg transition bg-white border rounded-lg text-primary border-primary hover:bg-green-50">Demander une démo</a>
                         </div>
                         <div class="flex flex-col md:flex-row justify-center gap-8">
                             <a href="#" @click.prevent="lightboxImage = 'https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true'; lightboxOpen = true" class="max-w-2xl cursor-pointer"><img src="https://github.com/anas1412/Fido/raw/main/Demo1.png?raw=true" alt="FIDO Dashboard 1" class="w-full transition duration-300 transform shadow-2xl rounded-xl hover:scale-105 hover:shadow-lg"/></a>
@@ -278,16 +124,16 @@
             </div>
 
             <div id="features" class="max-w-6xl px-4 py-20 mx-auto">
-                <h2 class="mb-4 text-3xl font-bold text-center" x-text="$store.i18n.t('featuresTitle')"></h2>
-                <p class="max-w-2xl mx-auto mb-12 text-center text-gray-600" x-text="$store.i18n.t('featuresSubtitle')"></p>
+                <h2 class="mb-4 text-3xl font-bold text-center">Tout Ce Dont Vous Avez Besoin</h2>
+                <p class="max-w-2xl mx-auto mb-12 text-center text-gray-600">Outils complets pour les comptables tunisiens pour rationaliser leur flux de travail</p>
                 <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    <template x-for="(feature, index) in $store.i18n.translations.features" :key="index">
+                    <template x-for="(feature, index) in $store.data.features" :key="index">
                         <div class="p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-xl transition-shadow duration-300">
                             <div class="flex items-center mb-4">
                                 <div x-html="feature.icon"></div>
-                                <h3 class="ml-4 text-xl font-bold" x-text="feature.title[$store.i18n.lang] || feature.title.en"></h3>
+                                <h3 class="ml-4 text-xl font-bold" x-text="feature.title"></h3>
                             </div>
-                            <p class="text-gray-600" x-text="feature.description[$store.i18n.lang] || feature.description.en"></p>
+                            <p class="text-gray-600" x-text="feature.description"></p>
                         </div>
                     </template>
                 </div>
@@ -295,12 +141,12 @@
 
     <!--         <div id="testimonials" class="py-16 bg-gray-50">
                 <div class="max-w-5xl px-4 mx-auto text-center">
-                    <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('testimonialsTitle')"></h2>
-                    <p class="max-w-2xl mx-auto mb-12 text-gray-600" x-text="$store.i18n.t('testimonialsSubtitle')"></p>
+                    <h2 class="mb-4 text-3xl font-bold">Approuvé par les professionnels</h2>
+                    <p class="max-w-2xl mx-auto mb-12 text-gray-600">Notre logiciel est utilisé et recommandé par des experts-comptables de Hammamet, Tunisie.</p>
                     <div class="grid gap-8 md:grid-cols-2">
-                        <template x-for="testimonial in $store.i18n.translations.testimonials" :key="testimonial.author">
+                        <template x-for="testimonial in $store.data.testimonials" :key="testimonial.author">
                             <div class="p-8 bg-white rounded-lg shadow-md">
-                                <p class="mb-4 text-lg italic text-gray-600" x-text="testimonial.quote[$store.i18n.lang] || testimonial.quote.en"></p>
+                                <p class="mb-4 text-lg italic text-gray-600" x-text="testimonial.quote"></p>
                                 <p class="font-bold text-primary" x-text="'- ' + testimonial.author"></p>
                             </div>
                         </template>
@@ -310,39 +156,39 @@
 
             <div id="pricing" class="py-16 bg-white">
                 <div class="max-w-5xl px-4 mx-auto">
-                    <h2 class="mb-12 text-3xl font-bold text-center" x-text="$store.i18n.t('pricingTitle')"></h2>
+                    <h2 class="mb-12 text-3xl font-bold text-center">Des Formules Flexibles Selon Vos Besoins</h2>
                     <div class="grid gap-8 md:grid-cols-2">
                         
                         <!-- Managed Service Plan -->
                         <div class="p-8 border border-green-100 shadow-lg bg-gradient-to-br from-green-50 to-white rounded-xl">
-                            <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan2Title')"></h3>
-                            <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan2Price')"></p>
-                            <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan2Subtitle')"></p>
+                            <h3 class="mb-4 text-2xl font-bold text-center">Pack Prix Fixe</h3>
+                            <p class="mb-2 text-4xl font-bold text-center">À partir de 480 TND</p>
+                            <p class="mb-6 text-center text-gray-600">Un ensemble fixe de fonctionnalités avec support dédié.</p>
                             <ul class="mb-8 space-y-4">
-                                <template x-for="featureText in $store.i18n.getPlanFeatures('plan2Features')" :key="featureText">
+                                <template x-for="featureText in $store.data.plan2Features" :key="featureText">
                                     <li class="flex items-center">
                                         <svg class="w-5 h-5 mr-2 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
                                         <span x-text="featureText"></span>
                                     </li>
                                 </template>
                             </ul>
-                            <div class="text-center"><a href="#contact" class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md" x-text="$store.i18n.t('heroBtnStart')"></a></div>
+                            <div class="text-center"><a href="#contact" class="bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md">Commencez Maintenant</a></div>
                         </div>
                         <!-- Extra Support Pack -->
                         <div class="p-8 border border-amber-200 shadow-lg bg-gradient-to-br from-amber-50 to-white rounded-xl relative overflow-hidden">
                             <div class="absolute top-0 right-0 px-3 py-1 text-xs font-semibold text-white uppercase bg-amber-500 rounded-bl-lg">Add-on</div>
-                            <h3 class="mb-4 text-2xl font-bold text-center" x-text="$store.i18n.t('plan3Title')"></h3>
-                            <p class="mb-2 text-4xl font-bold text-center" x-text="$store.i18n.t('plan3Price')"></p>
-                            <p class="mb-6 text-center text-gray-600" x-text="$store.i18n.t('plan3Subtitle')"></p>
+                            <h3 class="mb-4 text-2xl font-bold text-center">Pack Support Plus</h3>
+                            <p class="mb-2 text-4xl font-bold text-center">À partir de 50 TND</p>
+                            <p class="mb-6 text-center text-gray-600">Support prioritaire, formation pratique et gestionnaire de compte dédié.</p>
                             <ul class="mb-8 space-y-4">
-                                <template x-for="featureText in $store.i18n.getPlanFeatures('plan3Features')" :key="featureText">
+                                <template x-for="featureText in $store.data.plan3Features" :key="featureText">
                                     <li class="flex items-center">
                                         <svg class="w-5 h-5 mr-2 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
                                         <span x-text="featureText"></span>
                                     </li>
                                 </template>
                             </ul>
-                            <div class="text-center"><a href="#contact" class="bg-amber-500 text-white px-8 py-3 rounded-lg inline-block hover:bg-amber-600 transition shadow-md" x-text="$store.i18n.t('heroBtnContact')"></a></div>
+                            <div class="text-center"><a href="#contact" class="bg-amber-500 text-white px-8 py-3 rounded-lg inline-block hover:bg-amber-600 transition shadow-md">Nous Contacter</a></div>
                         </div>
                     </div>
                 </div>
@@ -350,8 +196,8 @@
 
             <div id="contact" class="py-16 bg-gray-50">
                 <div class="max-w-5xl px-4 mx-auto text-center">
-                    <h2 class="mb-4 text-3xl font-bold" x-text="$store.i18n.t('contactTitle')"></h2>
-                    <p class="max-w-2xl mx-auto mb-8 text-gray-600" x-text="$store.i18n.t('contactSubtitle')"></p>
+                    <h2 class="mb-4 text-3xl font-bold">Contactez-Nous</h2>
+                    <p class="max-w-2xl mx-auto mb-8 text-gray-600">Vous avez des questions ou besoin d'aide ? Contactez-nous !</p>
                     <div class="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-8 lg:gap-12">
                         <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><a href="mailto:support@fido.tn" class="text-lg text-gray-700 hover:underline">support@fido.tn</a></div>
                         <div class="flex items-center"><svg class="w-6 h-6 mr-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg><a href="tel:+21650377851" class="text-lg text-gray-700 hover:underline">+216 50 377 851</a></div>
@@ -362,9 +208,9 @@
 
             <footer class="py-12 text-white bg-gray-800">
                 <div class="max-w-6xl px-4 mx-auto">
-                    <div class="grid gap-8 mb-8 md:grid-cols-3"><div><h3 class="mb-4 text-lg font-bold">FIDO</h3><p class="text-sm text-gray-400" x-text="$store.i18n.t('footerSlogan')"></p></div><div><h4 class="mb-4 font-bold" x-text="$store.i18n.t('footerLinksTitle')"></h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#features" class="transition hover:text-white" x-text="$store.i18n.t('navFeatures')"></a></li><li><a href="#pricing" class="transition hover:text-white" x-text="$store.i18n.t('navPricing')"></a></li><li><a href="#contact" class="transition hover:text-white" x-text="$store.i18n.t('navContact')"></a></li></ul></div><div><h4 class="mb-4 font-bold" x-text="$store.i18n.t('footerSupportTitle')"></h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#contact" class="transition hover:text-white" x-text="$store.i18n.t('heroBtnContact')"></a></li><li><a href="https://github.com/anas1412/Fido" target="_blank" class="transition hover:text-white" x-text="$store.i18n.t('footerRepoLink')"></a></li></ul></div>
+                    <div class="grid gap-8 mb-8 md:grid-cols-3"><div><h3 class="mb-4 text-lg font-bold">FIDO</h3><p class="text-sm text-gray-400">Logiciel de comptabilité intelligent pour les professionnels tunisiens.</p></div><div><h4 class="mb-4 font-bold">Liens Rapides</h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#features" class="transition hover:text-white">Fonctionnalités</a></li><li><a href="#pricing" class="transition hover:text-white">Tarifs</a></li><li><a href="#contact" class="transition hover:text-white">Contact</a></li></ul></div><div><h4 class="mb-4 font-bold">Support</h4><ul class="space-y-2 text-sm text-gray-400"><li><a href="#contact" class="transition hover:text-white">Nous Contacter</a></li><li><a href="https://github.com/anas1412/Fido" target="_blank" class="transition hover:text-white">Dépôt GitHub</a></li></ul></div>
                     </div>
-                    <div class="pt-8 text-sm text-center text-gray-400 border-t border-gray-700"><p x-html="$store.i18n.t('footerCopyright')"></p></div>
+                    <div class="pt-8 text-sm text-center text-gray-400 border-t border-gray-700"><p>© 2026 Fido. Tous droits réservés.</p></div>
                 </div>
             </footer>
 
@@ -378,24 +224,22 @@
             <!-- Demo Request Modal -->
             <div x-show="isDemoModalOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70" style="display: none;">
                 <div @click.away="isDemoModalOpen = false" class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full text-center">
-                    <h3 class="text-2xl font-bold mb-4" x-text="$store.i18n.t('demoModalTitle')"></h3>
-                    <p class="text-gray-600 mb-6" x-text="$store.i18n.t('demoModalInstructions')"></p>
-                    <!-- New Notice -->
-                    <p class="text-sm text-red-600 mb-2" x-text="$store.i18n.t('demoNoticeReadOnly')"></p>
-                    <p class="text-sm text-red-600 mb-6" x-text="$store.i18n.t('demoNoticePerformance')"></p>
-                    <!-- End New Notice -->
+                    <h3 class="text-2xl font-bold mb-4">Accès Démo</h3>
+                    <p class="text-gray-600 mb-6">Veuillez utiliser les informations suivantes pour accéder à la démo :</p>
+                    <p class="text-sm text-red-600 mb-2">Veuillez noter : Cette démo est un environnement en lecture seule, conçu pour l'exploration. Les fonctionnalités telles que l'ajout, la modification ou la suppression de données sont désactivées.</p>
+                    <p class="text-sm text-red-600 mb-6">S'agissant d'une démonstration, des ralentissements occasionnels peuvent survenir ; votre patience est appréciée.</p>
                     <div class="space-y-4 text-left bg-gray-100 p-4 rounded-lg mb-6">
                         <div>
-                            <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalEmail')"></label>
+                            <label class="font-bold text-gray-700">Email</label>
                             <p class="text-lg text-gray-800">demo@fido.tn</p>
                         </div>
                         <div>
-                            <label class="font-bold text-gray-700" x-text="$store.i18n.t('demoModalPassword')"></label>
+                            <label class="font-bold text-gray-700">Mot de passe</label>
                             <p class="text-lg text-gray-800">password</p>
                         </div>
                     </div>
-                    <a href="https://github.com/anas1412/Fido/releases/latest/download/Fido.Demo.Setup.exe" class="w-full bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md mb-4" x-text="$store.i18n.t('demoModalDownload')"></a>
-                    <p class="text-sm text-gray-500" x-text="$store.i18n.t('demoModalContact')"></p>
+                    <a href="https://github.com/anas1412/Fido/releases/latest/download/Fido.Demo.Setup.exe" class="w-full bg-primary text-white px-8 py-3 rounded-lg inline-block hover:bg-[#5da939] transition shadow-md mb-4">Télécharger la Démo</a>
+                    <p class="text-sm text-gray-500">Un problème ? Contactez-nous.</p>
                 </div>
             </div>
             <script type="application/ld+json">
