@@ -1,0 +1,28 @@
+name: Deploy Static Site via FTP
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-deploy:
+    name: Production Deployment
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get latest code
+      uses: actions/checkout@v4
+
+    - name: Sync files to OVH Cluster
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ftp.cluster129.hosting.ovh.net
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        port: 21
+        local-dir: ./
+        server-dir: ./www/
+        exclude: |
+          **/**
+          !index.html
+          !favicon.ico
