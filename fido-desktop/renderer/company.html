@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIDO - Sociétés</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#09090b;color:#fafafa;min-height:100vh;display:flex;align-items:center;justify-content:center;-webkit-font-smoothing:antialiased;padding:24px}
+.container{width:100%;max-width:520px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center}
+.brand-icon{width:36px;height:36px;border-radius:10px;background:#0C5CAB;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(12,92,171,0.35)}
+.brand-icon svg{width:20px;height:20px;stroke:white;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.brand-text{font-size:24px;font-weight:700;letter-spacing:-0.02em}
+h2{font-size:15px;font-weight:600;color:#a1a1aa;margin-bottom:16px;text-align:center}
+/* Company cards */
+.company-card{background:#18181b;border:1px solid #27272a;border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:14px}
+.company-card:hover{border-color:#3f3f46;background:#1f1f22}
+.company-card.active{border-color:#0C5CAB;box-shadow:0 0 0 1px #0C5CAB}
+.company-card .icon{width:36px;height:36px;border-radius:8px;background:rgba(12,92,171,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.company-card .icon svg{width:18px;height:18px;stroke:#0C5CAB;fill:none;stroke-width:2}
+.company-card .info{flex:1;min-width:0}
+.company-card .name{font-size:14px;font-weight:500;color:#fafafa}
+.company-card .meta{font-size:12px;color:#71717a;margin-top:2px}
+/* Password area */
+.password-area{display:none;margin:-4px 0 10px 0;padding:14px 16px;background:#18181b;border:1px solid #27272a;border-radius:0 0 12px 12px;border-top:none}
+.password-area.visible{display:block}
+.password-area .input-group{display:flex;gap:8px}
+.password-area input{flex:1;border-radius:8px;padding:8px 12px;font-size:14px;outline:none;background:#09090b;border:1px solid #27272a;color:#fafafa;transition:border-color 0.15s}
+.password-area input:focus{border-color:#0C5CAB;box-shadow:0 0 0 2px rgba(12,92,171,0.15)}
+.password-area .error-msg{color:#ef4444;font-size:12px;margin-top:6px;display:none}
+.password-area .error-msg.visible{display:block}
+/* Buttons */
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:all 0.15s;border:none;cursor:pointer;background:#0C5CAB;color:white;white-space:nowrap}
+.btn-primary:hover{background:#0a4a8a;box-shadow:0 4px 14px rgba(12,92,171,0.35)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+.btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:500;transition:all 0.15s;border:1px solid #27272a;cursor:pointer;background:#18181b;color:#a1a1aa;white-space:nowrap}
+.btn-secondary:hover{background:#27272a;color:#fafafa;border-color:#3f3f46}
+/* New company form */
+.new-company-form{display:none;margin-top:16px;padding:20px;background:#18181b;border:1px solid #27272a;border-radius:12px}
+.new-company-form.visible{display:block}
+.new-company-form .field{margin-bottom:14px}
+.new-company-form label{display:block;font-size:13px;font-weight:500;color:#a1a1aa;margin-bottom:5px}
+.new-company-form input{width:100%;border-radius:8px;padding:8px 12px;font-size:14px;outline:none;background:#09090b;border:1px solid #27272a;color:#fafafa;transition:border-color 0.15s}
+.new-company-form input:focus{border-color:#0C5CAB;box-shadow:0 0 0 2px rgba(12,92,171,0.15)}
+.new-company-form .btn-row{display:flex;gap:8px;margin-top:6px}
+.new-company-form .error-msg{color:#ef4444;font-size:12px;margin-bottom:8px;display:none}
+.new-company-form .error-msg.visible{display:block}
+/* Empty state */
+.empty-state{text-align:center;padding:40px 20px;color:#71717a}
+.empty-state svg{width:48px;height:48px;stroke:#3f3f46;fill:none;stroke-width:1.5;margin-bottom:12px}
+.empty-state p{font-size:14px}
+/* Divider */
+.divider{text-align:center;margin:16px 0;position:relative}
+.divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:#27272a}
+.divider span{position:relative;background:#09090b;padding:0 12px;font-size:12px;color:#71717a}
+/* Loading spinner inline */
+.spinner-sm{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);border-top-color:white;animation:spin 0.6s linear infinite;vertical-align:middle;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+    </div>
+    <span class="brand-text">FIDO</span>
+  </div>
+
+  <h2>Choisir une société</h2>
+  <div id="companyList"></div>
+
+  <div class="divider"><span>ou</span></div>
+
+  <button class="btn-secondary" id="showNewFormBtn" style="width:100%;justify-content:center;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+    Nouvelle Société
+  </button>
+
+  <div class="new-company-form" id="newCompanyForm">
+    <div class="error-msg" id="createError"></div>
+    <div class="field">
+      <label>Nom de la société *</label>
+      <input type="text" id="newName" placeholder="Ma Société" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Mot de passe <span style="color:#71717a;font-weight:400;">(optionnel)</span></label>
+      <input type="password" id="newPassword" placeholder="Laisser vide = pas de mot de passe" autocomplete="new-password">
+    </div>
+    <div class="field">
+      <label>Confirmer le mot de passe</label>
+      <input type="password" id="newPasswordConfirm" placeholder="Confirmer" autocomplete="new-password">
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" id="createBtn">Créer la société</button>
+      <button class="btn-secondary" id="cancelNewBtn">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// === State ===
+let companies = [];
+let selectedCompanyId = null;
+
+// === DOM refs ===
+const companyListEl = document.getElementById('companyList');
+const showNewFormBtn = document.getElementById('showNewFormBtn');
+const newCompanyForm = document.getElementById('newCompanyForm');
+const createBtn = document.getElementById('createBtn');
+const cancelNewBtn = document.getElementById('cancelNewBtn');
+const createError = document.getElementById('createError');
+const newName = document.getElementById('newName');
+const newPassword = document.getElementById('newPassword');
+const newPasswordConfirm = document.getElementById('newPasswordConfirm');
+
+// === Render companies ===
+function renderCompanies() {
+  if (companies.length === 0) {
+    companyListEl.innerHTML = `
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24"><path d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+        <p>Aucune société pour le moment</p>
+        <p style="font-size:12px;margin-top:4px;">Créez votre première société ci-dessous</p>
+      </div>`;
+    return;
+  }
+
+  companyListEl.innerHTML = companies.map(c => `
+    <div class="company-card${selectedCompanyId === c.id ? ' active' : ''}" data-id="${c.id}">
+      <div class="icon">
+        <svg viewBox="0 0 24 24"><path d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+      </div>
+      <div class="info">
+        <div class="name">${escapeHtml(c.name)}</div>
+        <div class="meta">Créée le ${formatDate(c.created_at)}</div>
+      </div>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#71717a" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+    </div>
+  `).join('');
+
+  // Click handler via delegation
+  document.querySelectorAll('.company-card').forEach(el => {
+    el.addEventListener('click', () => onSelectCompany(el.dataset.id));
+  });
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// === Company selection + password ===
+function onSelectCompany(id) {
+  hideNewForm();
+  const prev = selectedCompanyId;
+  selectedCompanyId = id;
+  renderCompanies();
+
+  // Remove all password areas
+  document.querySelectorAll('.password-area').forEach(el => el.remove());
+
+  const card = document.querySelector(`.company-card[data-id="${id}"]`);
+  if (!card) return;
+
+  const passwordArea = document.createElement('div');
+  passwordArea.className = 'password-area visible';
+  passwordArea.innerHTML = `
+    <div class="input-group">
+      <input type="password" class="pwd-input" placeholder="Mot de passe" autocomplete="current-password">
+      <button class="btn-primary enter-btn">Entrer</button>
+    </div>
+    <div class="error-msg"></div>
+  `;
+  card.after(passwordArea);
+
+  const input = passwordArea.querySelector('.pwd-input');
+  const btn = passwordArea.querySelector('.enter-btn');
+  const err = passwordArea.querySelector('.error-msg');
+
+  function doLogin() {
+    const pwd = input.value;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-sm"></span>';
+    err.classList.remove('visible');
+    window.api.loginCompany(id, pwd).then(result => {
+      if (result.valid) {
+        // Tell main process to init DB and show main app
+        return window.api.startMainApp(id);
+      } else {
+        err.textContent = result.error || 'Erreur de connexion';
+        err.classList.add('visible');
+        btn.disabled = false;
+        btn.textContent = 'Entrer';
+      }
+    }).then(r => {
+      if (r && r.success) {
+        // Main app is loading — this window will close automatically
+      }
+    }).catch(e => {
+      err.textContent = e.message || 'Erreur de connexion';
+      err.classList.add('visible');
+      btn.disabled = false;
+      btn.textContent = 'Entrer';
+    });
+  }
+
+  btn.addEventListener('click', doLogin);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  setTimeout(() => input.focus(), 100);
+}
+
+// === New company form ===
+function showNewForm() {
+  selectedCompanyId = null;
+  renderCompanies();
+  document.querySelectorAll('.password-area').forEach(el => el.remove());
+  newCompanyForm.classList.add('visible');
+  createError.classList.remove('visible');
+  newName.focus();
+}
+
+function hideNewForm() {
+  newCompanyForm.classList.remove('visible');
+}
+
+showNewFormBtn.addEventListener('click', showNewForm);
+cancelNewBtn.addEventListener('click', hideNewForm);
+
+createBtn.addEventListener('click', async () => {
+  const name = newName.value.trim();
+  const pwd = newPassword.value;
+  const confirm = newPasswordConfirm.value;
+
+  createError.classList.remove('visible');
+
+  if (!name || name.length < 2) {
+    createError.textContent = 'Le nom doit contenir au moins 2 caractères';
+    createError.classList.add('visible');
+    return;
+  }
+  if (pwd && pwd.length < 4) {
+    createError.textContent = 'Le mot de passe doit contenir au moins 4 caractères';
+    createError.classList.add('visible');
+    return;
+  }
+  if (pwd !== confirm) {
+    createError.textContent = 'Les mots de passe ne correspondent pas';
+    createError.classList.add('visible');
+    return;
+  }
+
+  createBtn.disabled = true;
+  createBtn.innerHTML = '<span class="spinner-sm"></span> Création...';
+  try {
+    await window.api.createCompany(name, pwd);
+    // Refresh list
+    companies = await window.api.getCompanies();
+    renderCompanies();
+    hideNewForm();
+    newName.value = '';
+    newPassword.value = '';
+    newPasswordConfirm.value = '';
+  } catch (e) {
+    createError.textContent = e.message || 'Erreur lors de la création';
+    createError.classList.add('visible');
+  }
+  createBtn.disabled = false;
+  createBtn.innerHTML = 'Créer la société';
+});
+
+// === Init ===
+(async function init() {
+  try {
+    companies = await window.api.getCompanies();
+  } catch (e) {
+    console.error('Failed to load companies:', e);
+  }
+  renderCompanies();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "name": "fido-desktop",
+  "version": "3.0.0",
+  "description": "Fido - Logiciel de Comptabilité Intelligent",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.0.4",
+    "electron": "^41.2.0",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "jsdom": "^25.0.0"
+  },
+  "build": {
+    "appId": "tn.fido.desktop",
+    "productName": "Fido",
+    "win": {
+      "icon": "assets/icons/icon.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowElevation": false,
+      "createDesktopShortcut": true
+    },
+    "files": [
+      "main.cjs",
+      "preload.js",
+      "loading.html",
+      "src/**/*",
+      "renderer/**/*",
+      "assets/**/*",
+      "database/**/*",
+      "package.json"
+    ]
+  }
+}

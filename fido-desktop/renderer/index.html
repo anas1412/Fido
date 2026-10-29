@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIDO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    /* === Reset & Base === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    [x-cloak] { display: none !important; }
+    body { font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif; background: #09090b; color: #fafafa; -webkit-font-smoothing: antialiased; }
+
+    /* === Design Tokens === */
+    :root {
+      --surface: #09090b;
+      --surface-elevated: #18181b;
+      --border: #27272a;
+      --border-hover: #3f3f46;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --primary: #0C5CAB;
+      --primary-hover: #0a4a8a;
+      --primary-subtle: rgba(12, 92, 171, 0.15);
+      --primary-glow: rgba(12, 92, 171, 0.35);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+    }
+
+    /* === Glass Panel === */
+    .glass-panel { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 12px; }
+
+    /* === Sidebar === */
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.15s; color: var(--text-secondary); text-decoration: none; }
+    .sidebar-link:hover { background: var(--primary-subtle); color: var(--text-primary); }
+    .sidebar-link.active { background: var(--primary); color: white; box-shadow: 0 4px 14px var(--primary-glow); }
+    .sidebar-link span { flex: 1; }
+
+    /* === Buttons === */
+    .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.15s; border: none; cursor: pointer; background: var(--primary); color: white; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); box-shadow: 0 4px 14px var(--primary-glow); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+    .btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.15s; border: 1px solid var(--border); cursor: pointer; background: var(--surface-elevated); color: var(--text-secondary); text-decoration: none; }
+    .btn-secondary:hover { background: var(--border); color: var(--text-primary); border-color: var(--border-hover); }
+
+    .btn-danger { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.15s; border: none; cursor: pointer; background: var(--danger); color: white; }
+    .btn-danger:hover { background: var(--danger-hover); }
+
+    /* === Form Inputs === */
+    .input-field { display: block; width: 100%; border-radius: 8px; padding: 8px 12px; font-size: 14px; outline: none; transition: all 0.15s; background: var(--surface); border: 1px solid var(--border); color: var(--text-primary); }
+    .input-field::placeholder { color: #52525b; }
+    .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-subtle); }
+    .input-field:hover:not(:focus) { border-color: var(--border-hover); }
+    select.input-field { cursor: pointer; }
+    select.input-field option { background: var(--surface-elevated); color: var(--text-primary); }
+    textarea.input-field { resize: vertical; min-height: 80px; }
+
+    /* === Checkbox Custom === */
+    .checkbox-custom { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-secondary); cursor: pointer; user-select: none; }
+    .checkbox-custom .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+    .checkbox-custom .check-box.checked { background: var(--primary); border-color: var(--primary); }
+    .checkbox-custom input { position: absolute; opacity: 0; pointer-events: none; }
+
+    /* === Tables === */
+    .table-header { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+    .table-cell { padding: 12px 16px; font-size: 14px; color: var(--text-secondary); }
+    table { border-collapse: separate; border-spacing: 0; width: 100%; }
+    table tbody tr { transition: background 0.15s; }
+    table tbody tr:hover { background: var(--primary-subtle); }
+    table tbody tr:not(:last-child) { border-bottom: 1px solid var(--border); }
+    table tfoot tr { background: rgba(12,92,171,0.08); }
+    table tfoot td { color: var(--text-primary); font-weight: 600; }
+
+    /* === Stat Cards === */
+    .stat-card { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px; border-left: 4px solid var(--primary); transition: border-color 0.2s, box-shadow 0.2s; }
+    .stat-card:hover { border-color: var(--border-hover); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+
+    /* === Modals === */
+    .modal-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+    .modal-content { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); padding: 24px; max-width: 42rem; width: 100%; max-height: 85vh; overflow-y-auto; }
+    .modal-content::-webkit-scrollbar { width: 6px; }
+    .modal-content::-webkit-scrollbar-track { background: transparent; }
+    .modal-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* === Tab Buttons === */
+    .tab-btn { padding: 8px 16px; font-size: 14px; font-weight: 500; border-radius: 8px; transition: all 0.15s; cursor: pointer; border: none; background: transparent; }
+    .tab-btn.active { background: var(--primary); color: white; }
+    .tab-btn:not(.active) { color: var(--text-secondary); }
+    .tab-btn:not(.active):hover { background: var(--border); color: var(--text-primary); }
+
+    /* === Custom Scrollbar === */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+    /* === Misc === */
+    .chart-bar { background: linear-gradient(180deg, var(--primary) 0%, rgba(12,92,171,0.4) 100%); border-radius: 4px 4px 0 0; transition: opacity 0.2s; }
+    .chart-bar:hover { opacity: 0.8; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            surface: '#09090b',
+            elevated: '#18181b',
+            border: '#27272a',
+            primary: '#0C5CAB',
+            success: '#10b981',
+            warning: '#f59e0b',
+            danger: '#ef4444'
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body>
+  <div x-data="app()" x-init="init()" class="flex h-screen overflow-hidden" style="background:var(--surface);color:var(--text-primary)">
+
+    <!-- Sidebar -->
+    <aside class="w-64 flex flex-col shrink-0" style="background:var(--surface-elevated);border-right:1px solid var(--border);">
+      <!-- Brand -->
+      <div class="p-5" style="border-bottom:1px solid var(--border);">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--primary);box-shadow:0 4px 12px var(--primary-glow);">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div>
+            <span class="text-lg font-bold" style="color:var(--text-primary);">FIDO</span>
+            <span class="text-[10px] font-medium ml-1.5 px-1.5 py-0.5 rounded" style="background:var(--primary-subtle);color:var(--primary);">v<span x-text="appInfo.version"></span></span>
+          </div>
+        </div>
+      </div>
+      <!-- Navigation -->
+      <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        <template x-for="item in navItems" :key="item.id">
+          <a href="#"
+            @click.prevent="currentPage = item.id; pageTitle = item.label"
+            class="sidebar-link"
+            :class="{ 'active': currentPage === item.id }"
+            x-html="item.icon + '<span>' + item.label + '</span>'">
+          </a>
+        </template>
+      </nav>
+      <!-- Footer -->
+      <div class="p-4" style="border-top:1px solid var(--border);">
+        <div class="text-xs" style="color:var(--text-muted);">
+          <div class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full" style="background:var(--success);"></span>
+            Exercice <span class="font-medium" style="color:var(--text-secondary);" x-text="fiscalYear"></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Bar -->
+      <header class="px-6 py-3 flex items-center justify-between shrink-0" style="background:var(--surface-elevated);border-bottom:1px solid var(--border);">
+        <h1 class="text-lg font-bold" style="color:var(--text-primary);" x-text="pageTitle"></h1>
+        <div class="flex items-center gap-3">
+          <span class="text-sm" style="color:var(--text-muted);" x-text="getYearRange()"></span>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-6 relative" x-cloak>
+        <!-- Loading Overlay -->
+        <div x-show="loading" class="absolute inset-0 z-40 flex items-center justify-center" style="background:rgba(9,9,11,0.6);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);">
+          <div class="flex flex-col items-center gap-3 p-6 rounded-xl" style="background:var(--surface-elevated);border:1px solid var(--border);">
+            <div class="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style="border-color:var(--border);border-top-color:var(--primary);"></div>
+            <span class="text-sm" style="color:var(--text-muted);">Chargement...</span>
+          </div>
+        </div>
+
+        <!-- ======================== DASHBOARD ======================== -->
+        <div x-show="currentPage === 'dashboard'" x-transition.opacity.duration.300ms>
+          <!-- KPI Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="stat-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="stat-label">Clients</div>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:var(--primary-subtle);">
+                  <svg class="w-4 h-4" style="color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+              </div>
+              <div class="stat-value" x-text="stats.totalClients"></div>
+            </div>
+            <div class="stat-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="stat-label">Honoraires</div>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:var(--primary-subtle);">
+                  <svg class="w-4 h-4" style="color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+              </div>
+              <div class="stat-value" x-text="stats.honorairesCount"></div>
+            </div>
+            <div class="stat-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="stat-label">Notes de Débit</div>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:var(--primary-subtle);">
+                  <svg class="w-4 h-4" style="color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                </div>
+              </div>
+              <div class="stat-value" x-text="stats.noteDeDebitsCount"></div>
+            </div>
+            <div class="stat-card">
+              <div class="flex items-center justify-between mb-2">
+                <div class="stat-label">Net à payer (TTC)</div>
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(16,185,129,0.15);">
+                  <svg class="w-4 h-4" style="color:var(--success);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+              </div>
+              <div class="stat-value" style="color:var(--success);" x-text="formatMoney(stats.totalNet)"></div>
+            </div>
+          </div>
+
+          <!-- Secondary KPI Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div class="glass-panel p-4">
+              <div class="text-xs font-medium uppercase tracking-wider" style="color:var(--text-muted);">Total HT</div>
+              <div class="text-xl font-bold mt-1" style="color:var(--text-primary);" x-text="formatMoney(stats.totalHT)"></div>
+            </div>
+            <div class="glass-panel p-4">
+              <div class="text-xs font-medium uppercase tracking-wider" style="color:var(--text-muted);">Total TVA</div>
+              <div class="text-xl font-bold mt-1" style="color:var(--warning);" x-text="formatMoney(stats.totalTVA)"></div>
+            </div>
+            <div class="glass-panel p-4">
+              <div class="text-xs font-medium uppercase tracking-wider" style="color:var(--text-muted);">Total RS</div>
+              <div class="text-xl font-bold mt-1" style="color:var(--danger);" x-text="formatMoney(stats.totalRS)"></div>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="glass-panel p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-sm font-semibold" style="color:var(--text-primary);">Activité mensuelle</h3>
+              <div class="flex gap-1.5">
+                <template x-for="e in ['honoraires','notes','invoices']" :key="e">
+                  <button @click="chartEntity = e; loadChart()" class="tab-btn text-xs" :class="{ 'active': chartEntity === e }"
+                    x-text="{'honoraires':'Honoraires','notes':'Notes Débit','invoices':'Factures'}[e]"></button>
+                </template>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <template x-for="m in chartData" :key="m.month">
+                <div class="flex items-center gap-3">
+                  <span class="text-xs font-medium w-8 text-right" style="color:var(--text-muted);" x-text="getMonthName(m.month)"></span>
+                  <div class="flex-1 rounded-full overflow-hidden" style="background:var(--surface);height:20px;">
+                    <div class="chart-bar h-full rounded-full" :style="'width:' + (m.count / maxChart * 100) + '%'"></div>
+                  </div>
+                  <span class="text-xs font-semibold w-8 text-right" style="color:var(--text-secondary);" x-text="m.count"></span>
+                </div>
+              </template>
+              <p x-show="chartData.length === 0" class="text-sm py-6 text-center" style="color:var(--text-muted);">Aucune donnée pour l'exercice en cours</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================== CLIENTS ======================== -->
+        <div x-show="currentPage === 'clients'" x-transition.opacity.duration.300ms>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm" style="color:var(--text-muted);"><span class="font-semibold" style="color:var(--text-primary);" x-text="clients.length"></span> client(s)</p>
+            <button @click="openClientForm()" class="btn-primary">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+              Nouveau Client
+            </button>
+          </div>
+          <div class="mb-3">
+            <input type="text" x-model="searchClients" class="input-field" placeholder="Rechercher un client..." style="max-width:320px;">
+          </div>
+          <div class="glass-panel overflow-hidden">
+            <table class="w-full">
+              <thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">
+                <th class="table-header">Nom</th><th class="table-header">Ville</th>
+                <th class="table-header">Tél</th><th class="table-header">M.F</th><th class="table-header">Actions</th>
+              </tr></thead>
+              <tbody>
+                <template x-for="c in filteredClients" :key="c.id">
+                  <tr>
+                    <td class="table-cell font-medium" style="color:var(--text-primary);" x-text="c.name"></td>
+                    <td class="table-cell" x-text="c.city"></td>
+                    <td class="table-cell" x-text="c.phone"></td>
+                    <td class="table-cell text-xs font-mono" x-text="c.mf"></td>
+                    <td class="table-cell">
+                      <button @click="openClientForm(c)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--primary);" @mouseenter="$el.style.background='var(--primary-subtle)'" @mouseleave="$el.style.background='transparent'">Modifier</button>
+                      <button @click="deleteClient(c.id)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--danger);" @mouseenter="$el.style.background='rgba(239,68,68,0.1)'" @mouseleave="$el.style.background='transparent'">Supprimer</button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+            <p x-show="filteredClients.length === 0" class="text-sm p-8 text-center" style="color:var(--text-muted);">Aucun client</p>
+          </div>
+          <!-- Client Form Modal -->
+          <div x-show="clientFormOpen" class="modal-overlay" @click.self="clientFormOpen = false" x-transition.opacity>
+            <div class="modal-content" @click.stop>
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-bold" style="color:var(--text-primary);" x-text="clientForm.id ? 'Modifier le Client' : 'Nouveau Client'"></h3>
+                <button @click="clientFormOpen = false" class="p-1 rounded-lg transition" style="color:var(--text-muted);" @mouseenter="$el.style.color='var(--text-primary)'" @mouseleave="$el.style.color='var(--text-muted)'">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+              <div class="space-y-3">
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Nom *</label>
+                  <input type="text" x-model="clientForm.name" class="input-field" placeholder="Nom du client"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Ville</label>
+                  <input type="text" x-model="clientForm.city" class="input-field" placeholder="Hammamet"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Adresse</label>
+                  <input type="text" x-model="clientForm.address" class="input-field" placeholder="Adresse"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Téléphone</label>
+                  <input type="text" x-model="clientForm.phone" class="input-field" placeholder="+216 XX XXX XXX"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Matricule Fiscal</label>
+                  <input type="text" x-model="clientForm.mf" class="input-field" placeholder="0000000/X/X/000"></div>
+              </div>
+              <div class="flex justify-end gap-2 mt-6 pt-4" style="border-top:1px solid var(--border);">
+                <button @click="clientFormOpen = false" class="btn-secondary">Annuler</button>
+                <button @click="saveClient()" class="btn-primary" x-text="clientForm.id ? 'Mettre à jour' : 'Créer'"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================== HONORAIRES ======================== -->
+        <div x-show="currentPage === 'honoraires'" x-transition.opacity.duration.300ms>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm" style="color:var(--text-muted);"><span class="font-semibold" style="color:var(--text-primary);" x-text="honoraires.length"></span> honoraires</p>
+            <button @click="openHonoraireForm()" class="btn-primary">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+              Nouvel Honoraire
+            </button>
+          </div>
+          <div class="mb-3">
+            <input type="text" x-model="searchHonoraires" class="input-field" placeholder="Rechercher un honoraire..." style="max-width:320px;">
+          </div>
+          <div class="glass-panel overflow-hidden">
+            <table class="w-full">
+              <thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">
+                <th class="table-header">N°</th><th class="table-header">Date</th><th class="table-header">Client</th>
+                <th class="table-header">MT HT</th><th class="table-header">TVA</th><th class="table-header">RS</th>
+                <th class="table-header">Net</th><th class="table-header">Actions</th>
+              </tr></thead>
+              <tbody>
+                <template x-for="h in filteredHonoraires" :key="h.id">
+                  <tr>
+                    <td class="table-cell font-mono text-xs" style="color:var(--text-primary);" x-text="formatNote(h.note)"></td>
+                    <td class="table-cell" x-text="formatDate(h.date)"></td>
+                    <td class="table-cell" style="color:var(--text-primary);" x-text="h.client_name"></td>
+                    <td class="table-cell" x-text="formatMoney(h.montantHT)"></td>
+                    <td class="table-cell" style="color:var(--warning);" x-text="formatMoney(h.tva)"></td>
+                    <td class="table-cell" x-text="formatMoney(h.rs)"></td>
+                    <td class="table-cell font-semibold" style="color:var(--success);" x-text="formatMoney(h.netapayer)"></td>
+                    <td class="table-cell">
+                      <button @click="openHonoraireForm(h)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--primary);" @mouseenter="$el.style.background='var(--primary-subtle)'" @mouseleave="$el.style.background='transparent'">Voir</button>
+                      <button @click="printHonoraire(h.id)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--success);" @mouseenter="$el.style.background='rgba(16,185,129,0.1)'" @mouseleave="$el.style.background='transparent'">PDF</button>
+                      <button @click="deleteHonoraire(h.id)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--danger);" @mouseenter="$el.style.background='rgba(239,68,68,0.1)'" @mouseleave="$el.style.background='transparent'">Suppr</button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+            <p x-show="filteredHonoraires.length === 0" class="text-sm p-8 text-center" style="color:var(--text-muted);">Aucun honoraire</p>
+          </div>
+          <!-- Honoraire Form Modal -->
+          <div x-show="honoraireFormOpen" class="modal-overlay" @click.self="honoraireFormOpen = false" x-transition.opacity>
+            <div class="modal-content" @click.stop>
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-bold" style="color:var(--text-primary);" x-text="honoraireForm.id ? 'Honoraire N°' + formatNote(honoraireForm.note) : 'Nouvel Honoraire'"></h3>
+                <button @click="honoraireFormOpen = false" class="p-1 rounded-lg transition" style="color:var(--text-muted);" @mouseenter="$el.style.color='var(--text-primary)'" @mouseleave="$el.style.color='var(--text-muted)'">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                  <label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Client *</label>
+                  <select x-model="honoraireForm.client_id" class="input-field">
+                    <option value="">Sélectionner un client</option>
+                    <template x-for="c in clients" :key="c.id">
+                      <option :value="c.id" x-text="c.name"></option>
+                    </template>
+                  </select>
+                </div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Date</label>
+                  <input type="date" x-model="honoraireForm.date" class="input-field"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Montant HT *</label>
+                  <input type="number" step="0.001" x-model="honoraireForm.montantHT" @input.debounce="calcHonoraire" class="input-field"></div>
+                <div class="col-span-2"><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Objet</label>
+                  <input type="text" x-model="honoraireForm.object" class="input-field" placeholder="Objet de l'honoraire"></div>
+                <label class="checkbox-custom">
+                  <input type="checkbox" x-model="honoraireForm.exonere_tva" @change="calcHonoraire">
+                  <span class="check-box" :class="honoraireForm.exonere_tva ? 'checked' : ''" x-text="honoraireForm.exonere_tva ? '✓' : ''"></span>
+                  Exonéré TVA
+                </label>
+                <label class="checkbox-custom">
+                  <input type="checkbox" x-model="honoraireForm.exonere_rs" @change="calcHonoraire">
+                  <span class="check-box" :class="honoraireForm.exonere_rs ? 'checked' : ''" x-text="honoraireForm.exonere_rs ? '✓' : ''"></span>
+                  Exonéré RS
+                </label>
+                <label class="checkbox-custom">
+                  <input type="checkbox" x-model="honoraireForm.exonere_tf" @change="calcHonoraire">
+                  <span class="check-box" :class="honoraireForm.exonere_tf ? 'checked' : ''" x-text="honoraireForm.exonere_tf ? '✓' : ''"></span>
+                  Exonéré TF
+                </label>
+                <div class="col-span-2" style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px;">
+                  <div class="grid grid-cols-3 gap-3 text-sm">
+                    <div class="glass-panel p-3 text-center">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">TVA</div>
+                      <div class="font-semibold mt-1" style="color:var(--text-primary);" x-text="formatMoney(honoraireCalc.tva)"></div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">TTC</div>
+                      <div class="font-semibold mt-1" style="color:var(--text-primary);" x-text="formatMoney(honoraireCalc.montantTTC)"></div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">RS</div>
+                      <div class="font-semibold mt-1" style="color:var(--warning);" x-text="formatMoney(honoraireCalc.rs)"></div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">TF</div>
+                      <div class="font-semibold mt-1" style="color:var(--text-primary);" x-text="formatMoney(honoraireCalc.tf)"></div>
+                    </div>
+                    <div class="glass-panel p-3 text-center col-span-2" style="border-left:3px solid var(--success);">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Net à payer</div>
+                      <div class="font-bold text-lg mt-1" style="color:var(--success);" x-text="formatMoney(honoraireCalc.netapayer)"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-end gap-2 mt-5 pt-4" style="border-top:1px solid var(--border);">
+                <button @click="honoraireFormOpen = false" class="btn-secondary">Annuler</button>
+                <button @click="saveHonoraire()" class="btn-primary" x-text="honoraireForm.id ? 'Mettre à jour' : 'Créer'"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================== NOTES DE DEBIT ======================== -->
+        <div x-show="currentPage === 'notes'" x-transition.opacity.duration.300ms>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm" style="color:var(--text-muted);"><span class="font-semibold" style="color:var(--text-primary);" x-text="noteDeDebits.length"></span> notes de débit</p>
+            <button @click="openNoteForm()" class="btn-primary">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+              Nouvelle Note
+            </button>
+          </div>
+          <div class="mb-3">
+            <input type="text" x-model="searchNotes" class="input-field" placeholder="Rechercher une note..." style="max-width:320px;">
+          </div>
+          <div class="glass-panel overflow-hidden">
+            <table class="w-full">
+              <thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">
+                <th class="table-header">N°</th><th class="table-header">Date</th><th class="table-header">Client</th>
+                <th class="table-header">Montant</th><th class="table-header">Actions</th>
+              </tr></thead>
+              <tbody>
+                <template x-for="nd in filteredNotes" :key="nd.id">
+                  <tr>
+                    <td class="table-cell font-mono text-xs" style="color:var(--text-primary);" x-text="formatNote(nd.note)"></td>
+                    <td class="table-cell" x-text="formatDate(nd.date)"></td>
+                    <td class="table-cell" style="color:var(--text-primary);" x-text="nd.client_name"></td>
+                    <td class="table-cell font-semibold" style="color:var(--warning);" x-text="formatMoney(nd.amount)"></td>
+                    <td class="table-cell">
+                      <button @click="openNoteForm(nd)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--primary);" @mouseenter="$el.style.background='var(--primary-subtle)'" @mouseleave="$el.style.background='transparent'">Voir</button>
+                      <button @click="printNoteDeDebit(nd.id)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--success);" @mouseenter="$el.style.background='rgba(16,185,129,0.1)'" @mouseleave="$el.style.background='transparent'">PDF</button>
+                      <button @click="deleteNoteDeDebit(nd.id)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--danger);" @mouseenter="$el.style.background='rgba(239,68,68,0.1)'" @mouseleave="$el.style.background='transparent'">Suppr</button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+            <p x-show="filteredNotes.length === 0" class="text-sm p-8 text-center" style="color:var(--text-muted);">Aucune note de débit</p>
+          </div>
+          <!-- Note Form Modal -->
+          <div x-show="noteFormOpen" class="modal-overlay" @click.self="noteFormOpen = false" x-transition.opacity>
+            <div class="modal-content" @click.stop>
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-bold" style="color:var(--text-primary);" x-text="noteForm.id ? 'Note de Débit N°' + formatNote(noteForm.note) : 'Nouvelle Note de Débit'"></h3>
+                <button @click="noteFormOpen = false" class="p-1 rounded-lg transition" style="color:var(--text-muted);" @mouseenter="$el.style.color='var(--text-primary)'" @mouseleave="$el.style.color='var(--text-muted)'">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+              <div class="space-y-3">
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Client *</label>
+                  <select x-model="noteForm.client_id" class="input-field">
+                    <option value="">Sélectionner un client</option>
+                    <template x-for="c in clients" :key="c.id"><option :value="c.id" x-text="c.name"></option></template>
+                  </select></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Date</label>
+                  <input type="date" x-model="noteForm.date" class="input-field"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Montant *</label>
+                  <input type="number" step="0.001" x-model="noteForm.amount" class="input-field" placeholder="0.000"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Description</label>
+                  <textarea x-model="noteForm.description" class="input-field" rows="3" placeholder="Motif de la note de débit"></textarea></div>
+              </div>
+              <div class="flex justify-end gap-2 mt-6 pt-4" style="border-top:1px solid var(--border);">
+                <button @click="noteFormOpen = false" class="btn-secondary">Annuler</button>
+                <button @click="saveNoteDeDebit()" class="btn-primary" x-text="noteForm.id ? 'Mettre à jour' : 'Créer'"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================== FACTURES ======================== -->
+        <div x-show="currentPage === 'invoices'" x-transition.opacity.duration.300ms>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm" style="color:var(--text-muted);"><span class="font-semibold" style="color:var(--text-primary);" x-text="invoices.length"></span> factures</p>
+            <button @click="openInvoiceForm()" class="btn-primary">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Nouvelle Facture
+            </button>
+          </div>
+          <div class="glass-panel overflow-hidden">
+            <table class="w-full">
+              <thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">
+                <th class="table-header">N° Facture</th><th class="table-header">Date</th><th class="table-header">Client</th>
+                <th class="table-header">Total HT</th><th class="table-header">Net à payer</th><th class="table-header">Actions</th>
+              </tr></thead>
+              <tbody>
+                <template x-for="inv in invoices" :key="inv.id">
+                  <tr>
+                    <td class="table-cell font-mono text-xs" style="color:var(--text-primary);" x-text="formatInvoiceNumber(inv.invoice_number)"></td>
+                    <td class="table-cell" x-text="formatDate(inv.date)"></td>
+                    <td class="table-cell" style="color:var(--text-primary);" x-text="inv.client_name_ref || inv.client_name"></td>
+                    <td class="table-cell" x-text="formatMoney(inv.total_hors_taxe)"></td>
+                    <td class="table-cell font-semibold" style="color:var(--success);" x-text="formatMoney(inv.net_a_payer)"></td>
+                    <td class="table-cell">
+                      <button @click="openInvoiceForm(inv)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--primary);" @mouseenter="$el.style.background='var(--primary-subtle)'" @mouseleave="$el.style.background='transparent'">Voir</button>
+                      <button @click="printInvoice(inv.id)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--success);" @mouseenter="$el.style.background='rgba(16,185,129,0.1)'" @mouseleave="$el.style.background='transparent'">PDF</button>
+                      <button @click="deleteInvoice(inv.id)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--danger);" @mouseenter="$el.style.background='rgba(239,68,68,0.1)'" @mouseleave="$el.style.background='transparent'">Suppr</button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+            <p x-show="invoices.length === 0" class="text-sm p-8 text-center" style="color:var(--text-muted);">Aucune facture</p>
+          </div>
+          <!-- Invoice Form Modal -->
+          <div x-show="invoiceFormOpen" class="modal-overlay" @click.self="invoiceFormOpen = false" x-transition.opacity>
+            <div class="modal-content max-w-3xl" @click.stop>
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-bold" style="color:var(--text-primary);" x-text="invoiceForm.id ? 'Facture N°' + formatInvoiceNumber(invoiceForm.invoice_number) : 'Nouvelle Facture'"></h3>
+                <button @click="invoiceFormOpen = false" class="p-1 rounded-lg transition" style="color:var(--text-muted);" @mouseenter="$el.style.color='var(--text-primary)'" @mouseleave="$el.style.color='var(--text-muted)'">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2"><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Client *</label>
+                  <select x-model="invoiceForm.client_id" @change="fillInvoiceClient" class="input-field">
+                    <option value="">Sélectionner un client</option>
+                    <template x-for="c in clients" :key="c.id"><option :value="c.id" x-text="c.name"></option></template>
+                  </select></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Nom (bénéficiaire)</label>
+                  <input type="text" x-model="invoiceForm.client_name" class="input-field"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">M.F.</label>
+                  <input type="text" x-model="invoiceForm.client_mf" class="input-field"></div>
+                <div class="col-span-2"><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Adresse</label>
+                  <input type="text" x-model="invoiceForm.client_address" class="input-field"></div>
+                <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Date</label>
+                  <input type="date" x-model="invoiceForm.date" class="input-field"></div>
+                <div></div>
+
+                <!-- Invoice Items -->
+                <div class="col-span-2" style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px;">
+                  <div class="flex items-center justify-between mb-3">
+                    <h4 class="text-sm font-semibold" style="color:var(--text-primary);">Lignes de facture</h4>
+                    <button @click="addInvoiceItem()" class="text-sm font-medium transition px-3 py-1 rounded" style="color:var(--primary);" @mouseenter="$el.style.background='var(--primary-subtle)'" @mouseleave="$el.style.background='transparent'">+ Ajouter ligne</button>
+                  </div>
+                  <div class="space-y-2">
+                    <template x-for="(item, i) in invoiceForm.items" :key="i">
+                      <div class="grid grid-cols-12 gap-2 items-center p-2 rounded-lg" style="background:var(--surface);">
+                        <div class="col-span-4">
+                          <input type="text" x-model="item.object" class="input-field text-xs" placeholder="Désignation">
+                        </div>
+                        <div class="col-span-2">
+                          <input type="number" x-model="item.quantity" @input="calcInvoiceItem(i)" class="input-field text-xs" placeholder="Qté" min="1">
+                        </div>
+                        <div class="col-span-2">
+                          <input type="number" step="0.001" x-model="item.single_price" @input="calcInvoiceItem(i)" class="input-field text-xs" placeholder="P.U.">
+                        </div>
+                        <div class="col-span-3">
+                          <input type="text" :value="formatMoney(item.total_price)" class="input-field text-xs" style="background:var(--surface-elevated);border-color:transparent;" readonly>
+                        </div>
+                        <div class="col-span-1">
+                          <button @click="removeInvoiceItem(i)" class="p-1.5 rounded-lg transition" style="color:var(--danger);" @mouseenter="$el.style.background='rgba(239,68,68,0.1)'" @mouseleave="$el.style.background='transparent'">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                          </button>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+
+                <!-- Invoice Totals -->
+                <div class="col-span-2" style="border-top:1px solid var(--border);padding-top:16px;">
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                    <div class="glass-panel p-3 text-center">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Total HT</div>
+                      <div class="font-semibold mt-1" style="color:var(--text-primary);" x-text="formatMoney(invoiceCalc.totalHT)"></div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">TVA 19%</div>
+                      <div class="font-semibold mt-1" style="color:var(--warning);" x-text="formatMoney(invoiceCalc.tva)"></div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">TTC</div>
+                      <div class="font-semibold mt-1" style="color:var(--text-primary);" x-text="formatMoney(invoiceCalc.montantTTC)"></div>
+                    </div>
+                    <div class="glass-panel p-3 text-center">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Timbre</div>
+                      <div class="font-semibold mt-1" style="color:var(--danger);" x-text="formatMoney(invoiceCalc.timbre)"></div>
+                    </div>
+                    <div class="col-span-2 sm:col-span-4 glass-panel p-3 text-center" style="border:1px solid var(--success);">
+                      <div style="color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Net à payer</div>
+                      <div class="text-xl font-bold mt-1" style="color:var(--success);" x-text="formatMoney(invoiceCalc.netAPayer)"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-end gap-2 mt-5 pt-4" style="border-top:1px solid var(--border);">
+                <button @click="invoiceFormOpen = false" class="btn-secondary">Annuler</button>
+                <button @click="saveInvoice()" class="btn-primary" x-text="invoiceForm.id ? 'Mettre à jour' : 'Créer'"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================== RAPPORTS ======================== -->
+        <div x-show="currentPage === 'reports'" x-transition.opacity.duration.300ms>
+          <!-- Report Type Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div class="glass-panel p-5 cursor-pointer transition-all duration-200 hover:border-[var(--primary)] hover:shadow-lg hover:shadow-[var(--primary-glow)]" @click="reportType = 'honoraire'; loadReport()" :style="reportType === 'honoraire' ? 'border-color:var(--primary);box-shadow:0 4px 20px var(--primary-glow)' : ''">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background:var(--primary-subtle);">
+                <svg class="w-5 h-5" style="color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+              <h3 class="text-sm font-semibold" style="color:var(--text-primary);">Rapport des Honoraires</h3>
+              <p class="text-xs mt-1" style="color:var(--text-muted);">Tous les honoraires avec totaux</p>
+            </div>
+            <div class="glass-panel p-5 cursor-pointer transition-all duration-200 hover:border-[var(--primary)] hover:shadow-lg hover:shadow-[var(--primary-glow)]" @click="reportType = 'retenue'; loadReport()" :style="reportType === 'retenue' ? 'border-color:var(--primary);box-shadow:0 4px 20px var(--primary-glow)' : ''">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background:rgba(245,158,11,0.15);">
+                <svg class="w-5 h-5" style="color:var(--warning);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <h3 class="text-sm font-semibold" style="color:var(--text-primary);">État Retenue à la Source</h3>
+              <p class="text-xs mt-1" style="color:var(--text-muted);">Par client, TTC et RS</p>
+            </div>
+            <div class="glass-panel p-5 cursor-pointer transition-all duration-200 hover:border-[var(--primary)] hover:shadow-lg hover:shadow-[var(--primary-glow)]" @click="reportType = 'note'; loadReport()" :style="reportType === 'note' ? 'border-color:var(--primary);box-shadow:0 4px 20px var(--primary-glow)' : ''">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background:rgba(239,68,68,0.15);">
+                <svg class="w-5 h-5" style="color:var(--danger);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              </div>
+              <h3 class="text-sm font-semibold" style="color:var(--text-primary);">Rapport Notes de Débit</h3>
+              <p class="text-xs mt-1" style="color:var(--text-muted);">Avec totaux par période</p>
+            </div>
+          </div>
+
+          <!-- Report Content -->
+          <div x-show="reportType" class="glass-panel p-5">
+            <!-- Controls -->
+            <div class="flex flex-wrap items-center gap-3 mb-5 p-3 rounded-lg" style="background:var(--surface);">
+              <span class="text-sm font-medium" style="color:var(--text-secondary);">Période:</span>
+              <input type="date" x-model="reportStart" class="input-field" style="width:auto;min-width:140px;">
+              <span style="color:var(--text-muted);">à</span>
+              <input type="date" x-model="reportEnd" class="input-field" style="width:auto;min-width:140px;">
+              <button @click="loadReport()" class="btn-primary">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                Charger
+              </button>
+              <button @click="printReport()" class="btn-secondary">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Imprimer PDF
+              </button>
+            </div>
+
+            <!-- Honoraire Report -->
+            <div x-show="reportType === 'honoraire'">
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">
+                    <th class="table-header">Réf</th><th class="table-header">Date</th><th class="table-header">Client</th>
+                    <th class="table-header">HT</th><th class="table-header">TVA</th><th class="table-header">RS</th>
+                    <th class="table-header">TTC</th><th class="table-header">TF</th><th class="table-header">Net</th>
+                  </tr></thead>
+                  <tbody>
+                    <template x-for="r in reportData.rows" :key="r.id">
+                      <tr>
+                        <td class="table-cell font-mono text-xs" style="color:var(--text-primary);" x-text="formatNote(r.note)"></td>
+                        <td class="table-cell" x-text="formatDate(r.date)"></td>
+                        <td class="table-cell" style="color:var(--text-primary);" x-text="r.client_name"></td>
+                        <td class="table-cell" x-text="formatMoney(r.montantHT)"></td>
+                        <td class="table-cell" style="color:var(--warning);" x-text="formatMoney(r.tva)"></td>
+                        <td class="table-cell" x-text="formatMoney(r.rs)"></td>
+                        <td class="table-cell" x-text="formatMoney(r.montantTTC)"></td>
+                        <td class="table-cell" x-text="formatMoney(r.tf)"></td>
+                        <td class="table-cell font-semibold" style="color:var(--success);" x-text="formatMoney(r.netapayer)"></td>
+                      </tr>
+                    </template>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="3" class="table-cell text-right font-semibold" style="color:var(--text-primary);">TOTAUX:</td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalHT)"></td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalTVA)"></td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalRS)"></td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalTTC)"></td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalTF)"></td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalNet)"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <!-- Retenue Source Report -->
+            <div x-show="reportType === 'retenue'">
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">
+                    <th class="table-header">Client</th><th class="table-header">M.F</th><th class="table-header">TTC</th><th class="table-header">RS</th>
+                  </tr></thead>
+                  <tbody>
+                    <template x-for="r in groupedRetenue" :key="r.name">
+                      <tr>
+                        <td class="table-cell font-medium" style="color:var(--text-primary);" x-text="r.name"></td>
+                        <td class="table-cell text-xs font-mono" x-text="r.mf"></td>
+                        <td class="table-cell" x-text="formatMoney(r.ttc)"></td>
+                        <td class="table-cell" style="color:var(--warning);" x-text="formatMoney(r.rs)"></td>
+                      </tr>
+                    </template>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2" class="table-cell text-right font-semibold" style="color:var(--text-primary);">TOTAUX:</td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalTTC)"></td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalRS)"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <!-- Note Debit Report -->
+            <div x-show="reportType === 'note'">
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">
+                    <th class="table-header">Réf</th><th class="table-header">Date</th><th class="table-header">Client</th><th class="table-header">M.F</th><th class="table-header">Montant</th>
+                  </tr></thead>
+                  <tbody>
+                    <template x-for="r in reportData.rows" :key="r.id">
+                      <tr>
+                        <td class="table-cell font-mono text-xs" style="color:var(--text-primary);" x-text="formatNote(r.note)"></td>
+                        <td class="table-cell" x-text="formatDate(r.date)"></td>
+                        <td class="table-cell" style="color:var(--text-primary);" x-text="r.client_name"></td>
+                        <td class="table-cell text-xs font-mono" x-text="r.client_mf"></td>
+                        <td class="table-cell font-semibold" style="color:var(--warning);" x-text="formatMoney(r.amount)"></td>
+                      </tr>
+                    </template>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="4" class="table-cell text-right font-semibold" style="color:var(--text-primary);">TOTAL:</td>
+                      <td class="table-cell font-semibold" style="color:var(--text-primary);" x-text="formatMoney(reportData.totals.totalAmount)"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======================== PARAMÈTRES ======================== -->
+        <div x-show="currentPage === 'settings'" x-transition.opacity.duration.300ms class="max-w-3xl">
+          <!-- Company Settings -->
+          <div class="glass-panel p-6 mb-4">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--primary-subtle);">
+                <svg class="w-5 h-5" style="color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              </div>
+              <h3 class="text-base font-semibold" style="color:var(--text-primary);">Entreprise</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="col-span-2"><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Nom *</label>
+                <input type="text" x-model="settings.company_name" class="input-field" placeholder="Ma Société"></div>
+              <div class="col-span-2"><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Slogan</label>
+                <input type="text" x-model="settings.slogan" class="input-field" placeholder="Expert-comptable"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">M.F</label>
+                <input type="text" x-model="settings.mf_number" class="input-field" placeholder="0000000/X/X/000"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Localisation</label>
+                <input type="text" x-model="settings.location" class="input-field" placeholder="Hammamet"></div>
+              <div class="col-span-2"><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Adresse</label>
+                <input type="text" x-model="settings.address_line1" class="input-field mb-2" placeholder="Ligne 1">
+                <input type="text" x-model="settings.address_line2" class="input-field" placeholder="Ligne 2"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Tél 1</label>
+                <input type="text" x-model="settings.phone1" class="input-field" placeholder="+216 XX XXX XXX"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Tél 2</label>
+                <input type="text" x-model="settings.phone2" class="input-field" placeholder="+216 XX XXX XXX"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Tél 3</label>
+                <input type="text" x-model="settings.phone3" class="input-field" placeholder="+216 XX XXX XXX"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Fax</label>
+                <input type="text" x-model="settings.fax" class="input-field" placeholder="+216 XX XXX XXX"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">Email</label>
+                <input type="email" x-model="settings.email" class="input-field" placeholder="contact@exemple.com"></div>
+            </div>
+            <button @click="saveSettings()" class="btn-primary mt-5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Enregistrer
+            </button>
+          </div>
+
+          <!-- Tax Settings -->
+          <div class="glass-panel p-6 mb-4">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:rgba(245,158,11,0.15);">
+                <svg class="w-5 h-5" style="color:var(--warning);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21l-7-7m0 0l7-7m-7 7l-7 7"/></svg>
+              </div>
+              <h3 class="text-base font-semibold" style="color:var(--text-primary);">Taxes</h3>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">TVA (%)</label>
+                <input type="number" step="0.0001" x-model="taxes.tva" class="input-field"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">RS (%)</label>
+                <input type="number" step="0.0001" x-model="taxes.rs" class="input-field"></div>
+              <div><label class="block text-sm font-medium mb-1.5" style="color:var(--text-secondary);">TF (montant)</label>
+                <input type="number" step="0.001" x-model="taxes.tf" class="input-field" placeholder="1.000"></div>
+            </div>
+            <button @click="saveTaxes()" class="btn-primary mt-5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Enregistrer
+            </button>
+          </div>
+
+          <!-- Fiscal Year -->
+          <div class="glass-panel p-6 mb-4">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:rgba(16,185,129,0.15);">
+                <svg class="w-5 h-5" style="color:var(--success);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </div>
+              <h3 class="text-base font-semibold" style="color:var(--text-primary);">Exercice Fiscal</h3>
+            </div>
+            <div class="flex items-center gap-3">
+              <input type="number" x-model="fiscalYearInput" class="input-field" style="width:120px;">
+              <button @click="saveFiscalYear()" class="btn-primary">Modifier</button>
+            </div>
+          </div>
+
+          <!-- Backups -->
+          <div class="glass-panel p-6">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:var(--primary-subtle);">
+                <svg class="w-5 h-5" style="color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </div>
+              <h3 class="text-base font-semibold" style="color:var(--text-primary);">Sauvegardes</h3>
+            </div>
+            <div class="flex gap-2 mb-5">
+              <button @click="createBackup()" class="btn-primary">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                Créer une sauvegarde
+              </button>
+              <button @click="openBackupFolder()" class="btn-secondary">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+                Ouvrir le dossier
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">
+                  <th class="table-header">Fichier</th><th class="table-header">Date</th><th class="table-header">Taille</th><th class="table-header">Actions</th>
+                </tr></thead>
+                <tbody>
+                  <template x-for="b in backups" :key="b.path">
+                    <tr>
+                      <td class="table-cell font-mono text-xs" style="color:var(--text-primary);" x-text="b.name"></td>
+                      <td class="table-cell" x-text="new Date(b.date).toLocaleString('fr-FR')"></td>
+                      <td class="table-cell" x-text="formatSize(b.size)"></td>
+                      <td class="table-cell">
+                        <button @click="restoreBackup(b.path)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--warning);" @mouseenter="$el.style.background='rgba(245,158,11,0.1)'" @mouseleave="$el.style.background='transparent'">Restaurer</button>
+                        <button @click="deleteBackupFile(b.path)" class="text-xs font-medium transition px-2 py-1 rounded" style="color:var(--danger);" @mouseenter="$el.style.background='rgba(239,68,68,0.1)'" @mouseleave="$el.style.background='transparent'">Supprimer</button>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+              <p x-show="backups.length === 0" class="text-sm py-6 text-center" style="color:var(--text-muted);">Aucune sauvegarde</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    function app() {
+      return {
+        currentPage: 'dashboard',
+        pageTitle: 'Tableau de Bord',
+        loading: false,
+        fiscalYear: new Date().getFullYear(),
+        fiscalYearInput: new Date().getFullYear(),
+        chartEntity: 'honoraires',
+        chartData: [],
+        maxChart: 1,
+
+        navItems: [
+          { id: 'dashboard', label: 'Tableau de Bord', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>' },
+          { id: 'clients', label: 'Clients', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>' },
+          { id: 'honoraires', label: 'Honoraires', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>' },
+          { id: 'notes', label: 'Notes de Débit', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75"/></svg>' },
+          { id: 'invoices', label: 'Factures', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg>' },
+          { id: 'reports', label: 'Rapports', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>' },
+          { id: 'settings', label: 'Paramètres', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>' }
+        ],
+
+        // Data
+        clients: [], honoraires: [], noteDeDebits: [], invoices: [],
+        stats: {}, backups: [], appInfo: { version: '3.0.0' },
+        settings: {}, taxes: { tva: 0.19, rs: 0.03, tf: 1.00 },
+
+        // Search filters
+        searchClients: '', searchHonoraires: '', searchNotes: '', searchInvoices: '',
+
+        // Report
+        reportType: '', reportStart: '', reportEnd: '', reportData: { rows: [], totals: {} },
+
+        // Client Form
+        clientFormOpen: false,
+        clientForm: { id: null, name: '', city: 'Hammamet', address: '', phone: '', mf: '' },
+
+        // Honoraire Form
+        honoraireFormOpen: false,
+        honoraireForm: { id: null, note: '', client_id: '', date: '', montantHT: 0, object: '', exonere_tva: false, exonere_rs: false, exonere_tf: false },
+        honoraireCalc: { tva: 0, montantTTC: 0, rs: 0, tf: 0, netapayer: 0 },
+
+        // Note Form
+        noteFormOpen: false,
+        noteForm: { id: null, note: '', client_id: '', date: '', amount: 0, description: '' },
+
+        // Invoice Form
+        invoiceFormOpen: false,
+        invoiceForm: { id: null, client_id: '', client_name: '', client_mf: '', client_address: '', invoice_number: '', date: '', items: [] },
+        invoiceCalc: { totalHT: 0, tva: 0, montantTTC: 0, timbre: 0, netAPayer: 0 },
+
+        // ===== FILTERED VIEWS =====
+        get filteredClients() {
+          const q = (this.searchClients || '').toLowerCase();
+          if (!q) return this.clients;
+          return this.clients.filter(c =>
+            (c.name || '').toLowerCase().includes(q) ||
+            (c.city || '').toLowerCase().includes(q) ||
+            (c.phone || '').toLowerCase().includes(q) ||
+            (c.mf || '').toLowerCase().includes(q)
+          );
+        },
+        get filteredHonoraires() {
+          const q = (this.searchHonoraires || '').toLowerCase();
+          if (!q) return this.honoraires;
+          return this.honoraires.filter(h =>
+            (h.note || '').toLowerCase().includes(q) ||
+            (h.client_name || '').toLowerCase().includes(q) ||
+            (h.object || '').toLowerCase().includes(q)
+          );
+        },
+        get filteredNotes() {
+          const q = (this.searchNotes || '').toLowerCase();
+          if (!q) return this.noteDeDebits;
+          return this.noteDeDebits.filter(n =>
+            (n.note || '').toLowerCase().includes(q) ||
+            (n.client_name || '').toLowerCase().includes(q) ||
+            (n.description || '').toLowerCase().includes(q)
+          );
+        },
+        get filteredInvoices() {
+          const q = (this.searchInvoices || '').toLowerCase();
+          if (!q) return this.invoices;
+          return this.invoices.filter(inv =>
+            (inv.invoice_number || '').toLowerCase().includes(q) ||
+            (inv.client_name_ref || inv.client_name || '').toLowerCase().includes(q)
+          );
+        },
+
+        // ===== INIT =====
+        async init() {
+          this.appInfo = await window.api.getAppInfo();
+          const fy = await window.api.getFiscalYear();
+          this.fiscalYear = fy.year;
+          this.fiscalYearInput = fy.year;
+
+          // Set default report dates
+          const now = new Date();
+          this.reportStart = `${fy.year}-01-01`;
+          this.reportEnd = `${fy.year}-12-31`;
+
+          // Auto-load data when currentPage changes
+          this.$watch('currentPage', (page) => {
+            this.pageTitle = this.navItems.find(i => i.id === page)?.label || page;
+            this.loadPageData(page);
+          });
+
+          // Initial load
+          await this.loadDashboard();
+          await this.loadClients();
+        },
+
+        // ===== PAGE DATA LOADER =====
+        async loadPageData(page) {
+          this.loading = true;
+          // Small delay so the spinner shows before heavy queries
+          await new Promise(r => setTimeout(r, 50));
+          try {
+            switch (page) {
+            case 'dashboard':
+              await this.loadDashboard();
+              break;
+            case 'clients':
+              await this.loadClients();
+              break;
+            case 'honoraires':
+              await this.loadClients();
+              await this.loadHonoraires();
+              break;
+            case 'notes':
+              await this.loadClients();
+              await this.loadNotes();
+              break;
+            case 'invoices':
+              await this.loadClients();
+              await this.loadInvoices();
+              break;
+            case 'reports':
+              if (!this.reportType) break;
+              await this.loadReport();
+              break;
+            case 'settings':
+              await this.loadSettings();
+              await this.loadBackups();
+              break;
+          }
+          } finally {
+            this.loading = false;
+          }
+        },
+
+        // ===== HELPERS =====
+        getYearRange() {
+          return `Exercice ${this.fiscalYear}`;
+        },
+        formatMoney(v) {
+          const n = parseFloat(v) || 0;
+          return n.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' TND';
+        },
+        formatDate(d) {
+          if (!d) return '';
+          const dt = new Date(d + 'T00:00:00');
+          return dt.toLocaleDateString('fr-FR');
+        },
+        formatNote(note) {
+          if (!note) return '';
+          const s = String(note).padStart(8, '0');
+          return s.slice(0, 4) + '/' + s.slice(4);
+        },
+        formatInvoiceNumber(num) {
+          if (!num) return '';
+          return num.slice(0, 4) + '/' + num.slice(4);
+        },
+        formatSize(bytes) {
+          if (bytes < 1024) return bytes + ' o';
+          return (bytes / 1024).toFixed(1) + ' Ko';
+        },
+        getMonthName(m) {
+          return ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'][parseInt(m) - 1] || '';
+        },
+
+        // ===== DASHBOARD =====
+        async loadDashboard() {
+          this.stats = await window.api.getDashboardStats(this.fiscalYear);
+          await this.loadChart();
+        },
+        async loadChart() {
+          this.chartData = await window.api.getMonthlyChartData(this.chartEntity, this.fiscalYear);
+          this.maxChart = Math.max(1, ...this.chartData.map(d => d.count));
+        },
+
+        // ===== CLIENTS =====
+        async loadClients() { this.clients = await window.api.getClients(); },
+        openClientForm(c) {
+          if (c) { this.clientForm = { ...c }; }
+          else { this.clientForm = { id: null, name: '', city: 'Hammamet', address: '', phone: '', mf: '' }; }
+          this.clientFormOpen = true;
+        },
+        async saveClient() {
+          if (!this.clientForm.name) return alert('Nom requis');
+          const data = { ...this.clientForm };
+          if (data.id) {
+            await window.api.updateClient(data.id, data);
+          } else {
+            await window.api.createClient(data);
+          }
+          this.clientFormOpen = false;
+          await this.loadClients();
+          await this.loadDashboard();
+        },
+        async deleteClient(id) {
+          if (!confirm('Supprimer ce client ?')) return;
+          await window.api.deleteClient(id);
+          await this.loadClients();
+        },
+
+        // ===== HONORAIRES =====
+        async loadHonoraires() { this.honoraires = await window.api.getHonoraires(this.fiscalYear); },
+        openHonoraireForm(h) {
+          this.loadClients();
+          if (h) {
+            this.honoraireForm = { id: h.id, note: h.note, client_id: h.client_id, date: h.date,
+              montantHT: h.montantHT, object: h.object,
+              exonere_tva: !!h.exonere_tva, exonere_rs: !!h.exonere_rs, exonere_tf: !!h.exonere_tf };
+            this.honoraireCalc = { tva: h.tva, montantTTC: h.montantTTC, rs: h.rs, tf: h.tf, netapayer: h.netapayer };
+          } else {
+            this.honoraireForm = { id: null, note: '', client_id: '', date: new Date().toISOString().slice(0,10),
+              montantHT: 0, object: '', exonere_tva: false, exonere_rs: false, exonere_tf: false };
+            this.honoraireCalc = { tva: 0, montantTTC: 0, rs: 0, tf: 0, netapayer: 0 };
+          }
+          this.honoraireFormOpen = true;
+        },
+        calcHonoraire() {
+          const ht = parseFloat(this.honoraireForm.montantHT) || 0;
+          const tvaRate = parseFloat(this.taxes.tva) || 0.19;
+          const rsRate = parseFloat(this.taxes.rs) || 0.03;
+          const tfVal = parseFloat(this.taxes.tf) || 1;
+
+          const tva = this.honoraireForm.exonere_tva ? 0 : ht * tvaRate;
+          const montantTTC = ht + tva;
+          const rs = this.honoraireForm.exonere_rs ? 0 : montantTTC * rsRate;
+          const tf = this.honoraireForm.exonere_tf ? 0 : tfVal;
+          const netapayer = montantTTC - rs + tf;
+
+          this.honoraireCalc = { tva, montantTTC, rs, tf, netapayer };
+        },
+        async saveHonoraire() {
+          if (!this.honoraireForm.client_id) return alert('Client requis');
+          this.calcHonoraire();
+          const data = { ...this.honoraireForm, ...this.honoraireCalc };
+          if (data.id) {
+            await window.api.updateHonoraire(data.id, data);
+          } else {
+            await window.api.createHonoraire(data);
+          }
+          this.honoraireFormOpen = false;
+          await this.loadHonoraires();
+          await this.loadDashboard();
+        },
+        async deleteHonoraire(id) {
+          if (!confirm('Supprimer cet honoraire ?')) return;
+          await window.api.deleteHonoraire(id);
+          await this.loadHonoraires();
+          await this.loadDashboard();
+        },
+        async printHonoraire(id) {
+          const h = await window.api.getHonoraire(id);
+          const settings = await window.api.getCompanySettings();
+          const taxes = await window.api.getTaxSettings();
+          const html = generateHonorairePDF(h, settings, taxes);
+          await window.api.savePDF(html, `Honoraire_${h.note}.pdf`);
+        },
+
+        // ===== NOTES DE DEBIT =====
+        async loadNotes() { this.noteDeDebits = await window.api.getNoteDeDebits(this.fiscalYear); },
+        openNoteForm(nd) {
+          this.loadClients();
+          if (nd) {
+            this.noteForm = { id: nd.id, note: nd.note, client_id: nd.client_id, date: nd.date, amount: nd.amount, description: nd.description };
+          } else {
+            this.noteForm = { id: null, note: '', client_id: '', date: new Date().toISOString().slice(0,10), amount: 0, description: '' };
+          }
+          this.noteFormOpen = true;
+        },
+        async saveNoteDeDebit() {
+          if (!this.noteForm.client_id) return alert('Client requis');
+          const data = { ...this.noteForm };
+          if (data.id) {
+            await window.api.updateNoteDeDebit(data.id, data);
+          } else {
+            await window.api.createNoteDeDebit(data);
+          }
+          this.noteFormOpen = false;
+          await this.loadNotes();
+          await this.loadDashboard();
+        },
+        async deleteNoteDeDebit(id) {
+          if (!confirm('Supprimer cette note de débit ?')) return;
+          await window.api.deleteNoteDeDebit(id);
+          await this.loadNotes();
+          await this.loadDashboard();
+        },
+        async printNoteDeDebit(id) {
+          const nd = await window.api.getNoteDeDebit(id);
+          const settings = await window.api.getCompanySettings();
+          const html = generateNoteDeDebitPDF(nd, settings);
+          await window.api.savePDF(html, `NoteDeDebit_${nd.note}.pdf`);
+        },
+
+        // ===== INVOICES =====
+        async loadInvoices() { this.invoices = await window.api.getInvoices(this.fiscalYear); },
+        fillInvoiceClient() {
+          const c = this.clients.find(x => x.id == this.invoiceForm.client_id);
+          if (c) {
+            this.invoiceForm.client_name = c.name;
+            this.invoiceForm.client_mf = c.mf || '';
+            this.invoiceForm.client_address = c.address || '';
+          }
+        },
+        openInvoiceForm(inv) {
+          this.loadClients();
+          if (inv) {
+            this.loadInvoiceItems(inv.id);
+            this.invoiceForm = { id: inv.id, client_id: inv.client_id, client_name: inv.client_name,
+              client_mf: inv.client_mf, client_address: inv.client_address,
+              invoice_number: inv.invoice_number, date: inv.date, items: [] };
+            this.invoiceCalc = { totalHT: inv.total_hors_taxe, tva: inv.tva, montantTTC: inv.montant_ttc,
+              timbre: inv.timbre_fiscal, netAPayer: inv.net_a_payer };
+          } else {
+            this.invoiceForm = { id: null, client_id: '', client_name: '', client_mf: '', client_address: '',
+              invoice_number: '', date: new Date().toISOString().slice(0,10), items: [] };
+            this.invoiceCalc = { totalHT: 0, tva: 0, montantTTC: 0, timbre: 0, netAPayer: 0 };
+          }
+          this.invoiceFormOpen = true;
+        },
+        async loadInvoiceItems(invoiceId) {
+          this.invoiceForm.items = await window.api.getInvoiceItems(invoiceId);
+        },
+        addInvoiceItem() {
+          this.invoiceForm.items.push({ object: '', quantity: 1, single_price: 0, total_price: 0 });
+        },
+        removeInvoiceItem(i) {
+          this.invoiceForm.items.splice(i, 1);
+          this.calcInvoice();
+        },
+        calcInvoiceItem(i) {
+          const item = this.invoiceForm.items[i];
+          item.total_price = (parseInt(item.quantity) || 0) * (parseFloat(item.single_price) || 0);
+          this.calcInvoice();
+        },
+        calcInvoice() {
+          const totalHT = this.invoiceForm.items.reduce((s, it) => s + (parseFloat(it.total_price) || 0), 0);
+          const tvaRate = parseFloat(this.taxes.tva) || 0.19;
+          const tfVal = parseFloat(this.taxes.tf) || 1;
+          const tva = totalHT * tvaRate;
+          const montantTTC = totalHT + tva;
+          const timbre = tfVal;
+          const netAPayer = montantTTC + timbre;
+          this.invoiceCalc = { totalHT, tva, montantTTC, timbre, netAPayer };
+        },
+        async saveInvoice() {
+          if (!this.invoiceForm.client_id) return alert('Client requis');
+          this.calcInvoice();
+          const data = { ...this.invoiceForm, ...this.invoiceCalc, items: this.invoiceForm.items.map(it => ({ ...it })) };
+          if (data.id) {
+            await window.api.updateInvoice(data.id, data);
+          } else {
+            await window.api.createInvoice(data);
+          }
+          this.invoiceFormOpen = false;
+          await this.loadInvoices();
+          await this.loadDashboard();
+        },
+        async deleteInvoice(id) {
+          if (!confirm('Supprimer cette facture ?')) return;
+          await window.api.deleteInvoice(id);
+          await this.loadInvoices();
+          await this.loadDashboard();
+        },
+        async printInvoice(id) {
+          const inv = await window.api.getInvoice(id);
+          const settings = await window.api.getCompanySettings();
+          const html = generateInvoicePDF(inv, settings);
+          await window.api.savePDF(html, `Facture_${inv.invoice_number}.pdf`);
+        },
+
+        // ===== REPORTS =====
+        get groupedRetenue() {
+          const groups = {};
+          for (const r of this.reportData.rows || []) {
+            const key = r.client_name || 'Inconnu';
+            if (!groups[key]) groups[key] = { name: key, mf: r.client_mf || '', ttc: 0, rs: 0 };
+            groups[key].ttc += parseFloat(r.montantTTC) || 0;
+            groups[key].rs += parseFloat(r.rs) || 0;
+          }
+          return Object.values(groups);
+        },
+        async loadReport() {
+          if (!this.reportType) return;
+          switch (this.reportType) {
+            case 'honoraire':
+              this.reportData = await window.api.getHonoraireReport(this.reportStart, this.reportEnd);
+              break;
+            case 'retenue':
+              this.reportData = await window.api.getRetenueSourceReport(this.reportStart, this.reportEnd, this.taxes.rs);
+              break;
+            case 'note':
+              this.reportData = await window.api.getNoteDeDebitReport(this.reportStart, this.reportEnd);
+              break;
+          }
+        },
+        async printReport() {
+          const settings = await window.api.getCompanySettings();
+          const taxes = await window.api.getTaxSettings();
+          let html = '';
+          let name = '';
+          switch (this.reportType) {
+            case 'honoraire':
+              html = generateHonoraireReportPDF(this.reportData, settings, this.reportStart, this.reportEnd);
+              name = 'Rapport_Honoraires.pdf';
+              break;
+            case 'retenue':
+              html = generateRetenueSourcePDF(this.reportData, settings, taxes, this.fiscalYear);
+              name = 'Etat_Retenue_Source.pdf';
+              break;
+            case 'note':
+              html = generateNoteDeDebitReportPDF(this.reportData, settings, this.reportStart, this.reportEnd);
+              name = 'Rapport_Notes_De_Debit.pdf';
+              break;
+          }
+          if (html) await window.api.savePDF(html, name);
+        },
+
+        // ===== SETTINGS =====
+        async loadSettings() {
+          this.settings = await window.api.getCompanySettings();
+          this.taxes = await window.api.getTaxSettings();
+        },
+        async saveSettings() {
+          await window.api.saveCompanySettings({ ...this.settings });
+          alert('Paramètres enregistrés');
+        },
+        async saveTaxes() {
+          await window.api.saveTaxSettings({ ...this.taxes });
+          alert('Taxes enregistrées');
+        },
+        async saveFiscalYear() {
+          await window.api.saveFiscalYear(parseInt(this.fiscalYearInput));
+          this.fiscalYear = this.fiscalYearInput;
+          alert('Exercice fiscal modifié');
+        },
+
+        // ===== BACKUP =====
+        async loadBackups() {
+          this.backups = await window.api.getBackups();
+        },
+        async createBackup() {
+          await window.api.createBackup();
+          await this.loadBackups();
+          alert('Sauvegarde créée');
+        },
+        async restoreBackup(path) {
+          if (!confirm('Restaurer cette sauvegarde ? L\'application va redémarrer.')) return;
+          await window.api.restoreBackup(path);
+          window.location.reload();
+        },
+        async deleteBackupFile(path) {
+          if (!confirm('Supprimer cette sauvegarde ?')) return;
+          await window.api.deleteBackup(path);
+          await this.loadBackups();
+        },
+        openBackupFolder() {
+          window.api.openBackupFolder();
+        },
+
+      };
+    }
+
+    // ================================================================
+    // PDF GENERATORS (inline HTML templates)
+    // ================================================================
+
+    function generateHonorairePDF(h, settings, taxes) {
+      const note = String(h.note).padStart(8, '0');
+      const noteDisplay = note.slice(0, 4) + '/' + note.slice(4);
+      const d = new Date(h.date + 'T00:00:00');
+      const dateStr = d.toLocaleDateString('fr-FR');
+      const net = parseFloat(h.netapayer) || 0;
+      const dinars = Math.floor(net);
+      const millimes = Math.round((net - dinars) * 1000);
+      const tvaPct = (parseFloat(taxes?.tva) || 0.19) * 100;
+      const rsPct = (parseFloat(taxes?.rs) || 0.03) * 100;
+
+      return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+      <style>
+        @page { size: A4; margin: 10px; }
+        body { font-family: Arial, sans-serif; font-size: 15px; color: #333; margin: 0; padding: 20px; }
+        .header { position: relative; margin-bottom: 10px; }
+        .header h1 { font-size: 22px; margin: 0; }
+        .header p { margin: 2px 0; }
+        .mf-number { font-size: 12px; text-decoration: underline; text-align: right; }
+        .header-line { border-top: 1px solid #000; margin-top: 8px; }
+        .client-box { border: 1px solid #000; padding: 8px; display: inline-block; text-align: left; margin-left: 30%; line-height: 1.3; }
+        .client-box p { margin: 2px 0; }
+        table { width: 60%; border-collapse: collapse; margin: 20px auto; font-size: 16px; }
+        td { padding: 6px 10px; border: none; }
+        td:first-child { text-align: left; width: 45%; }
+        td:last-child { text-align: right; width: 45%; }
+        td:nth-child(2) { text-align: center; width: 10%; }
+        .footer { text-align: center; font-size: 11px; border-top: 1px solid #000; padding-top: 5px; margin-top: 30px; }
+      </style></head><body>
+        <div class="header">
+          <h1>${settings?.company_name || ''}</h1>
+          <p>${settings?.slogan || ''}</p>
+          <div class="mf-number">M.F. : ${settings?.mf_number || ''}</div>
+          <div class="header-line"></div>
+        </div>
+        <p><strong><u>Note d'honoraires</u> :</strong> N°${noteDisplay}</p>
+        <div style="text-align:right">
+          <p>${settings?.location || ''} le : ${dateStr}</p>
+          <div class="client-box">
+            <p>Client: <strong>${h.client_name || ''}</strong></p>
+            <p>Adresse: ${h.client_address || ''}</p>
+            <p>M.F.: ${h.client_mf || ''}</p>
+          </div>
+        </div>
+        <p><strong><u>Objet d'honoraire</u> :</strong> ${h.object || ''}.</p>
+        <table>
+          <tr><td>Montant H.T</td><td>:</td><td>${(h.montantHT || 0).toFixed(3)}</td></tr>
+          <tr><td>T.V.A ${tvaPct}%</td><td>:</td><td>${(h.tva || 0).toFixed(3)}</td></tr>
+          <tr><td>Montant T.T.C</td><td>:</td><td>${(h.montantTTC || 0).toFixed(3)}</td></tr>
+          <tr><td>R/S ${rsPct}%</td><td>:</td><td>${(h.rs || 0).toFixed(3)}</td></tr>
+          <tr><td>Timbre Fiscal</td><td>:</td><td>${(h.tf || 0).toFixed(3)}</td></tr>
+          <tr><td><strong>Net à payer</strong></td><td>:</td><td><strong>${net.toFixed(3)}</strong></td></tr>
+        </table>
+        <p>Arrêtée la présente note d'honoraires à la somme de : ${dinars} dinars et ${millimes} millimes.</p>
+        <p style="text-align:right; margin-top:30px"><strong>Cachet et signature</strong></p>
+        <div class="footer">
+          <table style="width:100%"><tr>
+            <td>${settings?.address_line1 || ''}</td><td>Tél : ${settings?.phone1 || ''}</td><td>GSM : ${settings?.phone2 || ''}</td>
+          </tr><tr>
+            <td>${settings?.address_line2 || ''}</td><td>Fax : ${settings?.fax || ''}</td><td>Email : ${settings?.email || ''}</td>
+          </tr></table>
+        </div>
+      </body></html>`;
+    }
+
+    function generateNoteDeDebitPDF(nd, settings) {
+      const note = String(nd.note).padStart(8, '0');
+      const noteDisplay = note.slice(0, 4) + '/' + note.slice(4);
+      const d = new Date(nd.date + 'T00:00:00');
+      const dateStr = d.toLocaleDateString('fr-FR');
+      const amount = parseFloat(nd.amount) || 0;
+      const dinars = Math.floor(amount);
+      const millimes = Math.round((amount - dinars) * 1000);
+
+      return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+      <style>
+        @page { size: A4; margin: 10px; }
+        body { font-family: Arial, sans-serif; font-size: 15px; color: #333; margin: 0; padding: 20px; }
+        .header { position: relative; margin-bottom: 10px; }
+        .header h1 { font-size: 22px; margin: 0; }
+        .header p { margin: 2px 0; }
+        .mf-number { font-size: 12px; text-decoration: underline; text-align: right; }
+        .header-line { border-top: 1px solid #000; margin-top: 8px; }
+        .client-box { border: 1px solid #000; padding: 8px; display: inline-block; text-align: left; margin-left: 30%; line-height: 1.3; }
+        .client-box p { margin: 2px 0; }
+        table { width: 50%; border-collapse: collapse; margin: 20px auto; font-size: 16px; }
+        td { padding: 6px 10px; border: none; }
+        .footer { text-align: center; font-size: 11px; border-top: 1px solid #000; padding-top: 5px; margin-top: 30px; }
+      </style></head><body>
+        <div class="header">
+          <h1>${settings?.company_name || ''}</h1>
+          <p>${settings?.slogan || ''}</p>
+          <div class="mf-number">M.F. : ${settings?.mf_number || ''}</div>
+          <div class="header-line"></div>
+        </div>
+        <p><strong><u>Note de débit</u> :</strong> N°${noteDisplay}</p>
+        <div style="text-align:right">
+          <p>${settings?.location || ''} le : ${dateStr}</p>
+          <div class="client-box">
+            <p>Client: <strong>${nd.client_name || ''}</strong></p>
+            <p>M.F.: ${nd.client_mf || ''}</p>
+          </div>
+        </div>
+        <p><strong><u>Objet de débit</u> :</strong> ${nd.description || ''}.</p>
+        <table><tr><td>Montant</td><td>:</td><td><strong>${amount.toFixed(3)}</strong></td></tr></table>
+        <p>Arrêtée la présente note de débit à la somme de : ${dinars} dinars et ${millimes} millimes.</p>
+        <p style="text-align:right; margin-top:30px"><strong>Cachet et signature</strong></p>
+        <div class="footer">
+          <table style="width:100%"><tr>
+            <td>${settings?.address_line1 || ''}</td><td>Tél : ${settings?.phone1 || ''}</td><td>GSM : ${settings?.phone2 || ''}</td>
+          </tr><tr>
+            <td>${settings?.address_line2 || ''}</td><td>Fax : ${settings?.fax || ''}</td><td>Email : ${settings?.email || ''}</td>
+          </tr></table>
+        </div>
+      </body></html>`;
+    }
+
+    function generateInvoicePDF(inv, settings) {
+      const num = String(inv.invoice_number || '');
+      const numDisplay = num.slice(0, 4) + '/' + num.slice(4);
+      const d = new Date(inv.date + 'T00:00:00');
+      const dateStr = d.toLocaleDateString('fr-FR');
+      const net = parseFloat(inv.net_a_payer) || 0;
+      const dinars = Math.floor(net);
+      const millimes = Math.round((net - dinars) * 1000);
+      const items = inv.items || [];
+
+      let itemsHtml = items.map((item, i) =>
+        `<tr><td>${item.quantity || 0}</td><td>${item.object || ''}</td><td>${(item.single_price || 0).toFixed(3)}</td><td>${(item.total_price || 0).toFixed(3)}</td></tr>`
+      ).join('');
+
+      return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+      <style>
+        @page { size: A4; margin: 30px 80px; }
+        body { font-family: Arial, sans-serif; font-size: 13px; line-height: 1.4; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #000; padding: 5px; text-align: center; }
+        th { font-weight: bold; }
+        .left { float: left; text-align: left; }
+        .right { float: right; text-align: right; }
+        .clear { clear: both; }
+        .title { text-align: center; font-size: 16px; font-weight: bold; margin: 20px 0; text-decoration: underline; }
+        .totals { width: 50%; margin-left: auto; border: none; }
+        .totals td { border: none; text-align: right; padding: 2px 5px; }
+      </style></head><body>
+        <div class="left">
+          <u>${inv.client_name || inv.client_name_ref || ''}</u><br>
+          <u>${inv.client_address || ''}</u><br><br>
+          <u>T.V.A.</u> : ${inv.client_mf || ''}
+        </div>
+        <div class="right"><u>HAMMAMET LE ${dateStr}</u></div>
+        <div class="clear"></div>
+        <div class="title">FACTURE N°${numDisplay}</div>
+        <p><u>Doit</u> : ${inv.client_name || ''}<br><u>Adresse</u> : ${inv.client_address || ''}<br>M.F. : ${inv.client_mf || ''}</p>
+        <table>
+          <tr><th style="width:10%">Qtés</th><th style="width:50%">DESIGNATIONS</th><th style="width:20%">P.U. H.T.</th><th style="width:20%">MONTANTS</th></tr>
+          ${itemsHtml || '<tr><td colspan="4">&nbsp;</td></tr>'}
+        </table>
+        <table class="totals">
+          <tr><td>Total Hors Taxes ..................</td><td>${(inv.total_hors_taxe || 0).toFixed(3)}</td></tr>
+          <tr><td>T.V.A. : 19% ..................</td><td>${(inv.tva || 0).toFixed(3)}</td></tr>
+          <tr><td>-------------------------</td><td></td></tr>
+          <tr><td>Montant TTC ..................</td><td>${(inv.montant_ttc || 0).toFixed(3)}</td></tr>
+          <tr><td>Timbre fiscal ..................</td><td>${(inv.timbre_fiscal || 0).toFixed(3)}</td></tr>
+          <tr><td>-------------------------</td><td></td></tr>
+          <tr><td><strong><u>Net à votre aimable règlement</u></strong></td><td><strong>${net.toFixed(3)}</strong></td></tr>
+        </table>
+        <p>Arrêtée la présente facture à la somme de : ${dinars} dinars et ${millimes} millimes.</p>
+        <div style="text-align:right; margin-top:50px"><u>SIGNATURE</u></div>
+      </body></html>`;
+    }
+
+    function generateHonoraireReportPDF(data, settings, start, end) {
+      const rows = data.rows || [];
+      const totals = data.totals || {};
+      let rowsHtml = rows.map(r =>
+        `<tr><td>${String(r.note).padStart(8,'0').slice(0,4)+'/'+String(r.note).padStart(8,'0').slice(4)}</td>
+        <td>${new Date(r.date+'T00:00:00').toLocaleDateString('fr-FR')}</td>
+        <td>${r.client_name || ''}</td>
+        <td>${(r.montantHT||0).toFixed(3)}</td><td>${(r.tva||0).toFixed(3)}</td>
+        <td>${(r.rs||0).toFixed(3)}</td><td>${(r.montantTTC||0).toFixed(3)}</td>
+        <td>${(r.tf||0).toFixed(3)}</td><td>${(r.netapayer||0).toFixed(3)}</td></tr>`
+      ).join('');
+
+      return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+      <style>
+        @page { size: A4 landscape; margin: 10px; }
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 3px 5px; text-align: left; font-size: 10px; }
+        th { background: #f2f2f2; font-weight: bold; }
+      </style></head><body>
+        <h2>${settings?.company_name || ''}</h2>
+        <p><strong>Période:</strong> ${start} à ${end} | <strong>Edité le:</strong> ${new Date().toLocaleDateString('fr-FR')}</p>
+        <h3>RAPPORT DES HONORAIRES</h3>
+        <table>
+          <tr><th>Réf</th><th>Date</th><th>Client</th><th>HT</th><th>TVA</th><th>RS</th><th>TTC</th><th>Timbre</th><th>Net</th></tr>
+          ${rowsHtml}
+          <tr style="font-weight:bold;background:#f2f2f2">
+            <td colspan="3" style="text-align:right">TOTAUX:</td>
+            <td>${(totals.totalHT||0).toFixed(3)}</td><td>${(totals.totalTVA||0).toFixed(3)}</td>
+            <td>${(totals.totalRS||0).toFixed(3)}</td><td>${(totals.totalTTC||0).toFixed(3)}</td>
+            <td>${(totals.totalTF||0).toFixed(3)}</td><td>${(totals.totalNet||0).toFixed(3)}</td>
+          </tr>
+        </table>
+      </body></html>`;
+    }
+
+    function generateRetenueSourcePDF(data, settings, taxes, fiscalYear) {
+      const groups = {};
+      for (const r of data.rows || []) {
+        const key = r.client_name || 'Inconnu';
+        if (!groups[key]) groups[key] = { name: key, mf: r.client_mf || '', ttc: 0, rs: 0 };
+        groups[key].ttc += parseFloat(r.montantTTC) || 0;
+        groups[key].rs += parseFloat(r.rs) || 0;
+      }
+      const groupList = Object.values(groups);
+      const rsPct = (parseFloat(taxes?.rs) || 0.03) * 100;
+      let rowsHtml = groupList.map(g =>
+        `<tr><td>${g.name}</td><td>${g.mf}</td><td>${g.ttc.toFixed(3)}</td><td>${g.rs.toFixed(3)}</td></tr>`
+      ).join('');
+      const totalTTC = parseFloat(data.totals?.totalTTC) || 0;
+      const totalRS = parseFloat(data.totals?.totalRS) || 0;
+
+      return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+      <style>
+        @page { size: A4; margin: 10px; }
+        body { font-family: Arial, sans-serif; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+        th { background: #f2f2f2; font-weight: bold; }
+      </style></head><body>
+        <h2>${settings?.company_name || ''}</h2>
+        <p>${settings?.slogan || ''}</p>
+        <p>M.F. : ${settings?.mf_number || ''}</p>
+        <h3>Etat Retenue à la Source Année ${fiscalYear}</h3>
+        <table>
+          <tr><th>Client</th><th>M.F</th><th>TTC</th><th>RS (${rsPct}%)</th></tr>
+          ${rowsHtml}
+          <tr style="font-weight:bold;background:#f2f2f2">
+            <td colspan="2" style="text-align:right">TOTAUX:</td>
+            <td>${totalTTC.toFixed(3)}</td><td>${totalRS.toFixed(3)}</td>
+          </tr>
+        </table>
+      </body></html>`;
+    }
+
+    function generateNoteDeDebitReportPDF(data, settings, start, end) {
+      const rows = data.rows || [];
+      const total = parseFloat(data.totals?.totalAmount) || 0;
+      let rowsHtml = rows.map(r =>
+        `<tr><td>${String(r.note).padStart(8,'0')}</td>
+        <td>${new Date(r.date+'T00:00:00').toLocaleDateString('fr-FR')}</td>
+        <td>${r.client_name || ''}</td><td>${r.client_mf || ''}</td>
+        <td>${(r.amount||0).toFixed(3)}</td></tr>`
+      ).join('');
+
+      return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+      <style>
+        @page { size: A4; margin: 10px; }
+        body { font-family: Arial, sans-serif; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 6px 8px; }
+        th { background: #f2f2f2; font-weight: bold; }
+      </style></head><body>
+        <h2>${settings?.company_name || ''}</h2>
+        <p>${settings?.slogan || ''}</p>
+        <p>M.F. : ${settings?.mf_number || ''}</p>
+        <h3>Rapport des Notes de Débit du ${start} au ${end}</h3>
+        <table>
+          <tr><th>Réf</th><th>Date</th><th>Client</th><th>M.F</th><th>Montant</th></tr>
+          ${rowsHtml}
+          <tr style="font-weight:bold;background:#f2f2f2">
+            <td colspan="4" style="text-align:right">TOTAL:</td><td>${total.toFixed(3)}</td>
+          </tr>
+        </table>
+      </body></html>`;
+    }
+  </script>
+</body>
+</html>

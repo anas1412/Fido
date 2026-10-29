@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIDO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #09090b; color: #fafafa;
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+      -webkit-app-region: drag; overflow: hidden;
+    }
+    .container {
+      text-align: center;
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-bottom: 32px;
+    }
+    .brand-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: #0C5CAB; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(12, 92, 171, 0.35);
+    }
+    .brand-icon svg {
+      width: 22px; height: 22px; stroke: white; fill: none;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .brand-text {
+      font-size: 28px; font-weight: 700; letter-spacing: -0.02em;
+    }
+    .spinner {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 3px solid #27272a;
+      border-top-color: #0C5CAB;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status {
+      font-size: 14px; color: #71717a;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      </div>
+      <span class="brand-text">FIDO</span>
+    </div>
+    <div class="spinner"></div>
+    <p class="status">Chargement...</p>
+  </div>
+</body>
+</html>
